@@ -1,0 +1,27 @@
+{
+  "name": "shenlearn-v2-to-v3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/uuid": "^8.3.4",
+    "argon2": "^0.28.5",
+    "camelcase-keys": "^7.0.2",
+    "crypto": "^1.0.1",
+    "knex": "^0.21.21",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "snakecase-keys": "^5.1.2",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/knex": "^0.16.1",
+    "@types/lodash": "^4.14.181",
+    "@types/node": "^17.0.23"
+  }
+}
