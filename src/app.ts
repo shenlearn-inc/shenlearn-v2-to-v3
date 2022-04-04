@@ -16,6 +16,7 @@ import lesson from "@/services/lesson";
 import payment from "@/services/payment";
 import receipt from "@/services/receipt";
 import attendance from "@/services/attendance";
+import studentSchedule from "@/services/studentSchedule";
 
 const main = async () => {
   v2centraldb()
@@ -71,6 +72,7 @@ const main = async () => {
           await attendance(trxs)
 
           // 轉移請假
+          await studentSchedule(trxs)
         })
       })
     })

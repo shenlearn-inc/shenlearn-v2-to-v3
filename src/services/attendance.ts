@@ -175,16 +175,16 @@ export default async (trxs: Trxs) => {
     // 找出班級出勤
     const v2StudentAttendances = await findAllNotAttendedStudentAttendances(config.chunkSize, i * config.chunkSize, trxs)
 
-    const v2Courses = await findCoursesByIds(v2StudentAttendances.map(a => a.courseId), trxs) as CourseV2[]
+    const v2Courses = await findCoursesByIds(Array.from(new Set(v2StudentAttendances.map(a => a.courseId))), trxs) as CourseV2[]
     const v2CourseMap = _.keyBy(v2Courses, 'id')
 
-    const v2InclassCourses = await findInclassCoursesByIds(v2StudentAttendances.map(a => a.inclassCourseId).filter(id => !!id) as number[], trxs) as InclassCourseV2[]
+    const v2InclassCourses = await findInclassCoursesByIds(Array.from(new Set(v2StudentAttendances.map(a => a.inclassCourseId))).filter(id => !!id) as number[], trxs) as InclassCourseV2[]
     const v2InclassCourseMap = _.keyBy(v2InclassCourses, 'id')
 
-    const v2Students = await findStudentsByIds(v2StudentAttendances.map(a => a.studentId), trxs) as StudentV2[]
+    const v2Students = await findStudentsByIds(Array.from(new Set(v2StudentAttendances.map(a => a.studentId))), trxs) as StudentV2[]
     const v2StudentMap = _.keyBy(v2Students, 'id')
 
-    const v2Teachers = await findTeachersByIds(v2StudentAttendances.map(a => a.studentId), trxs) as TeacherV2[]
+    const v2Teachers = await findTeachersByIds(Array.from(new Set(v2StudentAttendances.map(a => a.studentId))), trxs) as TeacherV2[]
     const v2TeacherMap = _.keyBy(v2Teachers, 'id')
 
     await createStudentLessonAttendances(
