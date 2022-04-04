@@ -13,6 +13,7 @@ import clazz from "@/services/clazz";
 import clazzRef from "@/services/clazzRef";
 import teacherAndStudentChatRoomRefs from "@/services/teacherAndStudentChatRoomRefs";
 import lesson from "@/services/lesson";
+import payment from "@/services/payment";
 
 const main = async () => {
   v2centraldb()
@@ -59,8 +60,10 @@ const main = async () => {
           await lesson(trxs)
 
           // 轉移繳費
+          await payment(trxs)
 
           // 轉移收據
+
 
           // 轉移到校出勤
 
