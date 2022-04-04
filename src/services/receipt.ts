@@ -10,7 +10,7 @@ import {findTeachersByIds} from "@/v2models/teachers";
 import toTeacherId from "@/utils/toTeacherId";
 import toStudentId from "@/utils/toStudentId";
 import v2db from "@/db/v2db";
-import {ReceiptPaymentItemRefV2} from "@/v2models/receipt_payment_item_refs";
+import {ReceiptPaymentItemRefV2} from "@/v2models/receiptPaymentItemRefs";
 import v3db from "@/db/v3db";
 import {findPaymentItemsByIds} from "@/v2models/paymentItems";
 
