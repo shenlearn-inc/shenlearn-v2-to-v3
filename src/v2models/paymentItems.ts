@@ -41,3 +41,13 @@ export const getNumberOfPaymentItem = async (trxs: Trxs): Promise<number> => {
 
   return result[0]['count(*)'] as number
 }
+
+export const findPaymentItemsByIds = async (paymentItemIds: number[], trxs: Trxs): Promise<PaymentItemV2[]> => {
+  const query = v2db()
+    .select()
+    .from('payment_items')
+    .whereIn('id', paymentItemIds)
+    .transacting(trxs.v2db)
+
+  return camelcaseKeys(await query)
+}

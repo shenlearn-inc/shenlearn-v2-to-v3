@@ -14,6 +14,7 @@ import clazzRef from "@/services/clazzRef";
 import teacherAndStudentChatRoomRefs from "@/services/teacherAndStudentChatRoomRefs";
 import lesson from "@/services/lesson";
 import payment from "@/services/payment";
+import receipt from "@/services/receipt";
 
 const main = async () => {
   v2centraldb()
@@ -63,7 +64,7 @@ const main = async () => {
           await payment(trxs)
 
           // 轉移收據
-
+          await receipt(trxs)
 
           // 轉移到校出勤
 
