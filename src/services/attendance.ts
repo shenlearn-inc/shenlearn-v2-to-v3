@@ -23,9 +23,17 @@ import toClazzId from "@/utils/toClazzId";
 import {findInclassCoursesByIds, InclassCourseV2} from "@/v2models/inclassCourses";
 
 export default async (trxs: Trxs) => {
+  console.info('轉移出勤')
+
   // 取得站台資料
   const siteInfoV2 = await findSiteInfo(trxs)
   const schoolId = toSchoolId(siteInfoV2.hashedId)
+
+  // 取得 service 帳號
+  const serviceDirector = await v2db()
+    .first()
+    .from('teachers')
+    .where('name', 'Service') as TeacherV2
 
   const numberOfStudent = await getNumberOfStudent(trxs)
   // 處理學生出勤
@@ -157,7 +165,7 @@ export default async (trxs: Trxs) => {
             attendAt: a.attendedAt,
             leaveAt: a.leftAt,
             remark: a.remark ?? '',
-            teacherId: toTeacherId(v2TeacherMap[a.teacherId].hashedId),
+            teacherId: a.teacherId in v2TeacherMap[a.teacherId] ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
             createdAt: a.createdAt ?? new Date(),
             updatedAt: a.updatedAt ?? new Date(),
             deletedAt: a.deletedAt,

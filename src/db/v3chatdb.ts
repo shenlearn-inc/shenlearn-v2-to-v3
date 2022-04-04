@@ -16,7 +16,7 @@ export default (dbName?: string): Knex => {
       // },
       connection: {
         host: 'localhost',
-        user: 'shenlearn',
+        user: 'postgres',
         password: '',
         database: dbName,
         port: 5432

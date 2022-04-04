@@ -14,6 +14,7 @@ import {findAllCourseTeacherRefs, getNumberOfCourseTeacherRef} from "@/v2models/
 import {createClazzTeacherRefs} from "@/v3models/clazzTeacherRefs";
 
 export default async (trxs: Trxs) => {
+  console.info('轉移班級關係')
 
   // 轉換學生關係
   const numberOfCourseStudentRef = await getNumberOfCourseStudentRef(trxs)

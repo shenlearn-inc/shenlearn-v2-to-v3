@@ -12,6 +12,8 @@ import {createUsers} from "@/v3chatModels/users";
 
 // 轉移老師資料
 export default async (trxs: Trxs) => {
+  console.info('轉移老師資料')
+
   // 取得站台資料
   const siteInfoV2 = await findSiteInfo(trxs)
 

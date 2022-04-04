@@ -15,6 +15,8 @@ import generateUUID from "@/utils/generateUUID";
 import weekdayToDate from "@/utils/weekdayToDate";
 
 export default async (trxs: Trxs) => {
+  console.info('轉移班級資料')
+
   const siteInfoV2 = await findSiteInfo(trxs)
 
   // 取得舊班級

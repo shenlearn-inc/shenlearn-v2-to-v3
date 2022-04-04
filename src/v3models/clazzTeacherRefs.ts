@@ -14,6 +14,7 @@ export interface ClazzTeacherRefV3 {
 export const createClazzTeacherRefs = async (refs: ClazzTeacherRefV3[], trxs: Trxs): Promise<void> => {
   const query = v3db()
     .insert(snakecaseKeys(refs))
+    .from('clazz_teacher_refs')
     .transacting(trxs.v3db)
 
   await query

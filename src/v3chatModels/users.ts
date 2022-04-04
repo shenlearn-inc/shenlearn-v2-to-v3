@@ -16,6 +16,9 @@ export const createUsers = async (users: UserV3[], trxs: Trxs): Promise<void> =>
   const query = v3chatdb()
     .insert(snakecaseKeys(users))
     .from('users')
+    // @ts-ignore
+    .onConflict('id')
+    .ignore()
     .transacting(trxs.v3chatdb)
 
   await query

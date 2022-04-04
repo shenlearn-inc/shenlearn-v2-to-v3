@@ -17,6 +17,8 @@ import {Trxs} from "@/types/Trxs";
 import {createUsers} from "@/v3chatModels/users";
 
 export default async (trxs: Trxs) => {
+  console.info('轉移聯絡人資料')
+
   // 取得站台資料
   const siteInfoV2 = await findSiteInfo(trxs)
 

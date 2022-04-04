@@ -27,7 +27,7 @@ export interface PaymentItemV3 {
 export const createPaymentItems = async (payments: PaymentItemV3[], trxs: Trxs): Promise<void> => {
   const query = v3db()
     .insert(snakecaseKeys(payments))
-    .from('payments')
+    .from('payment_items')
     .transacting(trxs.v3db)
 
   await query

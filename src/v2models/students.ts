@@ -17,7 +17,7 @@ export interface StudentV2 {
   cellphoneInternationalPrefix: string | null
   cellphone: string | null
   address: string | null
-  birthday: string | null
+  birthday: Date | null
   schoolName: string | null
   grade: 'other' | 'first' | 'second' | 'third' | 'fourth' | 'fifth' | 'sixth' | 'seventh' | 'eighth' | 'ninth' | 'tenth' | 'eleventh' | 'twelfth' | 'fresh' | 'sophomore' | 'junior' | 'senior' | null
   remark: string | null
@@ -32,7 +32,7 @@ export interface StudentV2 {
   chatRoomId: string | null
   englishName: string | null
   level: 'elementary' | 'junior' | 'high' | 'university' | null
-  enrollAt: string | null
+  enrollAt: Date | null
   introducer: string | null
   method: string | null
 }

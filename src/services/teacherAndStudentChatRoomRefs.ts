@@ -8,8 +8,17 @@ import generateUUID from "@/utils/generateUUID";
 import {keyBy} from 'lodash'
 import {StudentV3} from "@/v3models/students";
 import {SubContactorV3} from "@/v3models/subContactors";
+import {findSiteInfo} from "@/v2models/siteInfo";
+import toSchoolId from "@/utils/toSchoolId";
+import camelcaseKeys from "camelcase-keys";
 
 export default async (trxs: Trxs) => {
+  console.info('轉移老師與學生聊天室關係')
+
+  // 取得站台資料
+  const siteInfoV2 = await findSiteInfo(trxs)
+  const schoolId = toSchoolId(siteInfoV2.hashedId)
+
   // 找出老師
   const v2Teachers = await v2db()
     .select()
@@ -20,16 +29,17 @@ export default async (trxs: Trxs) => {
   if (!v2Teachers.length) return
 
   // 處理主任
-  const students = await v3db()
+  const students = camelcaseKeys(await v3db()
     .select()
     .from('students')
-    .whereNull('deleted_at')
+    .where('school_id', schoolId)
+    .whereNull('deleted_at'))
   const studentMap = keyBy(students, 'id')
   const subContactors = students.length
-    ? await v3db()
+    ? camelcaseKeys(await v3db()
       .select()
       .from('sub_contactors')
-      .whereIn('sub_contactors.student_id', Array.from(new Set(students.map(r => r.studentId)))) as SubContactorV3[]
+      .whereIn('student_id', Array.from(new Set(students.map(r => r.id))))) as SubContactorV3[]
     : []
   if (students.length || subContactors.length) {
     for (const v2Teacher of v2Teachers.filter(t => t.position === 'director')) {
@@ -99,10 +109,10 @@ export default async (trxs: Trxs) => {
       .whereNull('students.deleted_at') as { studentId: string; teacherId: string }[]
 
     // 加入學生主聊天室
-    const students = await v3db()
+    const students = camelcaseKeys(await v3db()
       .select()
       .from('students')
-      .whereIn('students.id', Array.from(new Set(refs.map(r => r.studentId)))) as StudentV3[]
+      .whereIn('students.id', Array.from(new Set(refs.map(r => r.studentId))))) as StudentV3[]
     const studentMap = keyBy(students, 'id')
 
     await createRoomUserRefs(

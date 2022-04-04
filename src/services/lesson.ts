@@ -8,12 +8,21 @@ import toSchoolId from "@/utils/toSchoolId";
 import {findCoursesByIds} from "@/v2models/courses";
 import {keyBy} from "lodash"
 import toClazzId from "@/utils/toClazzId";
-import {findTeachersByIds} from "@/v2models/teachers";
+import {findTeachersByIds, TeacherV2} from "@/v2models/teachers";
 import toTeacherId from "@/utils/toTeacherId";
+import v2db from "@/db/v2db";
 
 export default async (trxs: Trxs) => {
+  console.info('轉移課堂資料')
+
   // 取得站台資料
   const siteInfoV2 = await findSiteInfo(trxs)
+
+  // 取得 service 帳號
+  const serviceDirector = await v2db()
+    .first()
+    .from('teachers')
+    .where('name', 'Service') as TeacherV2
 
   const numberOfInclassCourse = await getNumberOfInclassCourse(trxs)
   for (let i = 0; i < Math.ceil(numberOfInclassCourse / config.chunkSize); i++) {
@@ -37,7 +46,7 @@ export default async (trxs: Trxs) => {
           name: '',
           startAt: c.inclassAt ?? null,
           endAt: c.outclassAt ?? null,
-          teacherId: toTeacherId(v2TeacherMap[c.teacherId].hashedId),
+          teacherId: c.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
           createdAt: c.createdAt ?? new Date(),
           updatedAt: c.updatedAt ?? new Date(),
           deletedAt: c.deletedAt,

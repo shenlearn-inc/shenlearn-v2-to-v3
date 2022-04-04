@@ -18,7 +18,8 @@ import receipt from "@/services/receipt";
 import attendance from "@/services/attendance";
 import studentSchedule from "@/services/studentSchedule";
 
-const main = async () => {
+export const run = async (): Promise<void> => {
+  console.info('Run')
   v2centraldb()
   v2db(config.site)
   v3db('shenlearn-v3-backend-server-playground')
@@ -78,5 +79,3 @@ const main = async () => {
     })
   })
 }
-
-main()

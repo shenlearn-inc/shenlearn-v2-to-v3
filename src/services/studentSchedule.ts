@@ -16,6 +16,8 @@ import toStudentScheduleType from "@/utils/toStudentScheduleType";
 import toTeacherId from "@/utils/toTeacherId";
 
 export default async (trxs: Trxs) => {
+  console.info('轉移請假')
+
   // 取得站台資料
   const siteInfoV2 = await findSiteInfo(trxs)
   const schoolId = toSchoolId(siteInfoV2.hashedId)
@@ -43,11 +45,11 @@ export default async (trxs: Trxs) => {
         return {
           id: generateUUID(s.hashedId),
           schoolId: schoolId,
-          hashedId: toStudentScheduleHashedId(studentId, clazzId, type, s.handleAt.slice(0, 10)),
+          hashedId: toStudentScheduleHashedId(studentId, clazzId, type, s.handleAt.toISOString().slice(0, 10)),
           studentId,
           clazzId,
           type,
-          date: s.handleAt.slice(0, 10),
+          date: s.handleAt.toISOString().slice(0, 10),
           remark: '',
           createdBy: toTeacherId(v2TeacherMap[s.teacherId].hashedId),
           createdAt: s.createdAt ?? new Date(),

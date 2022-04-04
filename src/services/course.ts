@@ -8,6 +8,8 @@ import generateUUID from "@/utils/generateUUID";
 import {Trxs} from "@/types/Trxs";
 
 export default async (trxs: Trxs) => {
+  console.info('轉移課種資料')
+
   const siteInfoV2 = await findSiteInfo(trxs)
 
   // 建立初始課種

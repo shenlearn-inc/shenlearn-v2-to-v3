@@ -9,9 +9,9 @@ export interface PaymentV2 {
   name: string | null
   paymentTagName: string | null
   remark: string | null
-  deadlineAt: string | null
-  startedAt: string | null
-  endedAt: string | null
+  deadlineAt: Date | null
+  startedAt: Date | null
+  endedAt: Date | null
   isPublic: boolean
   createdAt: Date | null
   updatedAt: Date | null

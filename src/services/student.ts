@@ -13,6 +13,8 @@ import toTeacherId from "@/utils/toTeacherId"
 import {Trxs} from "@/types/Trxs";
 
 export default async (trxs: Trxs) => {
+  console.info('轉移學生資料')
+
   // 取得站台資料
   const siteInfoV2 = await findSiteInfo(trxs)
   const numberOfStudent = await getNumberOfStudent(trxs)
@@ -43,7 +45,7 @@ export default async (trxs: Trxs) => {
         avatarUrl: s.imageUrl,
         status: s.status ? 'active' : 'inactive',
         cardNo: s.cardId,
-        dateOfBirth: s.birthday?.slice(0, 10) ?? null,
+        dateOfBirth: s.birthday?.toISOString().slice(0, 10) ?? null,
         cellphonePrefix: s.cellphoneInternationalPrefix,
         cellphone: s.cellphone,
         telephonePrefix: s.telephoneInternationalPrefix,
@@ -53,7 +55,7 @@ export default async (trxs: Trxs) => {
         alias: s.englishName ?? '',
         schoolName: s.schoolName ?? '',
         gradeNo: toGradeNumber(s.grade),
-        dateOfEnroll: s.enrollAt?.slice(0, 10) ?? null,
+        dateOfEnroll: s.enrollAt?.toISOString().slice(0, 10) ?? null,
         enrollmentMethod: '',
         highestDegreeEarned: s.level ?? '',
         remark: s.remark ?? '',

@@ -6,6 +6,8 @@ import toSchoolId from "@/utils/toSchoolId"
 import {Trxs} from "@/types/Trxs";
 
 export default async (trxs: Trxs) => {
+  console.info('轉移站台資料')
+
   // 取得站台資料
   const siteInfoV2 = await findSiteInfo(trxs)
 

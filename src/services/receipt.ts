@@ -16,6 +16,8 @@ import {findPaymentItemsByIds} from "@/v2models/paymentItems";
 import camelcaseKeys from "camelcase-keys";
 
 export default async (trxs: Trxs) => {
+  console.info('轉移收據')
+
   // 取得站台資料
   const siteInfoV2 = await findSiteInfo(trxs)
   const schoolId = toSchoolId(siteInfoV2.hashedId)
@@ -26,6 +28,7 @@ export default async (trxs: Trxs) => {
     const v2Receipts = await findAllReceipts(config.chunkSize, i * config.chunkSize, trxs)
 
     for (const v2Receipt of v2Receipts) {
+      console.info(`正在處理收據 ${v2Receipt.hashedId}`)
       const receiptId = generateUUID(v2Receipt.hashedId)
 
       const [student] = await findStudentsByIds([v2Receipt.studentId!], trxs)
@@ -51,14 +54,18 @@ export default async (trxs: Trxs) => {
       // 將已繳費的 payment item 填入 receiptId
       const v2refs = camelcaseKeys(await v2db()
         .select()
-        .from('receipt_payment_item_refs')) as ReceiptPaymentItemRefV2[]
+        .from('receipt_payment_item_refs')
+        .where('receipt_id', v2Receipt.id)) as ReceiptPaymentItemRefV2[]
 
       const paymentItems = await findPaymentItemsByIds(v2refs.map(r => r.paymentItemId), trxs)
+
+      if (!paymentItems.length) continue
 
       await v3db()
         .update({
           receipt_id: receiptId
         })
+        .from('payment_items')
         .whereIn('id', paymentItems.map(pi => generateUUID(pi.hashedId)))
         .transacting(trxs.v3db)
     }

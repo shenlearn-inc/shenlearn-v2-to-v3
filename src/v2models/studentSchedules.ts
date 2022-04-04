@@ -9,7 +9,7 @@ export interface StudentScheduleV2 {
   studentId: number
   teacherId: number
   event: 'absent' | 'makeup' | 'substitute' | 'join' | 'leave'
-  handleAt: string
+  handleAt: Date
   handleTeacherId: number | null
   status: number | null
   createdAt: Date | null

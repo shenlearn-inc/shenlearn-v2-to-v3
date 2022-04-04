@@ -20,6 +20,9 @@ export const createContactors = async (contactors: ContactorV3[], trxs: Trxs): P
   const query = v3db()
     .insert(snakecaseKeys(contactors))
     .from('contactors')
+    // @ts-ignore
+    .onConflict('id')
+    .ignore()
     .transacting(trxs.v3db)
 
   await query
