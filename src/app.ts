@@ -11,6 +11,7 @@ import course from "@/services/course"
 import {Trxs} from "@/types/Trxs";
 import clazz from "@/services/clazz";
 import clazzRef from "@/services/clazzRef";
+import teacherAndStudentChatRoomRefs from "@/services/teacherAndStudentChatRoomRefs";
 
 const main = async () => {
   v2centraldb()
@@ -50,7 +51,11 @@ const main = async () => {
           // 轉移班級關係
           await clazzRef(trxs)
 
+          // 轉移老師與學生聊天室關係
+          await teacherAndStudentChatRoomRefs(trxs)
+
           // 轉移課堂
+
 
           // 轉移繳費
 
