@@ -40,3 +40,13 @@ export const getNumberOfInclassCourse = async (trxs: Trxs): Promise<number> => {
 
   return result[0]['count(*)'] as number
 }
+
+export const findInclassCoursesByIds = async (inclassCourseIds: number[], trxs: Trxs): Promise<InclassCourseV2[]> => {
+  const query = v2db()
+    .select()
+    .from('inclass_courses')
+    .whereIn('id', inclassCourseIds)
+    .transacting(trxs.v2db)
+
+  return camelcaseKeys(await query)
+}

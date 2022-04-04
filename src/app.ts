@@ -15,6 +15,7 @@ import teacherAndStudentChatRoomRefs from "@/services/teacherAndStudentChatRoomR
 import lesson from "@/services/lesson";
 import payment from "@/services/payment";
 import receipt from "@/services/receipt";
+import attendance from "@/services/attendance";
 
 const main = async () => {
   v2centraldb()
@@ -66,9 +67,8 @@ const main = async () => {
           // 轉移收據
           await receipt(trxs)
 
-          // 轉移到校出勤
-
-          // 轉移班級出勤
+          // 轉移出勤
+          await attendance(trxs)
 
           // 轉移請假
         })
