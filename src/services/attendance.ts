@@ -165,7 +165,7 @@ export default async (trxs: Trxs) => {
             attendAt: a.attendedAt,
             leaveAt: a.leftAt,
             remark: a.remark ?? '',
-            teacherId: a.teacherId in v2TeacherMap[a.teacherId] ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
+            teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
             createdAt: a.createdAt ?? new Date(),
             updatedAt: a.updatedAt ?? new Date(),
             deletedAt: a.deletedAt,
