@@ -21,8 +21,8 @@ import studentSchedule from "@/services/studentSchedule";
 const main = async () => {
   v2centraldb()
   v2db(config.site)
-  v3db('shenlearn-v3-backend-server')
-  v3chatdb('shenlearn-v3-chat-server')
+  v3db('shenlearn-v3-backend-server-playground')
+  v3chatdb('shenlearn-v3-chat-server-playground')
 
   await v2centraldb().transaction(async v2centraldbTRX => {
     await v2db().transaction(async v2dbTRX => {

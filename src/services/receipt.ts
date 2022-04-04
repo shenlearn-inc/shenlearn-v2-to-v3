@@ -13,6 +13,7 @@ import v2db from "@/db/v2db";
 import {ReceiptPaymentItemRefV2} from "@/v2models/receiptPaymentItemRefs";
 import v3db from "@/db/v3db";
 import {findPaymentItemsByIds} from "@/v2models/paymentItems";
+import camelcaseKeys from "camelcase-keys";
 
 export default async (trxs: Trxs) => {
   // 取得站台資料
@@ -48,9 +49,9 @@ export default async (trxs: Trxs) => {
       }], trxs)
 
       // 將已繳費的 payment item 填入 receiptId
-      const v2refs = await v2db()
+      const v2refs = camelcaseKeys(await v2db()
         .select()
-        .from('receipt_payment_item_refs') as ReceiptPaymentItemRefV2[]
+        .from('receipt_payment_item_refs')) as ReceiptPaymentItemRefV2[]
 
       const paymentItems = await findPaymentItemsByIds(v2refs.map(r => r.paymentItemId), trxs)
 
