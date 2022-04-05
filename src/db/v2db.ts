@@ -1,4 +1,5 @@
 import Knex from "knex"
+import config from "@/config"
 
 let db: Knex
 
@@ -8,10 +9,8 @@ export default (dbName?: string): Knex => {
     db = Knex({
       client: 'mysql',
       connection: {
-        host: 'db-gcp-1.shenlearn.com',
+        ...config.v2db,
         database: dbName,
-        user: 'shenlearn',
-        password: 'e~A3L:dJO.F}wj*5Yz4',
         port: 3306,
       }
     })

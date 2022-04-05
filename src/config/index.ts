@@ -1,3 +1,7 @@
+import dotenv from 'dotenv'
+
+dotenv.config()
+
 export default {
   // 必改
   site: 'lfntu',
@@ -20,5 +24,23 @@ export default {
   zone: 'Asia/Taipei',
   chunkSize: 100,
   studentRoleId: 'd9a7dc11-074d-403a-bd88-c35d30fe8b90',
-  contactorRoleId: '26eaa76b-9090-43ec-b0c8-237bca571a33'
+  contactorRoleId: '26eaa76b-9090-43ec-b0c8-237bca571a33',
+
+  v2db: {
+    host: process.env.V2_DB_HOST,
+    user: process.env.V2_DB_USER,
+    password: process.env.V2_DB_PASSWORD,
+  },
+
+  v3db: {
+    host: process.env.V3_DB_HOST,
+    user: process.env.V3_DB_USER,
+    password: process.env.V3_DB_PASSWORD,
+  },
+
+  v3chatdb: {
+    host: process.env.V3_CHATDB_HOST,
+    user: process.env.V3_CHATDB_USER,
+    password: process.env.V3_CHATDB_PASSWORD,
+  }
 }
