@@ -6,6 +6,9 @@ export default {
   organizationId: 'de47ae02-5320-498d-9ebb-1f460c69b741',
 
   // 必改
+  schoolId: '203e284f-d3b9-465c-82cc-824b073a045e',
+
+  // 必改
   planId: '3cf984f6-4204-4b2c-96b4-8e32a382d111',
 
   // 必改，版本角色

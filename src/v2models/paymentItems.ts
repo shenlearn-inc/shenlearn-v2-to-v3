@@ -10,10 +10,10 @@ export interface PaymentItemV2 {
   teacherId: number | null
   price: number | null
   remark: string | null
-  deadlineAt: string | null
-  startedAt: string | null
-  endedAt: string | null
-  paidAt: string | null
+  deadlineAt: Date | null
+  startedAt: Date | null
+  endedAt: Date | null
+  paidAt: Date | null
   isPublic: number
   createdAt: Date | null
   updatedAt: Date | null
