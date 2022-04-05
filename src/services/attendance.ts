@@ -116,7 +116,7 @@ export default async (trxs: Trxs) => {
           enderId: v2TeacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[v2TeacherId].hashedId) : null,
           enderType: null,
           createdAt: studentSignIns[i].createdAt ?? new Date(),
-          updatedAt: studentSignOuts[i].updatedAt ?? new Date(),
+          updatedAt: studentSignIns[i].updatedAt ?? new Date(),
           deletedAt: null,
         }], trxs)
       } else {
@@ -131,7 +131,7 @@ export default async (trxs: Trxs) => {
           enderId: v2TeacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[v2TeacherId].hashedId) : null,
           enderType: null,
           createdAt: studentSignIns[i].createdAt ?? new Date(),
-          updatedAt: studentSignOuts[i].updatedAt ?? new Date(),
+          updatedAt: studentSignIns[i].updatedAt ?? new Date(),
           deletedAt: null,
         }], trxs)
       }
