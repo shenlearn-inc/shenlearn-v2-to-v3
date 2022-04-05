@@ -39,7 +39,9 @@ export default async (trxs: Trxs) => {
   // 處理學生出勤
   for (let i = 0; i < numberOfStudent; i++) {
     // 找出學生
-    const [v2Student] = await findAllStudents(1, i * config.chunkSize, trxs)
+    const [v2Student] = await findAllStudents(1, i, trxs)
+    console.info(`正在處理學生 ${v2Student.hashedId}`)
+
     const studentId = toStudentId(v2Student.hashedId)
 
     const studentSignIns = camelcaseKeys(await v2db()
@@ -207,7 +209,7 @@ export default async (trxs: Trxs) => {
           attendAt: a.attendedAt,
           leaveAt: a.leftAt,
           remark: a.remark ?? '',
-          teacherId: toTeacherId(v2TeacherMap[a.teacherId].hashedId),
+          teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
           createdAt: a.createdAt ?? new Date(),
           updatedAt: a.updatedAt ?? new Date(),
           deletedAt: a.deletedAt,
