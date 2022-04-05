@@ -44,23 +44,29 @@ export default async (trxs: Trxs) => {
 
     const studentId = toStudentId(v2Student.hashedId)
 
-    const studentSignIns = camelcaseKeys(await v2db()
-      .select('*')
-      .from('student_signs')
-      .where({
-        student_id: v2Student.id,
-        status: true,
-        deleted_at: null,
-      })) as StudentSignV2[]
+    const studentSignIns = camelcaseKeys(
+      await v2db()
+        .select('*')
+        .from('student_signs')
+        .where({
+          student_id: v2Student.id,
+          status: true,
+          deleted_at: null,
+        })
+        .orderBy('created_at', 'desc')
+    ) as StudentSignV2[]
 
-    const studentSignOuts = camelcaseKeys(await v2db()
-      .select('*')
-      .from('student_signs')
-      .where({
-        student_id: v2Student.id,
-        status: false,
-        deleted_at: null,
-      })) as StudentSignV2[]
+    const studentSignOuts = camelcaseKeys(
+      await v2db()
+        .select('*')
+        .from('student_signs')
+        .where({
+          student_id: v2Student.id,
+          status: false,
+          deleted_at: null,
+        })
+        .orderBy('created_at', 'desc')
+    ) as StudentSignV2[]
 
     if (!studentSignIns.length || !studentSignOuts.length) {
       continue
@@ -137,9 +143,6 @@ export default async (trxs: Trxs) => {
       }
 
       for (let j = 0; j < v2StudentAttendances.length; j++) {
-        console.log(`attendAt ${v2StudentAttendances[j].attendedAt} signAt ${studentSignIns[i].createdAt}`)
-        console.log(moment(v2StudentAttendances[j].attendedAt).isSameOrAfter(studentSignIns[i].createdAt))
-
         if (i === 0) {
           if (moment(v2StudentAttendances[j].attendedAt).isSameOrAfter(studentSignIns[i].createdAt)) {
             const a = v2StudentAttendances[j]
