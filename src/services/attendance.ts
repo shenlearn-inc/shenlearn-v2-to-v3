@@ -18,7 +18,7 @@ import generateUUID from "@/utils/generateUUID";
 import toStudentId from "@/utils/toStudentId";
 import {findTeachersByIds, TeacherV2} from "@/v2models/teachers";
 import toTeacherId from "@/utils/toTeacherId";
-import {createStudentLessonAttendances} from "@/v3models/studentLessonAttendances";
+import {createStudentLessonAttendances, StudentLessonAttendanceV3} from "@/v3models/studentLessonAttendances";
 import toClazzId from "@/utils/toClazzId";
 import {findInclassCoursesByIds, InclassCourseV2} from "@/v2models/inclassCourses";
 
@@ -98,7 +98,7 @@ export default async (trxs: Trxs) => {
 
     const isOffset: boolean = false;
     for (let i = 0; i < studentSignIns.length; i++) {
-      let attendances: StudentAttendanceV2[] = []
+      let attendances: StudentLessonAttendanceV3[] = []
 
       const schoolAttendanceId = generateUUID(studentSignIns[i].hashedId)
       const v2TeacherId = studentSignIns[i].teacherId!
@@ -139,31 +139,33 @@ export default async (trxs: Trxs) => {
       for (let j = 0; j < v2StudentAttendances.length; j++) {
         if (i === 0) {
           if (moment(v2StudentAttendances[j].attendedAt).isSameOrAfter(studentSignIns[i].createdAt)) {
-            attendances.push(v2StudentAttendances[j]);
+            const a = v2StudentAttendances[j]
+            attendances.push({
+              id: generateUUID(a.hashedId),
+              schoolId: schoolId,
+              clazzId: toClazzId(v2CourseMap[a.courseId].hashedId),
+              lessonId: generateUUID(v2InclassCourseMap[a.inclassCourseId!].hashedId),
+              studentId: studentId,
+              studentSchoolAttendanceId: generateUUID(studentSignIns[i].hashedId),
+              attendAt: a.attendedAt,
+              leaveAt: a.leftAt,
+              remark: a.remark ?? '',
+              teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
+              createdAt: a.createdAt ?? new Date(),
+              updatedAt: a.updatedAt ?? new Date(),
+              deletedAt: a.deletedAt,
+            });
             v2StudentAttendances.splice(j, 1);
             j = -1;
           }
         } else if (i === studentSignIns.length - 1) {
-          attendances = v2StudentAttendances;
-          break;
-        } else {
-          if (moment(v2StudentAttendances[j].attendedAt).isBetween(studentSignIns[i].createdAt, studentSignIns[i - 1].createdAt, null, '[)')) {
-            attendances.push(v2StudentAttendances[j]);
-            v2StudentAttendances.splice(j, 1);
-            j = -1;
-          }
-        }
-      }
-
-      await createStudentLessonAttendances(
-        attendances.map(a => {
-          return {
+          attendances = v2StudentAttendances.map(a => ({
             id: generateUUID(a.hashedId),
             schoolId: schoolId,
             clazzId: toClazzId(v2CourseMap[a.courseId].hashedId),
             lessonId: generateUUID(v2InclassCourseMap[a.inclassCourseId!].hashedId),
             studentId: studentId,
-            studentSchoolAttendanceId: schoolAttendanceId,
+            studentSchoolAttendanceId: generateUUID(studentSignIns[i].hashedId),
             attendAt: a.attendedAt,
             leaveAt: a.leftAt,
             remark: a.remark ?? '',
@@ -171,11 +173,33 @@ export default async (trxs: Trxs) => {
             createdAt: a.createdAt ?? new Date(),
             updatedAt: a.updatedAt ?? new Date(),
             deletedAt: a.deletedAt,
+          }));
+          break;
+        } else {
+          if (moment(v2StudentAttendances[j].attendedAt).isBetween(studentSignIns[i].createdAt, studentSignIns[i - 1].createdAt, null, '[)')) {
+            const a = v2StudentAttendances[j]
+            attendances.push({
+              id: generateUUID(a.hashedId),
+              schoolId: schoolId,
+              clazzId: toClazzId(v2CourseMap[a.courseId].hashedId),
+              lessonId: generateUUID(v2InclassCourseMap[a.inclassCourseId!].hashedId),
+              studentId: studentId,
+              studentSchoolAttendanceId: generateUUID(studentSignIns[i].hashedId),
+              attendAt: a.attendedAt,
+              leaveAt: a.leftAt,
+              remark: a.remark ?? '',
+              teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
+              createdAt: a.createdAt ?? new Date(),
+              updatedAt: a.updatedAt ?? new Date(),
+              deletedAt: a.deletedAt,
+            });
+            v2StudentAttendances.splice(j, 1);
+            j = -1;
           }
-        }),
-        trxs,
-      )
+        }
+      }
 
+      await createStudentLessonAttendances(attendances, trxs)
     }
   }
 
