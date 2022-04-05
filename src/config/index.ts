@@ -36,11 +36,13 @@ export default {
     host: process.env.V3_DB_HOST,
     user: process.env.V3_DB_USER,
     password: process.env.V3_DB_PASSWORD,
+    database: process.env.V3_DB_NAME,
   },
 
   v3chatdb: {
     host: process.env.V3_CHATDB_HOST,
     user: process.env.V3_CHATDB_USER,
     password: process.env.V3_CHATDB_PASSWORD,
+    database: process.env.V3_CHATDB_NAME,
   }
 }

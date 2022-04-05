@@ -20,8 +20,8 @@ import studentSchedule from "@/services/studentSchedule";
 export const run = async (): Promise<void> => {
   console.info('Run')
   v2db(config.site)
-  v3db('shenlearn-v3-backend-server-playground')
-  v3chatdb('shenlearn-v3-chat-server-playground')
+  v3db(config.v3db.database)
+  v3chatdb(config.v3chatdb.database)
 
   await v2db().transaction(async v2dbTRX => {
     await v3db().transaction(async v3dbTRX => {
