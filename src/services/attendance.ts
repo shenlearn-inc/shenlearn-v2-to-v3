@@ -137,6 +137,9 @@ export default async (trxs: Trxs) => {
       }
 
       for (let j = 0; j < v2StudentAttendances.length; j++) {
+        console.log(`attendAt ${v2StudentAttendances[j].attendedAt} signAt ${studentSignIns[i].createdAt}`)
+        console.log(moment(v2StudentAttendances[j].attendedAt).isSameOrAfter(studentSignIns[i].createdAt))
+
         if (i === 0) {
           if (moment(v2StudentAttendances[j].attendedAt).isSameOrAfter(studentSignIns[i].createdAt)) {
             const a = v2StudentAttendances[j]
