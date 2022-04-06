@@ -20,12 +20,12 @@ export default async (trxs: Trxs) => {
   const schoolId = toSchoolId(siteInfoV2.hashedId)
 
   // 找出老師
-  const v2Teachers = await v2db()
+  const v2Teachers = camelcaseKeys(await v2db()
     .select()
     .from('teachers')
     .whereNull('deleted_at')
     .where('status', true)
-    .transacting(trxs.v2db) as TeacherV2[]
+    .transacting(trxs.v2db)) as TeacherV2[]
   if (!v2Teachers.length) return
 
   // 處理主任
