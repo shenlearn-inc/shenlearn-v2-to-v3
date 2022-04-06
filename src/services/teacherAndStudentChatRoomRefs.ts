@@ -20,12 +20,13 @@ export default async (trxs: Trxs) => {
   const schoolId = toSchoolId(siteInfoV2.hashedId)
 
   // 找出老師
-  const v2Teachers = camelcaseKeys(await v2db()
+  const v2Teachers = camelcaseKeys(
+    await v2db()
     .select()
     .from('teachers')
     .whereNull('deleted_at')
     .where('status', true)
-    .transacting(trxs.v2db)) as TeacherV2[]
+  ) as TeacherV2[]
   if (!v2Teachers.length) return
 
   // 處理主任
@@ -120,7 +121,7 @@ export default async (trxs: Trxs) => {
       await v3db()
         .select()
         .from('students')
-        .whereIn('students.id', Array.from(new Set(refs.map(r => r.studentId))))
+        .whereIn('id', Array.from(new Set(refs.map(r => r.studentId))))
         .transacting(trxs.v3db)
     ) as StudentV3[]
     const studentMap = keyBy(students, 'id')
