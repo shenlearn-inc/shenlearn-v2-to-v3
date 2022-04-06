@@ -29,17 +29,23 @@ export default async (trxs: Trxs) => {
   if (!v2Teachers.length) return
 
   // 處理主任
-  const students = camelcaseKeys(await v3db()
-    .select()
-    .from('students')
-    .where('school_id', schoolId)
-    .whereNull('deleted_at'))
+  const students = camelcaseKeys(
+    await v3db()
+      .select()
+      .from('students')
+      .where('school_id', schoolId)
+      .whereNull('deleted_at')
+      .transacting(trxs.v3db)
+  )
   const studentMap = keyBy(students, 'id')
   const subContactors = students.length
-    ? camelcaseKeys(await v3db()
-      .select()
-      .from('sub_contactors')
-      .whereIn('student_id', Array.from(new Set(students.map(r => r.id))))) as SubContactorV3[]
+    ? camelcaseKeys(
+      await v3db()
+        .select()
+        .from('sub_contactors')
+        .whereIn('student_id', Array.from(new Set(students.map(r => r.id))))
+        .transacting(trxs.v3db)
+    ) as SubContactorV3[]
     : []
   if (students.length || subContactors.length) {
     for (const v2Teacher of v2Teachers.filter(t => t.position === 'director')) {
@@ -106,13 +112,17 @@ export default async (trxs: Trxs) => {
       .whereNull('clazzes.deleted_at')
       .where('clazzes.is_active', true)
       .whereNull('clazz_teacher_refs.deleted_at')
-      .whereNull('students.deleted_at') as { studentId: string; teacherId: string }[]
+      .whereNull('students.deleted_at')
+      .transacting(trxs.v3db) as { studentId: string; teacherId: string }[]
 
     // 加入學生主聊天室
-    const students = camelcaseKeys(await v3db()
-      .select()
-      .from('students')
-      .whereIn('students.id', Array.from(new Set(refs.map(r => r.studentId))))) as StudentV3[]
+    const students = camelcaseKeys(
+      await v3db()
+        .select()
+        .from('students')
+        .whereIn('students.id', Array.from(new Set(refs.map(r => r.studentId))))
+        .transacting(trxs.v3db)
+    ) as StudentV3[]
     const studentMap = keyBy(students, 'id')
 
     await createRoomUserRefs(
@@ -137,10 +147,13 @@ export default async (trxs: Trxs) => {
     )
 
     // 加入學生家長聊天室
-    const subContactors = await v3db()
-      .select()
-      .from('sub_contactors')
-      .whereIn('sub_contactors.student_id', Array.from(new Set(refs.map(r => r.studentId)))) as SubContactorV3[]
+    const subContactors = camelcaseKeys(
+      await v3db()
+        .select()
+        .from('sub_contactors')
+        .whereIn('sub_contactors.student_id', Array.from(new Set(refs.map(r => r.studentId))))
+        .transacting(trxs.v3db)
+    ) as SubContactorV3[]
     await createRoomUserRefs(
       subContactors.map(sc => {
         return {

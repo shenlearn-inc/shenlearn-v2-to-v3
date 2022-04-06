@@ -72,10 +72,12 @@ export default async (trxs: Trxs) => {
       }], trxs)
 
       // Payment item
-      const v2PaymentItems = camelcaseKeys(await v2db()
+      const v2PaymentItems = camelcaseKeys(
+        await v2db()
         .select()
         .from('payment_items')
-        .where('payment_id', v2Payment.id)) as PaymentItemV2[]
+        .where('payment_id', v2Payment.id)
+      ) as PaymentItemV2[]
 
       const v2Students = await findStudentsByIds(Array.from(new Set(v2PaymentItems.map(pi => pi.studentId))), trxs) as StudentV2[]
       const v2StudentMap = keyBy(v2Students, 'id')
