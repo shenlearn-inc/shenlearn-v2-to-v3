@@ -112,7 +112,7 @@ export default async (trxs: Trxs) => {
       .whereNull('clazz_teacher_refs.deleted_at')
       .whereNull('clazzes.deleted_at')
       .where('clazzes.is_active', true)
-      .whereNull('clazz_teacher_refs.deleted_at')
+      .whereNull('clazz_student_refs.deleted_at')
       .whereNull('students.deleted_at')
       .transacting(trxs.v3db) as { studentId: string; teacherId: string }[]
 
