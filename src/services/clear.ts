@@ -1,14 +1,11 @@
 import {Trxs} from "@/types/Trxs";
 import v3db from "@/db/v3db";
 import camelcaseKeys from "camelcase-keys";
-import toSchoolId from "@/utils/toSchoolId";
-import {findSiteInfo} from "@/v2models/siteInfo";
 import config from "@/config";
 
 export default async (trxs: Trxs) => {
 
-  const siteInfoV2 = await findSiteInfo(trxs)
-  const schoolId = toSchoolId(siteInfoV2.hashedId)
+  const schoolId = config.schoolId;
 
   // 刪除校園通知
   const announcements = camelcaseKeys(await v3db()
