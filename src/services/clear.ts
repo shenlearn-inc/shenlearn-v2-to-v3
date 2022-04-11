@@ -4,6 +4,7 @@ import camelcaseKeys from "camelcase-keys";
 import config from "@/config";
 
 export default async (trxs: Trxs) => {
+  console.info('清除新資料庫中的學校資料')
 
   const schoolId = config.schoolId;
 
