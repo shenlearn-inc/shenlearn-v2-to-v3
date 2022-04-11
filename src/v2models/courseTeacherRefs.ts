@@ -30,7 +30,7 @@ export const getNumberOfCourseTeacherRef = async (trxs: Trxs): Promise<number> =
       v2db()
         .select()
         .from('course_teacher_refs')
-        .groupBy(['student_id', 'course_id', 'deleted_at'])
+        .groupBy(['teacher_id', 'course_id', 'deleted_at'])
         .as('t')
     )
     .transacting(trxs.v2db)
