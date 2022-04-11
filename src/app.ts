@@ -16,6 +16,7 @@ import payment from "@/services/payment";
 import receipt from "@/services/receipt";
 import attendance from "@/services/attendance";
 import studentSchedule from "@/services/studentSchedule";
+import clear from "@/services/clear";
 
 export const run = async (): Promise<void> => {
   console.info('Run')
@@ -31,6 +32,9 @@ export const run = async (): Promise<void> => {
           v3db: v3dbTRX,
           v3chatdb: v3chatdbTRX,
         } as Trxs
+
+        // 清空學校資料
+        await clear(trxs)
 
         // 轉移學校
         await school(trxs)
