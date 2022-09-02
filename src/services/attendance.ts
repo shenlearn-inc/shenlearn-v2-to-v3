@@ -133,7 +133,7 @@ export default async (trxs: Trxs) => {
           startedAt: studentSignIns[i].createdAt,
           starterId: v2TeacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[v2TeacherId].hashedId) : null,
           starterType: null,
-          endedAt: studentSignOuts[i].createdAt,
+          endedAt: studentSignOuts[i]?.createdAt ?? null,
           enderId: v2TeacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[v2TeacherId].hashedId) : null,
           enderType: null,
           createdAt: studentSignIns[i].createdAt ?? new Date(),
