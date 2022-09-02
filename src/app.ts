@@ -81,4 +81,6 @@ export const run = async (): Promise<void> => {
       })
     })
   })
+
+  console.info('Done')
 }
