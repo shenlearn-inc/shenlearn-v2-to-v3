@@ -26,7 +26,7 @@ export default async (trxs: Trxs) => {
   for (let i = 0; i < Math.ceil(numberOfPayment / config.chunkSize); i++) {
 
     // 找出學生排程
-    const v2StudentSchedules = await findAllStudentSchedules(config.chunkSize, i * config.chunkSize, trxs)
+    const v2StudentSchedules = (await findAllStudentSchedules(config.chunkSize, i * config.chunkSize, trxs)).filter(s => !!s.studentId)
 
     const v2Students = await findStudentsByIds(Array.from(new Set(v2StudentSchedules.map(pi => pi.studentId))), trxs) as StudentV2[]
     const v2StudentMap = keyBy(v2Students, 'id')
