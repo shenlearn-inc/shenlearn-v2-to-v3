@@ -28,16 +28,18 @@ export default async (trxs: Trxs) => {
     const v2StudentMap = keyBy(v2Students, 'id')
 
     // 轉換學生關係
-    await createClazzStudentRefs(v2CourseStudentRefs.map(r => {
-      return {
-        id: generateUUID(),
-        clazzId: toClazzId(v2CourseMap[r.courseId].hashedId),
-        studentId: toStudentId(v2StudentMap[r.studentId].hashedId),
-        createdAt: r.createdAt ?? new Date(),
-        updatedAt: r.updatedAt ?? new Date(),
-        deletedAt: r.deletedAt,
-      }
-    }), trxs)
+    await createClazzStudentRefs(v2CourseStudentRefs
+      .filter(r => !!r.courseId)
+      .map(r => {
+        return {
+          id: generateUUID(),
+          clazzId: toClazzId(v2CourseMap[r.courseId].hashedId),
+          studentId: toStudentId(v2StudentMap[r.studentId].hashedId),
+          createdAt: r.createdAt ?? new Date(),
+          updatedAt: r.updatedAt ?? new Date(),
+          deletedAt: r.deletedAt,
+        }
+      }), trxs)
   }
 
   // 轉換老師關係
@@ -52,15 +54,18 @@ export default async (trxs: Trxs) => {
     const v2TeacherMap = keyBy(v2Teachers, 'id')
 
     // 轉換老師關係
-    await createClazzTeacherRefs(v2CourseTeacherRefs.map(r => {
-      return {
-        id: generateUUID(),
-        clazzId: toClazzId(v2CourseMap[r.courseId].hashedId),
-        teacherId: toTeacherId(v2TeacherMap[r.teacherId].hashedId),
-        createdAt: r.createdAt ?? new Date(),
-        updatedAt: r.updatedAt ?? new Date(),
-        deletedAt: r.deletedAt,
-      }
-    }), trxs)
+    await createClazzTeacherRefs(v2CourseTeacherRefs
+      .filter(r => !!r.courseId)
+      .map(r => {
+
+        return {
+          id: generateUUID(),
+          clazzId: toClazzId(v2CourseMap[r.courseId].hashedId),
+          teacherId: toTeacherId(v2TeacherMap[r.teacherId].hashedId),
+          createdAt: r.createdAt ?? new Date(),
+          updatedAt: r.updatedAt ?? new Date(),
+          deletedAt: r.deletedAt,
+        }
+      }), trxs)
   }
 }

@@ -17,6 +17,7 @@ import receipt from "@/services/receipt";
 import attendance from "@/services/attendance";
 import studentSchedule from "@/services/studentSchedule";
 import clear from "@/services/clear";
+import credit from "@/services/credit";
 
 export const run = async (): Promise<void> => {
   console.info('Run')
@@ -74,6 +75,9 @@ export const run = async (): Promise<void> => {
 
         // 轉移請假
         await studentSchedule(trxs)
+
+        // 轉移堂次
+        await credit(trxs)
       })
     })
   })

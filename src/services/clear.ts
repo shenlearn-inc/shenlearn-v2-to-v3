@@ -8,6 +8,13 @@ export default async (trxs: Trxs) => {
 
   const schoolId = config.schoolId;
 
+  // 刪除堂次
+  await v3db()
+    .delete()
+    .from('credits')
+    .where('school_id', schoolId)
+    .transacting(trxs.v3db)
+
   // 刪除校園通知
   const announcements = camelcaseKeys(await v3db()
     .select()

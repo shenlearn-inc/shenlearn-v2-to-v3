@@ -3,22 +3,31 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 export default {
-  // 必改
-  site: 'lfntu',
+  // !必改
+  site: 'lusartstudio',
 
-  // 必改
-  organizationId: 'de47ae02-5320-498d-9ebb-1f460c69b741',
+  // !必改
+  // 莘莘集團
+  organizationId: '546694a2-6e6b-4f1d-8bfd-7559fda0ffbf',
 
-  // 必改
-  schoolId: '203e284f-d3b9-465c-82cc-824b073a045e',
+  // !必改
+  schoolId: '6cd417fb-55d1-5ec7-8323-8e1b7c889b09',
 
-  // 必改
-  planId: '3cf984f6-4204-4b2c-96b4-8e32a382d111',
+  // !必改
+  // 旗艦版
+  // planId: '3cf984f6-4204-4b2c-96b4-8e32a382d111',
+  // 專業版
+  planId: 'a9cb8f65-07f1-4663-8db1-d6c9948dd54e',
 
-  // 必改，版本角色
-  directorRoleId: '77e6bc2d-352b-444d-bc9f-fe486adbab7f',
-  managerRoleId: 'd1da500a-bec5-42d8-9b04-c46db0d422a5',
-  teacherRoleId: '1dc24d0c-80eb-4025-9d2c-0cb566c843f9',
+  // !必改，版本角色
+  // 旗艦版
+  // directorRoleId: '77e6bc2d-352b-444d-bc9f-fe486adbab7f',
+  // managerRoleId: 'd1da500a-bec5-42d8-9b04-c46db0d422a5',
+  // teacherRoleId: '1dc24d0c-80eb-4025-9d2c-0cb566c843f9',
+  // 專業版
+  directorRoleId: '9c104851-4782-4835-83ab-93ff4c5882f4',
+  managerRoleId: '2be42894-2afb-4b48-b466-c8204d4aaed7',
+  teacherRoleId: 'f5144404-2f9b-49f1-a491-fa34ad2013da',
 
   initTeacherPassword: 'test123',
   zone: 'Asia/Taipei',
