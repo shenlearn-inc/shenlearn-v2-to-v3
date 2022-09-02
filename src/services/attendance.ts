@@ -21,6 +21,9 @@ import toTeacherId from "@/utils/toTeacherId";
 import {createStudentLessonAttendances, StudentLessonAttendanceV3} from "@/v3models/studentLessonAttendances";
 import toClazzId from "@/utils/toClazzId";
 import {findInclassCoursesByIds, InclassCourseV2} from "@/v2models/inclassCourses";
+import v3db from "@/db/v3db";
+import {TeacherV3} from "@/v3models/teachers";
+import toLessonId from "@/utils/toLessonId";
 
 export default async (trxs: Trxs) => {
   console.info('轉移出勤')
@@ -30,10 +33,11 @@ export default async (trxs: Trxs) => {
   const schoolId = toSchoolId(siteInfoV2.hashedId)
 
   // 取得 service 帳號
-  const serviceDirector = await v2db()
+  const serviceDirector = await v3db()
     .first()
     .from('teachers')
-    .where('name', 'Service') as TeacherV2
+    .where('no', 'T00000001')
+    .transacting(trxs.v3db) as TeacherV3
 
   const numberOfStudent = await getNumberOfStudent(trxs)
   // 處理學生出勤
@@ -156,7 +160,7 @@ export default async (trxs: Trxs) => {
               attendAt: a.attendedAt,
               leaveAt: a.leftAt,
               remark: a.remark ?? '',
-              teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
+              teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : serviceDirector.id,
               createdAt: a.createdAt ?? new Date(),
               updatedAt: a.updatedAt ?? new Date(),
               deletedAt: a.deletedAt,
@@ -175,7 +179,7 @@ export default async (trxs: Trxs) => {
             attendAt: a.attendedAt,
             leaveAt: a.leftAt,
             remark: a.remark ?? '',
-            teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
+            teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : serviceDirector.id,
             createdAt: a.createdAt ?? new Date(),
             updatedAt: a.updatedAt ?? new Date(),
             deletedAt: a.deletedAt,
@@ -194,7 +198,7 @@ export default async (trxs: Trxs) => {
               attendAt: a.attendedAt,
               leaveAt: a.leftAt,
               remark: a.remark ?? '',
-              teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
+              teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : serviceDirector.id,
               createdAt: a.createdAt ?? new Date(),
               updatedAt: a.updatedAt ?? new Date(),
               deletedAt: a.deletedAt,
@@ -213,7 +217,7 @@ export default async (trxs: Trxs) => {
   const numberOfNotAttendedStudentAttendance = await getNumberOfNotAttendedStudentAttendance(trxs)
   for (let i = 0; i < Math.ceil(numberOfNotAttendedStudentAttendance / config.chunkSize); i++) {
     // 找出班級出勤
-    const v2StudentAttendances = await findAllNotAttendedStudentAttendances(config.chunkSize, i * config.chunkSize, trxs)
+    const v2StudentAttendances = (await findAllNotAttendedStudentAttendances(config.chunkSize, i * config.chunkSize, trxs)).filter(a => !!a.studentId)
 
     const v2Courses = await findCoursesByIds(Array.from(new Set(v2StudentAttendances.map(a => a.courseId))), trxs) as CourseV2[]
     const v2CourseMap = _.keyBy(v2Courses, 'id')
@@ -233,13 +237,13 @@ export default async (trxs: Trxs) => {
           id: generateUUID(a.hashedId),
           schoolId: schoolId,
           clazzId: toClazzId(v2CourseMap[a.courseId].hashedId),
-          lessonId: generateUUID(v2InclassCourseMap[a.inclassCourseId!].hashedId),
+          lessonId: toLessonId(v2InclassCourseMap[a.inclassCourseId!].hashedId),
           studentId: toStudentId(v2StudentMap[a.studentId].hashedId),
           studentSchoolAttendanceId: null,
           attendAt: a.attendedAt,
           leaveAt: a.leftAt,
           remark: a.remark ?? '',
-          teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
+          teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : serviceDirector.id,
           createdAt: a.createdAt ?? new Date(),
           updatedAt: a.updatedAt ?? new Date(),
           deletedAt: a.deletedAt,
