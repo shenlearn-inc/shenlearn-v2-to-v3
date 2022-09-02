@@ -43,7 +43,7 @@ export default async (trxs: Trxs) => {
     const v2Teachers = await findTeachersByIds(Array.from(new Set(v2Credits.map(a => a.teacherId))), trxs) as TeacherV2[]
     const v2TeacherMap = _.keyBy(v2Teachers, 'id')
 
-    const v2InclassCourses = await findInclassCoursesByIds(Array.from(new Set(v2Credits.filter(a => !!a.courseCategoryId).map(a => a.courseCategoryId) as number[])), trxs) as InclassCourseV2[]
+    const v2InclassCourses = await findInclassCoursesByIds(Array.from(new Set(v2Credits.filter(a => !!a.inclassCourseId).map(a => a.inclassCourseId) as number[])), trxs) as InclassCourseV2[]
     const v2InclassCourseMap = _.keyBy(v2InclassCourses, 'id')
 
     // 檢查 courseCategoryId 是否為 null
