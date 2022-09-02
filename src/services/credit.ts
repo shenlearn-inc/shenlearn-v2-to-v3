@@ -17,6 +17,8 @@ import {createCredits} from "@/v3models/credits";
 import toCourseId from "@/utils/toCourseId";
 import toLessonId from "@/utils/toLessonId";
 import toCreditId from "@/utils/toCreditId";
+import v3db from "@/db/v3db";
+import {TeacherV3} from "@/v3models/teachers";
 
 export default async (trxs: Trxs) => {
   console.info('轉移堂次')
@@ -24,6 +26,13 @@ export default async (trxs: Trxs) => {
   // 取得站台資料
   const siteInfoV2 = await findSiteInfo(trxs)
   const schoolId = toSchoolId(siteInfoV2.hashedId)
+
+  // 取得 service 帳號
+  const serviceDirector = await v3db()
+    .first()
+    .from('teachers')
+    .where('no', 'T00000001')
+    .transacting(trxs.v3db) as TeacherV3
 
   const numberOfPayment = await getNumberOfStudentSchedule(trxs)
   for (let i = 0; i < Math.ceil(numberOfPayment / config.chunkSize); i++) {
@@ -56,9 +65,9 @@ export default async (trxs: Trxs) => {
         const id = toCreditId(c.hashedId)
         const courseId = toCourseId(v2CourseCategoryMap[c.courseCategoryId as number].hashedId)
         const studentId = toStudentId(v2StudentMap[c.studentId].hashedId)
-        const teacherId = toTeacherId(v2TeacherMap[c.teacherId].hashedId)
-        const clazzId = c.courseId ? toClazzId(v2CourseMap[c.courseId].hashedId) : null
-        const lessonId = c.inclassCourseId ? toLessonId(v2InclassCourseMap[c.inclassCourseId].hashedId) : null
+        const teacherId = c.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : serviceDirector.id
+        const clazzId = c.courseId && c.courseId in v2CourseMap ? toClazzId(v2CourseMap[c.courseId].hashedId) : null
+        const lessonId = c.inclassCourseId && c.inclassCourseId in v2InclassCourseMap ? toLessonId(v2InclassCourseMap[c.inclassCourseId].hashedId) : null
         const receiptId = null
 
         return {
