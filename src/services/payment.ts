@@ -16,6 +16,8 @@ import {findStudentsByIds, StudentV2} from "@/v2models/students";
 import {keyBy} from "lodash"
 import toStudentId from "@/utils/toStudentId";
 import camelcaseKeys from "camelcase-keys";
+import v3db from "@/db/v3db";
+import {TeacherV3} from "@/v3models/teachers";
 
 export default async (trxs: Trxs) => {
   console.info('轉移繳費')
@@ -25,10 +27,11 @@ export default async (trxs: Trxs) => {
   const schoolId = toSchoolId(siteInfoV2.hashedId)
 
   // 取得 service 帳號
-  const serviceDirector = await v2db()
+  const serviceDirector = await v3db()
     .first()
     .from('teachers')
-    .where('name', 'Service') as TeacherV2
+    .where('no', 'T00000001')
+    .transacting(trxs.v3db) as TeacherV3
 
   const numberOfPayment = await getNumberOfPayment(trxs)
   for (let i = 0; i < Math.ceil(numberOfPayment / config.chunkSize); i++) {
@@ -56,7 +59,7 @@ export default async (trxs: Trxs) => {
       await createPayments([{
         id: paymentId,
         schoolId: schoolId,
-        teacherId: toTeacherId(serviceDirector.hashedId),
+        teacherId: serviceDirector.id,
         paymentRootId: paymentRootId,
         price: v2Payment.price ?? 0,
         remark: v2Payment.remark ?? '',

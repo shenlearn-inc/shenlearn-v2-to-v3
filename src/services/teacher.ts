@@ -9,6 +9,7 @@ import toSchoolId from "@/utils/toSchoolId";
 import toRoleId from "@/utils/toRoleId";
 import {Trxs} from "@/types/Trxs";
 import {createUsers} from "@/v3chatModels/users";
+import generateUUID from "@/utils/generateUUID";
 
 // 轉移老師資料
 export default async (trxs: Trxs) => {
@@ -20,14 +21,60 @@ export default async (trxs: Trxs) => {
   const v2Teachers = await findAllTeachers(99999, 0, trxs)
   if (!v2Teachers.length) return
 
+  const randomPassword = randomBytes(10).toString('hex')
   const salt = randomBytes(32)
-  const hashedPassword = await argon2.hash(config.initTeacherPassword, {salt})
+  const hashedPassword = await argon2.hash(randomPassword, {salt})
 
+  // 建立管理主任
+  const [serviceDirector] = await createTeachers([
+    {
+      id: generateUUID(),
+      username: `${siteInfoV2.databaseName}.service@shenlearn.com`,
+      password: hashedPassword,
+      salt: salt.toString('hex'),
+      accessToken: null,
+      refreshToken: null,
+      schoolId: toSchoolId(siteInfoV2.hashedId),
+      roleId: toRoleId('director'),
+      name: 'Service',
+      no: 'T00000001',
+      avatarUrl: null,
+      status: 'active',
+      cardNo: null,
+      cellphonePrefix: null,
+      cellphone: null,
+      telephonePrefix: null,
+      telephone: null,
+      email: `${siteInfoV2.databaseName}.service@shenlearn.com`,
+      address: '',
+      isSms: false,
+      isEmail: false,
+      remark: '',
+      isInSchool: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    }
+  ], trxs)
+
+  // 建立管理主任 chat user
+  await createUsers([{
+    id: serviceDirector.id,
+    name: serviceDirector.name,
+    type: 'teacher',
+    avatarUrl: null,
+    createdAt: serviceDirector.createdAt ?? new Date(),
+    updatedAt: serviceDirector.updatedAt ?? new Date(),
+    deletedAt: serviceDirector.deletedAt,
+  }], trxs)
+
+  // 轉移老師資料
+  const initHashedPassword = await argon2.hash(config.initTeacherPassword, {salt})
   await createTeachers(v2Teachers.map(t => {
     return {
       id: toTeacherId(t.hashedId),
       username: t.email ?? '',
-      password: hashedPassword,
+      password: initHashedPassword,
       salt: salt.toString('hex'),
       accessToken: null,
       refreshToken: null,

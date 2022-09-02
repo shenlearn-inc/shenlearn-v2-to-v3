@@ -1,6 +1,7 @@
 import v3db from "@/db/v3db";
 import snakecaseKeys from "snakecase-keys";
 import {Trxs} from "@/types/Trxs";
+import camelcaseKeys from "camelcase-keys";
 
 export interface TeacherV3 {
   id: string
@@ -31,12 +32,12 @@ export interface TeacherV3 {
   deletedAt: Date | null
 }
 
-export const createTeachers = async (teachers: TeacherV3[], trxs: Trxs): Promise<void> => {
+export const createTeachers = async (teachers: TeacherV3[], trxs: Trxs): Promise<TeacherV3[]> => {
   const query = v3db()
     .insert(snakecaseKeys(teachers))
     .from('teachers')
+    .returning('*')
     .transacting(trxs.v3db)
 
-  await query
-  return
+  return camelcaseKeys(await query)
 }
