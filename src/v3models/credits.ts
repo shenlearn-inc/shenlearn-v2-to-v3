@@ -22,7 +22,7 @@ export interface CreditV3 {
 export const createCredits = async (credits: CreditV3[], trxs: Trxs): Promise<void> => {
   const query = v3db()
     .insert(snakecaseKeys(credits))
-    .from('clazzes')
+    .from('credits')
     .transacting(trxs.v3db)
 
   await query
