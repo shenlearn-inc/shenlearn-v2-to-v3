@@ -81,7 +81,7 @@ export default async (trxs: Trxs) => {
       schoolId: toSchoolId(siteInfoV2.hashedId),
       roleId: toRoleId(t.position!),
       name: t.name ?? '',
-      no: t.aftsId ?? '',
+      no: t.aftsId ?? 'T00000002',
       avatarUrl: null,
       status: !!t.status ? "active" : "inactive",
       cardNo: t.cardId,
