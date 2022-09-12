@@ -4,7 +4,7 @@ dotenv.config()
 
 export default {
   // !必改
-  site: 'nms-v3',
+  site: 'nms',
 
   // !必改
   // 莘莘集團
