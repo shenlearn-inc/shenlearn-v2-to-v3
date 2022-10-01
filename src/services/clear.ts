@@ -210,4 +210,18 @@ export default async (trxs: Trxs) => {
     .from('teacher_school_attendances')
     .where('school_id', schoolId)
     .transacting(trxs.v3db)
+
+  // 刪除學生
+  await v3db()
+    .delete()
+    .from('students')
+    .where('school_id', schoolId)
+    .transacting(trxs.v3db)
+
+  // 刪除學校
+  await v3db()
+    .delete()
+    .from('schools')
+    .where('id', schoolId)
+    .transacting(trxs.v3db)
 }
