@@ -2,6 +2,7 @@ import {Trxs} from "@/types/Trxs";
 import v3db from "@/db/v3db";
 import camelcaseKeys from "camelcase-keys";
 import config from "@/config";
+import v3chatdb from "@/db/v3chatdb";
 
 export default async (trxs: Trxs) => {
   console.info('清除新資料庫中的學校資料')
@@ -161,6 +162,29 @@ export default async (trxs: Trxs) => {
     .where('school_id', schoolId)
     .transacting(trxs.v3db))
   const studentIds = Array.from(new Set(students.map(s => s.id)))
+
+  // 聊天室
+  const rooms = await v3chatdb()
+    .select()
+    .from('rooms')
+    .whereIn('external_id', studentIds)
+    .transacting(trxs.v3chatdb)
+  const roomIds = Array.from(new Set(rooms.map(s => s.id)))
+
+  // 刪除聊天室關係
+  await v3chatdb()
+    .delete()
+    .from('room_user_refs')
+    .whereIn('room_id', roomIds)
+    .transacting(trxs.v3chatdb)
+
+  // 刪除聊天室
+  await v3chatdb()
+    .delete()
+    .from('rooms')
+    .whereIn('id', roomIds)
+    .transacting(trxs.v3chatdb)
+
   // 刪除學生日誌
   await v3db()
     .delete()
@@ -208,13 +232,6 @@ export default async (trxs: Trxs) => {
   await v3db()
     .delete()
     .from('teacher_school_attendances')
-    .where('school_id', schoolId)
-    .transacting(trxs.v3db)
-
-  // 刪除學生
-  await v3db()
-    .delete()
-    .from('students')
     .where('school_id', schoolId)
     .transacting(trxs.v3db)
 
