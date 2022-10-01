@@ -65,6 +65,7 @@ export default async (trxs: Trxs) => {
   // 轉移子聯絡人
   for (const sp of studentParents) {
     const studentId = toStudentId(studentMap[sp.studentId!].hashedId)
+    const student = studentMap[sp.studentId!]
     const chatRoomId = toSubContactorChatRoomId(sp.hashedId)
 
     await createSubContactors([{
@@ -103,6 +104,7 @@ export default async (trxs: Trxs) => {
     if (!sp.deletedAt) {
       // 把子聯絡人加入聊天室
       await createRoomUserRefs([
+        // 所有聯絡人聊天室
         {
           id: generateUUID(),
           userId: toContactorId(sp.cellphoneInternationalPrefix!, sp.cellphone!),
@@ -110,7 +112,7 @@ export default async (trxs: Trxs) => {
           userAvatarUrl: null,
           roomId: toStudentChatRoomId(studentMap[sp.studentId!].hashedId),
           roomName: siteInfoV2.name,
-          roomSubName: siteInfoV2.name,
+          roomSubName: student.name ?? '',
           roomAvatarUrl: siteInfoV2.imageUrl,
           unread: 0,
           lastSeenAt: null,
@@ -118,6 +120,7 @@ export default async (trxs: Trxs) => {
           updatedAt: new Date(),
           deletedAt: null,
         },
+        // 單獨聊天室
         {
           id: generateUUID(),
           userId: toContactorId(sp.cellphoneInternationalPrefix!, sp.cellphone!),
@@ -125,7 +128,7 @@ export default async (trxs: Trxs) => {
           userAvatarUrl: null,
           roomId: chatRoomId,
           roomName: siteInfoV2.name,
-          roomSubName: siteInfoV2.name,
+          roomSubName: student.name ?? '',
           roomAvatarUrl: siteInfoV2.imageUrl,
           unread: 0,
           lastSeenAt: null,
