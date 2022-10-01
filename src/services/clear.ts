@@ -222,12 +222,11 @@ export default async (trxs: Trxs) => {
     .transacting(trxs.v3db)
 
   // 刪除老師
-  const teachers = camelcaseKeys(await v3db()
-    .select()
+  await v3db()
+    .delete()
     .from('teachers')
     .where('school_id', schoolId)
-    .transacting(trxs.v3db))
-  const teacherIds = Array.from(new Set(teachers.map(t => t.id)))
+    .transacting(trxs.v3db)
   // 刪除老師出勤
   await v3db()
     .delete()
