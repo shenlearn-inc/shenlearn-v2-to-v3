@@ -18,6 +18,7 @@ import toStudentId from "@/utils/toStudentId";
 import camelcaseKeys from "camelcase-keys";
 import v3db from "@/db/v3db";
 import {TeacherV3} from "@/v3models/teachers";
+import toDateStr from "@/utils/toDateStr";
 
 export default async (trxs: Trxs) => {
   console.info('轉移繳費')
@@ -91,6 +92,7 @@ export default async (trxs: Trxs) => {
 
       await createPaymentItems(
         v2PaymentItems.map(pi => {
+
           return {
             id: toPaymentId(pi.hashedId),
             schoolId: schoolId,
@@ -101,9 +103,9 @@ export default async (trxs: Trxs) => {
             price: pi.price ?? 0,
             remark: pi.remark ?? '',
             isPublic: !!pi.isPublic,
-            deadlineDate: pi.deadlineAt?.toISOString().slice(0, 10) ?? null,
-            startedDate: pi.startedAt?.toISOString().slice(0, 10) ?? null,
-            endedDate: pi.endedAt?.toISOString().slice(0, 10) ?? null,
+            deadlineDate: toDateStr(pi.deadlineAt),
+            startedDate: toDateStr(pi.startedAt),
+            endedDate: toDateStr(pi.endedAt),
             receiptId: null,
             courseId: null,
             creditCount: null,
