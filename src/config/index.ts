@@ -4,15 +4,15 @@ dotenv.config()
 
 export default {
   // !必改
-  site: 'nms',
+  site: 'yuhao',
 
   // !必改
   // 莘莘集團
   // organizationId: '546694a2-6e6b-4f1d-8bfd-7559fda0ffbf',
-  organizationId: '4d50248d-9120-489c-ba61-bb28f0dfc7d2',
+  organizationId: '24408209-9f2e-4a31-a933-dcf7f3187e69',
 
   // !必改
-  schoolId: '6f6292c6-ad9a-5df0-aa01-647478e20bb3',
+  schoolId: '418b2015-3bfb-4dc5-8dca-834c6ca73353',
 
   // !必改
   // 旗艦版
