@@ -96,7 +96,7 @@ export default async (trxs: Trxs) => {
             schoolId: schoolId,
             paymentId: paymentId,
             studentId: toStudentId(v2StudentMap[pi.studentId].hashedId),
-            teacherId: toTeacherId(v2TeacherMap[pi.teacherId ?? serviceTeacher.id].hashedId),
+            teacherId: toTeacherId(pi.teacherId! in v2TeacherMap ? v2TeacherMap[pi.teacherId!].hashedId : serviceTeacher.hashedId),
             name: v2Payment.name ?? '',
             price: pi.price ?? 0,
             remark: pi.remark ?? '',
