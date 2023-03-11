@@ -86,6 +86,7 @@ export default async (trxs: Trxs) => {
       const v2StudentMap = keyBy(v2Students, 'id')
 
       const v2Teachers = await findTeachersByIds(Array.from(new Set(v2PaymentItems.filter(pi => !!pi.teacherId).map(pi => pi.teacherId) as number[])), trxs) as TeacherV2[]
+      const serviceTeacher = v2Teachers.filter((t) => t.email === "service@shenlearn.com")[0];
       const v2TeacherMap = keyBy(v2Teachers, 'id')
 
       await createPaymentItems(
@@ -95,7 +96,7 @@ export default async (trxs: Trxs) => {
             schoolId: schoolId,
             paymentId: paymentId,
             studentId: toStudentId(v2StudentMap[pi.studentId].hashedId),
-            teacherId: toTeacherId(v2TeacherMap[pi.teacherId!].hashedId),
+            teacherId: toTeacherId(v2TeacherMap[pi.teacherId ?? serviceTeacher.id].hashedId),
             name: v2Payment.name ?? '',
             price: pi.price ?? 0,
             remark: pi.remark ?? '',
