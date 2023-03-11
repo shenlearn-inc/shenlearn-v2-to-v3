@@ -67,3 +67,13 @@ export const findTeachersByIds = async (teacherIds: number[], trxs: Trxs): Promi
 
   return camelcaseKeys(await query)
 }
+
+export const findServiceTeacher = async (trxs: Trxs): Promise<TeacherV2> => {
+  const query = v2db()
+    .first()
+    .from('teachers')
+    .where('email', "service@shenlearn.com")
+    .transacting(trxs.v2db)
+
+  return camelcaseKeys(await query)
+}

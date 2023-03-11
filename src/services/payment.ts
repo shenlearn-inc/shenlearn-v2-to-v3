@@ -7,7 +7,7 @@ import generateUUID from "@/utils/generateUUID";
 import toSchoolId from "@/utils/toSchoolId";
 import {createPaymentRoots} from "@/v3models/paymentRoots";
 import v2db from "@/db/v2db";
-import {findTeachersByIds, TeacherV2} from "@/v2models/teachers";
+import {findServiceTeacher, findTeachersByIds, TeacherV2} from "@/v2models/teachers";
 import toTeacherId from "@/utils/toTeacherId";
 import {createPaymentItems} from "@/v3models/paymentItems";
 import toPaymentId from "@/utils/toPaymentId";
@@ -86,7 +86,7 @@ export default async (trxs: Trxs) => {
       const v2StudentMap = keyBy(v2Students, 'id')
 
       const v2Teachers = await findTeachersByIds(Array.from(new Set(v2PaymentItems.filter(pi => !!pi.teacherId).map(pi => pi.teacherId) as number[])), trxs) as TeacherV2[]
-      const serviceTeacher = v2Teachers.filter((t) => t.email === "service@shenlearn.com")[0];
+      const serviceTeacher = await findServiceTeacher(trxs);
       const v2TeacherMap = keyBy(v2Teachers, 'id')
 
       await createPaymentItems(
