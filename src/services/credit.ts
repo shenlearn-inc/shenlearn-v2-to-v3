@@ -68,7 +68,6 @@ export default async (trxs: Trxs) => {
         const teacherId = c.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : serviceDirector.id
         const clazzId = c.courseId && c.courseId in v2CourseMap ? toClazzId(v2CourseMap[c.courseId].hashedId) : null
         const lessonId = c.inclassCourseId && c.inclassCourseId in v2InclassCourseMap ? toLessonId(v2InclassCourseMap[c.inclassCourseId].hashedId) : null
-        const receiptId = null
 
         return {
           id,
@@ -78,7 +77,6 @@ export default async (trxs: Trxs) => {
           teacherId,
           clazzId,
           lessonId,
-          receiptId,
           reason: c.reason ?? '',
           count: c.count ?? 0,
           remark: c.remark ?? '',

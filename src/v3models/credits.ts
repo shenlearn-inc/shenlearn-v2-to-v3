@@ -10,7 +10,6 @@ export interface CreditV3 {
   teacherId: string
   clazzId: string | null
   lessonId: string | null
-  receiptId: string | null
   reason: string
   count: number
   remark: string
