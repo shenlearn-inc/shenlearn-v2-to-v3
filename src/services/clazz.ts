@@ -36,7 +36,7 @@ export default async (trxs: Trxs) => {
       id: toClazzId(c.hashedId),
       name: c.name ?? '',
       schoolId: toSchoolId(siteInfoV2.hashedId),
-      courseId: c.id in courseCategoryMap ? toCourseId(courseCategoryMap[c.id].hashedId) : initCourse!.id,
+      courseId: c.courseCategoryId in courseCategoryMap ? toCourseId(courseCategoryMap[c.id].hashedId) : initCourse!.id,
       attendMethod: toAttendMode(siteInfoV2.signMode),
       remark: c.remark ?? '',
       isActive: !!c.status,
