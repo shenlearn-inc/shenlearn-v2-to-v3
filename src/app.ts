@@ -18,6 +18,7 @@ import attendance from "@/services/attendance";
 import studentSchedule from "@/services/studentSchedule";
 import clear from "@/services/clear";
 import credit from "@/services/credit";
+import chat from "@/services/chat";
 
 export const run = async (): Promise<void> => {
   console.info('Run')
@@ -60,6 +61,9 @@ export const run = async (): Promise<void> => {
 
         // 轉移老師與學生聊天室關係
         await teacherAndStudentChatRoomRefs(trxs)
+
+        // 轉移聊天室訊息
+        await chat(trxs)
 
         // 轉移課堂
         await lesson(trxs)

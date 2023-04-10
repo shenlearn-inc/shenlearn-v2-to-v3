@@ -50,10 +50,10 @@ export default async (trxs: Trxs) => {
     : []
   if (students.length || subContactors.length) {
     for (const v2Teacher of v2Teachers.filter(t => t.position === 'director')) {
-
       // 加入學生主聊天室
       await createRoomUserRefs(
         students.map(s => {
+          if (!s) console.log(students);
           return {
             id: generateUUID(),
             roomId: s.chatRoomId,
