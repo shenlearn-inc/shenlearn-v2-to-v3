@@ -53,7 +53,6 @@ export default async (trxs: Trxs) => {
       // 加入學生主聊天室
       await createRoomUserRefs(
         students.map(s => {
-          if (!s) console.log(students);
           return {
             id: generateUUID(),
             roomId: s.chatRoomId,
@@ -128,6 +127,10 @@ export default async (trxs: Trxs) => {
 
     await createRoomUserRefs(
       refs.map(r => {
+        if (!(r.studentId in studentMap)) {
+          console.info(r.studentId)
+          console.info(students)
+        }
         return {
           id: generateUUID(),
           roomId: studentMap[r.studentId].chatRoomId,
