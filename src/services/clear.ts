@@ -3,11 +3,17 @@ import v3db from "@/db/v3db";
 import camelcaseKeys from "camelcase-keys";
 import config from "@/config";
 import v3chatdb from "@/db/v3chatdb";
+import v2db from "@/db/v2db";
+import toSchoolId from "@/utils/toSchoolId";
 
 export default async (trxs: Trxs) => {
   console.info('清除新資料庫中的學校資料')
 
-  const schoolId = config.schoolId;
+  const v2SiteInfo = await v2db().first().from('site_info');
+  if (!v2SiteInfo || !v2SiteInfo.id) {
+    throw new Error(`${config.site} siteInfo does not exist`);
+  }
+  const schoolId = toSchoolId(v2SiteInfo.hashed_id);
 
   // 刪除堂次
   await v3db()
@@ -170,6 +176,13 @@ export default async (trxs: Trxs) => {
     .whereIn('external_id', studentIds)
     .transacting(trxs.v3chatdb)
   const roomIds = Array.from(new Set(rooms.map(s => s.id)))
+
+  // 刪除聊天訊息
+  await v3chatdb()
+    .delete()
+    .from('messages')
+    .whereIn('room_id', roomIds)
+    .transacting(trxs.v3chatdb)
 
   // 刪除聊天室關係
   await v3chatdb()

@@ -1,5 +1,5 @@
 import {findSiteInfo} from "@/v2models/siteInfo"
-import {findAllTeachers} from "@/v2models/teachers";
+import {findAllTeachers, TeacherV2} from "@/v2models/teachers";
 import {createTeachers} from "@/v3models/teachers";
 import toTeacherId from "@/utils/toTeacherId";
 import {randomBytes} from "crypto"
@@ -10,6 +10,7 @@ import toRoleId from "@/utils/toRoleId";
 import {Trxs} from "@/types/Trxs";
 import {createUsers} from "@/v3chatModels/users";
 import generateUUID from "@/utils/generateUUID";
+import v2db from "@/db/v2db";
 
 // 轉移老師資料
 export default async (trxs: Trxs) => {
@@ -18,17 +19,23 @@ export default async (trxs: Trxs) => {
   // 取得站台資料
   const siteInfoV2 = await findSiteInfo(trxs)
 
-  const v2Teachers = await findAllTeachers(99999, 0, trxs)
+  let v2Teachers = await findAllTeachers(99999, 0, trxs)
   if (!v2Teachers.length) return
 
   const randomPassword = randomBytes(10).toString('hex')
   const salt = randomBytes(32)
   const hashedPassword = await argon2.hash(randomPassword, {salt})
 
+  // 取得 service 帳號
+  const v2ServiceDirectorIndex = v2Teachers.findIndex((teacher) => teacher.name === "Service");
+  if (v2ServiceDirectorIndex !== -1) {
+    v2Teachers.splice(v2ServiceDirectorIndex, 1)
+  }
+
   // 建立管理主任
   const [serviceDirector] = await createTeachers([
     {
-      id: generateUUID(),
+      id: v2ServiceDirectorIndex !== -1 ? toTeacherId(v2Teachers[v2ServiceDirectorIndex].hashedId) : generateUUID(),
       username: `${siteInfoV2.databaseName}.service@shenlearn.com`,
       password: hashedPassword,
       salt: salt.toString('hex'),
