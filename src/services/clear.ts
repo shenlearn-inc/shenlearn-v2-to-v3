@@ -9,7 +9,8 @@ import toSchoolId from "@/utils/toSchoolId";
 export default async (trxs: Trxs) => {
   console.info('清除新資料庫中的學校資料')
 
-  const v2SiteInfo = await v2db().first().from('site_info');
+  const v2SiteInfo = await v2db().first().from('site_info').transacting(trxs.v2db);
+  console.info(v2SiteInfo);
   if (!v2SiteInfo || !v2SiteInfo.id) {
     throw new Error(`${config.site} siteInfo does not exist`);
   }
