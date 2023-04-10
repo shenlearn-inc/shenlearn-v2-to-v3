@@ -19,7 +19,7 @@ export default async (trxs: Trxs) => {
   // 取得站台資料
   const siteInfoV2 = await findSiteInfo(trxs)
 
-  let v2Teachers = await findAllTeachers(99999, 0, trxs)
+  const v2Teachers = await findAllTeachers(99999, 0, trxs)
   if (!v2Teachers.length) return
 
   const randomPassword = randomBytes(10).toString('hex')
@@ -28,9 +28,6 @@ export default async (trxs: Trxs) => {
 
   // 取得 service 帳號
   const v2ServiceDirectorIndex = v2Teachers.findIndex((teacher) => teacher.name === "Service");
-  if (v2ServiceDirectorIndex !== -1) {
-    v2Teachers.splice(v2ServiceDirectorIndex, 1)
-  }
 
   // 建立管理主任
   const [serviceDirector] = await createTeachers([
@@ -74,6 +71,11 @@ export default async (trxs: Trxs) => {
     updatedAt: serviceDirector.updatedAt ?? new Date(),
     deletedAt: serviceDirector.deletedAt,
   }], trxs)
+
+  // 把 serviceDirector 從列表移除
+  if (v2ServiceDirectorIndex !== -1) {
+    v2Teachers.splice(v2ServiceDirectorIndex, 1)
+  }
 
   // 轉移老師資料
   const initHashedPassword = await argon2.hash(config.initTeacherPassword, {salt})
