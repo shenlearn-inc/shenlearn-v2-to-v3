@@ -122,7 +122,7 @@ export default async (trxs: Trxs) => {
     // 加入學生主聊天室
     console.log(await v3db()
       .select()
-      .from('students').where("id", "711b40db-2d3b-556a-a224-447423217bed"))
+      .from('students').where("id", "711b40db-2d3b-556a-a224-447423217bed").transacting(trxs.v3db))
     const students = camelcaseKeys(
       (await v3db()
         .select()
