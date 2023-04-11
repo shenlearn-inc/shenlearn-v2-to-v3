@@ -5,7 +5,7 @@ import {TeacherV2} from "@/v2models/teachers";
 import toTeacherId from "@/utils/toTeacherId";
 import {createRoomUserRefs} from "@/v3chatModels/roomUserRefs";
 import generateUUID from "@/utils/generateUUID";
-import {keyBy} from 'lodash'
+import {differenceWith, keyBy} from 'lodash'
 import {StudentV3} from "@/v3models/students";
 import {SubContactorV3} from "@/v3models/subContactors";
 import {findSiteInfo} from "@/v2models/siteInfo";
@@ -123,14 +123,11 @@ export default async (trxs: Trxs) => {
         .whereIn('id', Array.from(new Set(refs.map(r => r.studentId))))
         .transacting(trxs.v3db)
     ) as StudentV3[]
+    console.log(differenceWith(Array.from(new Set(refs.map(r => r.studentId))), students, (a, b) => a === b.id));
     const studentMap = keyBy(students, 'id')
 
     await createRoomUserRefs(
       refs.map(r => {
-        if (!(r.studentId in studentMap)) {
-          console.info(r.studentId)
-          console.info(students)
-        }
         return {
           id: generateUUID(),
           roomId: studentMap[r.studentId].chatRoomId,
