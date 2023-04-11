@@ -98,7 +98,7 @@ export default async (trxs: Trxs) => {
 
   // 處理行政與老師
   for (const v2Teacher of v2Teachers.filter(t => t.position === 'manager' || t.position === 'teacher')) {
-    const refs = await v3db()
+    const refs = (await v3db()
       .select({
         studentId: 'clazz_student_refs.student_id',
         teacherId: 'clazz_teacher_refs.teacher_id',
@@ -113,7 +113,7 @@ export default async (trxs: Trxs) => {
       .where('clazzes.is_active', true)
       .whereNull('clazz_student_refs.deleted_at')
       .whereNull('students.deleted_at')
-      .transacting(trxs.v3db) as { studentId: string; teacherId: string }[]
+      .transacting(trxs.v3db)).filter(r => !!r) as { studentId: string; teacherId: string }[]
 
     if (!refs?.length) {
       continue;
