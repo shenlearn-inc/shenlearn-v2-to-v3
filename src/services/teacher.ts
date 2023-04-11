@@ -78,8 +78,9 @@ export default async (trxs: Trxs) => {
   }
 
   // 轉移老師資料
+  let counter = 1
   const initHashedPassword = await argon2.hash(config.initTeacherPassword, {salt})
-  await createTeachers(v2Teachers.map(t => {
+  await createTeachers(v2Teachers.map((t, index) => {
     return {
       id: toTeacherId(t.hashedId),
       username: t.email ?? '',
@@ -90,7 +91,7 @@ export default async (trxs: Trxs) => {
       schoolId: toSchoolId(siteInfoV2.hashedId),
       roleId: toRoleId(t.position!),
       name: t.name ?? '',
-      no: t.aftsId ?? 'T00000002',
+      no: t.aftsId ?? `T${`${++counter}`.padStart(8, "0")}`,
       avatarUrl: null,
       status: !!t.status ? "active" : "inactive",
       cardNo: t.cardId,
