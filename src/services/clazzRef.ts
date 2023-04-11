@@ -31,6 +31,9 @@ export default async (trxs: Trxs) => {
     await createClazzStudentRefs(v2CourseStudentRefs
       .filter(r => !!r.courseId)
       .map(r => {
+        if (toStudentId(v2StudentMap[r.studentId].hashedId) === '711b40db-2d3b-556a-a224-447423217bed') {
+          console.log(v2StudentMap[r.studentId])
+        }
         return {
           id: generateUUID(),
           clazzId: toClazzId(v2CourseMap[r.courseId].hashedId),
