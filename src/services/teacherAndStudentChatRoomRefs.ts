@@ -132,6 +132,9 @@ export default async (trxs: Trxs) => {
 
     await createRoomUserRefs(
       refs.map(r => {
+        if (!studentMap[r.studentId]?.chatRoomId) {
+          console.log(r.studentId);
+        }
         return {
           id: generateUUID(),
           roomId: studentMap[r.studentId].chatRoomId,
