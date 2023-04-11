@@ -30,6 +30,10 @@ export default async (trxs: Trxs) => {
       const chatRoomId = toStudentChatRoomId(s.hashedId)
       const studentId = toStudentId(s.hashedId)
 
+      if (studentId === "711b40db-2d3b-556a-a224-447423217bed") {
+        console.log(s)
+      }
+
       // 新建學生資料
       await createStudents([{
         id: studentId,
