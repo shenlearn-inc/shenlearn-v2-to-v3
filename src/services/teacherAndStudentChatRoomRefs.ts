@@ -120,17 +120,14 @@ export default async (trxs: Trxs) => {
     }
 
     // 加入學生主聊天室
-    console.log(await v3db()
-      .select()
-      .from('students').where("id", "711b40db-2d3b-556a-a224-447423217bed").transacting(trxs.v3db))
     const students = camelcaseKeys(
       (await v3db()
         .select()
         .from('students')
         .whereIn('id', Array.from(new Set(refs.map(r => r.studentId))))
-        .transacting(trxs.v3db)).filter(s => !!s)
+        .transacting(trxs.v3db))
     ) as StudentV3[]
-    console.log(differenceWith(Array.from(new Set(refs.map(r => r.studentId))), students, (a, b) => a !== b.id))
+    console.log(students.filter(s => s.id === "711b40db-2d3b-556a-a224-447423217bed"))
     const studentMap = keyBy(students, 'id')
 
     await createRoomUserRefs(
