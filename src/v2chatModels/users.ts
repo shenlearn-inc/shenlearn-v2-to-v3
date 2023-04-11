@@ -1,4 +1,5 @@
 import v2chatdb from "@/db/v2chatdb";
+import camelcaseKeys from "camelcase-keys";
 
 export interface UserV2 {
   id: string
@@ -19,5 +20,5 @@ export const findUsersByIds = async (ids: string[]): Promise<UserV2[]> => {
     .whereIn("id", ids)
     .whereNull("deleted_at")
 
-  return await query;
+  return camelcaseKeys(await query);
 }

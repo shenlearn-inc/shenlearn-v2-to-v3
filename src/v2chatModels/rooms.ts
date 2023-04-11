@@ -2,6 +2,7 @@ import snakecaseKeys from "snakecase-keys"
 import v3chatdb from "@/db/v3chatdb"
 import {Trxs} from "@/types/Trxs";
 import v2chatdb from "@/db/v2chatdb";
+import camelcaseKeys from "camelcase-keys";
 
 export interface RoomV2 {
   id: string
@@ -32,5 +33,5 @@ export const findRoomByExternalId = async (externalId: string): Promise<RoomV2 |
     })
     .from('rooms')
 
-  return await query;
+  return camelcaseKeys(await query);
 }

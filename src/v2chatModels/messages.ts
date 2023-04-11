@@ -1,4 +1,5 @@
 import v2chatdb from "@/db/v2chatdb";
+import camelcaseKeys from "camelcase-keys";
 
 export interface MessageV2 {
   id: string
@@ -20,5 +21,5 @@ export const findMessagesByRoomId = async (roomId: string): Promise<MessageV2[]>
     })
     .whereNull("deleted_at")
 
-  return await query;
+  return camelcaseKeys(await query);
 }

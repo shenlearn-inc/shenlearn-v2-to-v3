@@ -1,6 +1,5 @@
 import {Trxs} from "@/types/Trxs";
 import {findSiteInfo} from "@/v2models/siteInfo";
-import toSchoolId from "@/utils/toSchoolId";
 import config from "@/config";
 import {findAllStudents} from "@/v2models/students";
 import toTeacherId from "@/utils/toTeacherId";
@@ -18,26 +17,26 @@ const convertPayloadV2ToPayloadV3 = (message: any) => {
   if (type === "image") {
     const payload = JSON.parse(message.message.payload);
     return {
-      name: payload.text ?? "",
+      name: payload?.text ?? "",
       url: payload.url,
     }
   } else if (type === "info") {
     const payload = JSON.parse(message.message.payload);
     return {
-      title: payload.title ?? "",
-      text: payload.content ?? "",
+      title: payload?.title ?? "",
+      text: payload?.content ?? "",
       images: payload.images?.map((image: any) => ({
         url: image.url,
       })) ?? [],
       actions: payload.actions?.map((action: any) => ({
-        name: action.name ?? action.text ?? "",
+        name: action?.name ?? action?.text ?? "",
         url: action.url
       }))
     }
   } else if (type === "file") {
     const payload = JSON.parse(message.message.payload);
     return {
-      name: payload.name ?? payload.text ?? "",
+      name: payload?.name ?? payload?.text ?? "",
       url: payload.url,
     }
   }
@@ -51,7 +50,6 @@ export default async (trxs: Trxs) => {
 
   // 取得站台資料
   const siteInfoV2 = await findSiteInfo(trxs)
-  const schoolId = toSchoolId(siteInfoV2.hashedId)
 
   // 取得 Service 帳號
   const serviceDirector = await v3db()
@@ -74,7 +72,7 @@ export default async (trxs: Trxs) => {
       continue;
     }
     const userIdMap: { [key: string]: string } = {};
-    const v2MessageUsers = await findUsersByIds(v2Messages.map(message => message.userId));
+    const v2MessageUsers = await findUsersByIds(Array.from(new Set(v2Messages.map(message => message.userId))));
     for (const user of v2MessageUsers) {
       if (user.externalRole === "site") {
         userIdMap[user.id] = serviceDirector.id;
