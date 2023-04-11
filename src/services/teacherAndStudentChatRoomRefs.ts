@@ -115,6 +115,10 @@ export default async (trxs: Trxs) => {
       .whereNull('students.deleted_at')
       .transacting(trxs.v3db) as { studentId: string; teacherId: string }[]
 
+    if (!refs?.length) {
+      continue;
+    }
+
     // 加入學生主聊天室
     const students = camelcaseKeys(
       await v3db()
@@ -123,7 +127,6 @@ export default async (trxs: Trxs) => {
         .whereIn('id', Array.from(new Set(refs.map(r => r.studentId))))
         .transacting(trxs.v3db)
     ) as StudentV3[]
-    console.log(differenceWith(Array.from(new Set(refs.map(r => r.studentId))), students, (a, b) => a === b.id));
     const studentMap = keyBy(students, 'id')
 
     await createRoomUserRefs(
