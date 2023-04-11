@@ -113,7 +113,7 @@ export default async (trxs: Trxs) => {
       .where('clazzes.is_active', true)
       .whereNull('clazz_student_refs.deleted_at')
       .whereNull('students.deleted_at')
-      .transacting(trxs.v3db)).filter(r => !!r) as { studentId: string; teacherId: string }[]
+      .transacting(trxs.v3db)).filter(r => !!r && !!r.studentId && !!r.teacherId) as { studentId: string; teacherId: string }[]
 
     if (!refs?.length) {
       continue;
@@ -127,14 +127,10 @@ export default async (trxs: Trxs) => {
         .whereIn('id', Array.from(new Set(refs.map(r => r.studentId))))
         .transacting(trxs.v3db))
     ) as StudentV3[]
-    console.log(students.filter(s => s.id === "711b40db-2d3b-556a-a224-447423217bed"))
     const studentMap = keyBy(students, 'id')
 
     await createRoomUserRefs(
       refs.map(r => {
-        if (!studentMap[r.studentId]?.chatRoomId) {
-          console.log(r.studentId);
-        }
         return {
           id: generateUUID(),
           roomId: studentMap[r.studentId].chatRoomId,
