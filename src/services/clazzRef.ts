@@ -32,7 +32,11 @@ export default async (trxs: Trxs) => {
       .filter(r => !!r.courseId)
       .map(r => {
         if (toStudentId(v2StudentMap[r.studentId].hashedId) === '711b40db-2d3b-556a-a224-447423217bed') {
-          console.log(v2StudentMap[r.studentId])
+          console.log({
+            id: v2StudentMap[r.studentId].id,
+            name: v2StudentMap[r.studentId].name,
+            hashedId: v2StudentMap[r.studentId].hashedId,
+          })
         }
         return {
           id: generateUUID(),
