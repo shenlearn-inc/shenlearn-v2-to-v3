@@ -13,15 +13,15 @@ import toContactorId from "@/utils/toContactorId";
 import {createMessages, MessageV3} from "@/v3chatModels/messages";
 
 const convertPayloadV2ToPayloadV3 = (message: any) => {
-  const type = message.message.type;
+  const type = message.type;
   if (type === "image") {
-    const payload = JSON.parse(message.message.payload);
+    const payload = JSON.parse(message.payload);
     return {
       name: payload?.text ?? "",
       url: payload.url,
     }
   } else if (type === "info") {
-    const payload = JSON.parse(message.message.payload);
+    const payload = JSON.parse(message.payload);
     return {
       title: payload?.title ?? "",
       text: payload?.content ?? "",
@@ -34,14 +34,14 @@ const convertPayloadV2ToPayloadV3 = (message: any) => {
       }))
     }
   } else if (type === "file") {
-    const payload = JSON.parse(message.message.payload);
+    const payload = JSON.parse(message.payload);
     return {
       name: payload?.name ?? payload?.text ?? "",
       url: payload.url,
     }
   }
   return {
-    text: message.message.payload ?? ""
+    text: message.payload ?? ""
   }
 }
 
