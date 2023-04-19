@@ -10,6 +10,8 @@ export default {
   // 莘莘集團
   // organizationId: '546694a2-6e6b-4f1d-8bfd-7559fda0ffbf',
   organizationId: 'a45df600-f856-4256-ad11-188c1ffcbc47',
+  // 是否要刪除聯絡人
+  isDeleteContactor: false,
 
   // !必改
   // 旗艦版

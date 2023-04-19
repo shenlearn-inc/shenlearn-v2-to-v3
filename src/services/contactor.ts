@@ -31,19 +31,23 @@ export default async (trxs: Trxs) => {
   for (const phoneNumber of phoneNumbers) {
     console.log(phoneNumber);
     const [prefix, phone] = phoneNumber.split('-')
-    await createContactors([{
-      id: toContactorId(prefix, phone),
-      username: `${prefix}${phone}`,
-      password: null,
-      salt: null,
-      accessToken: null,
-      refreshToken: null,
-      roleId: config.contactorRoleId,
-      organizationId: config.organizationId,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
-    }], trxs)
+    try {
+      await createContactors([{
+        id: toContactorId(prefix, phone),
+        username: `${prefix}${phone}`,
+        password: null,
+        salt: null,
+        accessToken: null,
+        refreshToken: null,
+        roleId: config.contactorRoleId,
+        organizationId: config.organizationId,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+      }], trxs)
+    } catch (e) {
+      console.log(`聯絡人已存在 phoneNumber = ${phoneNumber}, contactorId = ${toContactorId(prefix, phone)}`);
+    }
   }
 
   // 建立 contactor chat user

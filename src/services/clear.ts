@@ -119,12 +119,20 @@ export default async (trxs: Trxs) => {
     .transacting(trxs.v3db)
 
   // 刪除聯絡人
+  if (config.isDeleteContactor) {
+    await v3db()
+      .delete()
+      .from('contactors')
+      .where('organization_id', config.organizationId)
+      .transacting(trxs.v3db)
+  }
+  // 刪除子聯絡人
   await v3db()
     .delete()
-    .from('contactors')
-    .where('organization_id', config.organizationId)
+    .from('sub_contactors')
+    .where('school_id', schoolId)
     .transacting(trxs.v3db)
-  // 刪除子聯絡人
+  // 刪除親屬關係
   await v3db()
     .delete()
     .from('student_relationships')
