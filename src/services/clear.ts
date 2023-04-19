@@ -15,6 +15,19 @@ export default async (trxs: Trxs) => {
   }
   const schoolId = toSchoolId(v2SiteInfo.hashed_id);
 
+  // 刪除工號
+  await v3db()
+    .delete()
+    .from("person_sign_pins")
+    .where('school_id', schoolId)
+    .transacting(trxs.v3db)
+  // 刪除簽到機資料
+  await v3db()
+    .delete()
+    .from("sign_devices")
+    .where('school_id', schoolId)
+    .transacting(trxs.v3db)
+
   // 刪除堂次
   await v3db()
     .delete()
