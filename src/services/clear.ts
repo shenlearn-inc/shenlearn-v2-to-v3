@@ -120,6 +120,15 @@ export default async (trxs: Trxs) => {
 
   // 刪除聯絡人
   if (config.isDeleteContactor) {
+    const contactors = await v3db()
+      .select()
+      .from('contactors')
+      .where('organization_id', config.organizationId)
+      .transacting(trxs.v3db)
+    await v3chatdb()
+      .delete()
+      .from('users')
+      .whereIn('id', contactors.map(c => c.id))
     await v3db()
       .delete()
       .from('contactors')
