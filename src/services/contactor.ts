@@ -72,21 +72,25 @@ export default async (trxs: Trxs) => {
     const student = studentMap[sp.studentId!]
     const chatRoomId = toSubContactorChatRoomId(sp.hashedId)
 
-    await createSubContactors([{
-      id: generateUUID(),
-      contactorId: toContactorId(sp.cellphoneInternationalPrefix!, sp.cellphone!),
-      schoolId: toSchoolId(siteInfoV2.hashedId),
-      studentId: studentId,
-      name: sp.name ?? '',
-      relationship: sp.relationship ?? 'others',
-      cellphonePrefix: sp.cellphoneInternationalPrefix!,
-      cellphone: sp.cellphone!,
-      isSms: false,
-      chatRoomId: chatRoomId,
-      createdAt: sp.createdAt ?? new Date(),
-      updatedAt: sp.updatedAt ?? new Date(),
-      deletedAt: sp.deletedAt,
-    }], trxs)
+    try {
+      await createSubContactors([{
+        id: generateUUID(),
+        contactorId: toContactorId(sp.cellphoneInternationalPrefix!, sp.cellphone!),
+        schoolId: toSchoolId(siteInfoV2.hashedId),
+        studentId: studentId,
+        name: sp.name ?? '',
+        relationship: sp.relationship ?? 'others',
+        cellphonePrefix: sp.cellphoneInternationalPrefix!,
+        cellphone: sp.cellphone!,
+        isSms: false,
+        chatRoomId: chatRoomId,
+        createdAt: sp.createdAt ?? new Date(),
+        updatedAt: sp.updatedAt ?? new Date(),
+        deletedAt: sp.deletedAt,
+      }], trxs)
+    } catch (e) {
+      console.log("catch error")
+    }
 
     // 新建老師與子聯絡人的聊天室
     await createRooms([{
