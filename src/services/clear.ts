@@ -5,6 +5,7 @@ import config from "@/config";
 import v3chatdb from "@/db/v3chatdb";
 import v2db from "@/db/v2db";
 import toSchoolId from "@/utils/toSchoolId";
+import toStudentId from "@/utils/toStudentId";
 
 export default async (trxs: Trxs) => {
   console.info('清除新資料庫中的學校資料')
@@ -180,7 +181,13 @@ export default async (trxs: Trxs) => {
     .from('students')
     .where('school_id', schoolId)
     .transacting(trxs.v3db))
-  const studentIds = Array.from(new Set(students.map(s => s.id)))
+  const v2Students = camelcaseKeys(
+    await v2db()
+      .select()
+      .from("students")
+      .transacting(trxs.v2db)
+  )
+  const studentIds = Array.from(new Set(v2Students.map(s => toStudentId(s.hashedId)).concat(students.map(s => s.id))))
 
   // 聊天室
   const rooms = await v3chatdb()
