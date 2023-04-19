@@ -28,3 +28,15 @@ export const createContactors = async (contactors: ContactorV3[], trxs: Trxs): P
   await query
   return
 }
+
+export const findContactorsByIds = async (ids: string[], trxs: Trxs): Promise<void> => {
+  const query = v3db()
+    .from('contactors')
+    // @ts-ignore
+    .onConflict('id')
+    .ignore()
+    .transacting(trxs.v3db)
+
+  await query
+  return
+}

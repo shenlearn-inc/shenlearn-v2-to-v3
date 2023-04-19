@@ -30,23 +30,19 @@ export default async (trxs: Trxs) => {
   const phoneNumbers = Array.from(new Set(studentParents.map(s => `${s.cellphoneInternationalPrefix}-${s.cellphone}`)))
   for (const phoneNumber of phoneNumbers) {
     const [prefix, phone] = phoneNumber.split('-')
-    try {
-      await createContactors([{
-        id: toContactorId(prefix, phone),
-        username: `${prefix}${phone}`,
-        password: null,
-        salt: null,
-        accessToken: null,
-        refreshToken: null,
-        roleId: config.contactorRoleId,
-        organizationId: config.organizationId,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null,
-      }], trxs)
-    } catch (e) {
-      console.log(`聯絡人已存在 phoneNumber = ${phoneNumber}, contactorId = ${toContactorId(prefix, phone)}`);
-    }
+    await createContactors([{
+      id: toContactorId(prefix, phone),
+      username: `${prefix}${phone}`,
+      password: null,
+      salt: null,
+      accessToken: null,
+      refreshToken: null,
+      roleId: config.contactorRoleId,
+      organizationId: config.organizationId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
+    }], trxs)
   }
 
   // 建立 contactor chat user
@@ -72,25 +68,21 @@ export default async (trxs: Trxs) => {
     const student = studentMap[sp.studentId!]
     const chatRoomId = toSubContactorChatRoomId(sp.hashedId)
 
-    try {
-      await createSubContactors([{
-        id: generateUUID(),
-        contactorId: toContactorId(sp.cellphoneInternationalPrefix!, sp.cellphone!),
-        schoolId: toSchoolId(siteInfoV2.hashedId),
-        studentId: studentId,
-        name: sp.name ?? '',
-        relationship: sp.relationship ?? 'others',
-        cellphonePrefix: sp.cellphoneInternationalPrefix!,
-        cellphone: sp.cellphone!,
-        isSms: false,
-        chatRoomId: chatRoomId,
-        createdAt: sp.createdAt ?? new Date(),
-        updatedAt: sp.updatedAt ?? new Date(),
-        deletedAt: sp.deletedAt,
-      }], trxs)
-    } catch (e) {
-      console.log("catch error")
-    }
+    await createSubContactors([{
+      id: generateUUID(),
+      contactorId: toContactorId(sp.cellphoneInternationalPrefix!, sp.cellphone!),
+      schoolId: toSchoolId(siteInfoV2.hashedId),
+      studentId: studentId,
+      name: sp.name ?? '',
+      relationship: sp.relationship ?? 'others',
+      cellphonePrefix: sp.cellphoneInternationalPrefix!,
+      cellphone: sp.cellphone!,
+      isSms: false,
+      chatRoomId: chatRoomId,
+      createdAt: sp.createdAt ?? new Date(),
+      updatedAt: sp.updatedAt ?? new Date(),
+      deletedAt: sp.deletedAt,
+    }], trxs)
 
     // 新建老師與子聯絡人的聊天室
     await createRooms([{
