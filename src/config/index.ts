@@ -4,12 +4,12 @@ dotenv.config()
 
 export default {
   // !必改
-  site: 'alltrueluzhiu',
+  site: 'lusartstudio',
 
   // !必改
   // 莘莘集團
   // organizationId: '546694a2-6e6b-4f1d-8bfd-7559fda0ffbf',
-  organizationId: '84063c50-e529-4a94-a9a2-cf53bd1440ff',
+  organizationId: 'a45df600-f856-4256-ad11-188c1ffcbc47',
 
   // !必改
   // 旗艦版

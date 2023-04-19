@@ -19,6 +19,7 @@ import studentSchedule from "@/services/studentSchedule";
 import clear from "@/services/clear";
 import credit from "@/services/credit";
 import chat from "@/services/chat";
+import signDevice from "@/services/signDevice";
 
 export const run = async (): Promise<void> => {
   console.info('Run')
@@ -82,6 +83,9 @@ export const run = async (): Promise<void> => {
 
         // 轉移堂次
         await credit(trxs)
+
+        // 轉移簽到機資料
+        await signDevice(trxs)
       })
     })
   })
