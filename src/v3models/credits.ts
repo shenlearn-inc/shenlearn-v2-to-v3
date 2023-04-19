@@ -1,6 +1,7 @@
 import v3db from "@/db/v3db"
 import snakecaseKeys from "snakecase-keys"
 import {Trxs} from "@/types/Trxs"
+import v2db from "@/db/v2db";
 
 export interface CreditV3 {
   id: string
@@ -26,4 +27,15 @@ export const createCredits = async (credits: CreditV3[], trxs: Trxs): Promise<vo
 
   await query
   return
+}
+
+export const getNumberOfCredit = async (trxs: Trxs): Promise<number> => {
+  const query = v2db()
+    .count()
+    .from('credits')
+    .transacting(trxs.v2db)
+
+  const result = await query
+
+  return result[0]['count(*)'] as number
 }

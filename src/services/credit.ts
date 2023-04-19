@@ -3,7 +3,6 @@ import {findSiteInfo} from "@/v2models/siteInfo";
 import toSchoolId from "@/utils/toSchoolId";
 import {findTeachersByIds, TeacherV2} from "@/v2models/teachers";
 import config from "@/config";
-import {getNumberOfStudentSchedule} from "@/v2models/studentSchedules";
 import {findStudentsByIds, StudentV2} from "@/v2models/students";
 import _, {keyBy} from "lodash";
 import toStudentId from "@/utils/toStudentId";
@@ -13,7 +12,7 @@ import toTeacherId from "@/utils/toTeacherId";
 import {findAllCredits} from "@/v2models/credits";
 import {CourseCategoryV2, findCourseCategoriesByIds} from "@/v2models/courseCategories";
 import {findInclassCoursesByIds, InclassCourseV2} from "@/v2models/inclassCourses";
-import {createCredits} from "@/v3models/credits";
+import {createCredits, getNumberOfCredit} from "@/v3models/credits";
 import toCourseId from "@/utils/toCourseId";
 import toLessonId from "@/utils/toLessonId";
 import toCreditId from "@/utils/toCreditId";
@@ -34,8 +33,8 @@ export default async (trxs: Trxs) => {
     .where('no', 'T00000001')
     .transacting(trxs.v3db) as TeacherV3
 
-  const numberOfPayment = await getNumberOfStudentSchedule(trxs)
-  for (let i = 0; i < Math.ceil(numberOfPayment / config.chunkSize); i++) {
+  const numberOfCredit = await getNumberOfCredit(trxs)
+  for (let i = 0; i < Math.ceil(numberOfCredit / config.chunkSize); i++) {
 
     // 找出堂次
     const v2Credits = await findAllCredits(config.chunkSize, i * config.chunkSize, trxs)

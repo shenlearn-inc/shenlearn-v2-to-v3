@@ -22,8 +22,8 @@ export default async (trxs: Trxs) => {
   const siteInfoV2 = await findSiteInfo(trxs)
   const schoolId = toSchoolId(siteInfoV2.hashedId)
 
-  const numberOfPayment = await getNumberOfStudentSchedule(trxs)
-  for (let i = 0; i < Math.ceil(numberOfPayment / config.chunkSize); i++) {
+  const numberOfSchedule = await getNumberOfStudentSchedule(trxs)
+  for (let i = 0; i < Math.ceil(numberOfSchedule / config.chunkSize); i++) {
 
     // 找出學生排程
     const v2StudentSchedules = (await findAllStudentSchedules(config.chunkSize, i * config.chunkSize, trxs)).filter(s => !!s.studentId)
