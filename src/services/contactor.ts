@@ -95,7 +95,7 @@ export default async (trxs: Trxs) => {
       lastMessageAt: null,
       lastChatMessageAt: null,
       lastChatMessage: null,
-      deactivatedAt: null,
+      deactivatedAt: new Date(),
       createdAt: new Date(),
       updatedAt: new Date(),
       deletedAt: null,
