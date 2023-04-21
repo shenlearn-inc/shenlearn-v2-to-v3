@@ -92,19 +92,19 @@ export default async (trxs: Trxs) => {
 
     if (notificationStudentRefs.length) {
       const students = await findStudentsByIds(Array.from(new Set(notificationStudentRefs.map(ref => ref.studentId))), trxs)
-      students.forEach(s => {
-        announcementStudentRefs.push({
+      for (const student of students) {
+        await createAnnouncementStudentRefs([{
           id: generateUUID(),
           announcementId,
-          studentId: toStudentId(s.hashedId),
+          studentId: toStudentId(student.hashedId),
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
-          deletedAt: null,
-        })
-      })
+          deletedAt: student.deletedAt ? student.deletedAt.toISOString() : null,
+        }], trxs);
+      }
     }
 
-    announcements.push({
+    const announcement = {
       id: announcementId,
       payload: {
         files: files.map((f, index) => ({
@@ -131,8 +131,7 @@ export default async (trxs: Trxs) => {
       publishedAt: notification.createdAt,
       updatedAt: notification.updatedAt,
       deletedAt: notification.deletedAt,
-    } as AnnouncementV3)
+    }
+    await createAnnouncements([announcement as any], trxs);
   }
-  await createAnnouncements(announcements, trxs);
-  await createAnnouncementStudentRefs(announcementStudentRefs, trxs);
 }
