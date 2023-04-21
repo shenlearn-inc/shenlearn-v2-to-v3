@@ -16,6 +16,31 @@ export default async (trxs: Trxs) => {
   }
   const schoolId = toSchoolId(v2SiteInfo.hashed_id);
 
+  // 刪除校園公告
+  const announcements = camelcaseKeys(await v3db()
+    .select()
+    .from('announcements')
+    .where('school_id', schoolId)
+    .transacting(trxs.v3db))
+  const announcementIds = Array.from(new Set(announcements.map(a => a.id)))
+  await v3db()
+    .delete()
+    .from('announcement_student_refs')
+    .whereIn('announcement_id', announcementIds)
+    .transacting(trxs.v3db)
+  await v3db()
+    .delete()
+    .from('announcements')
+    .where('school_id', schoolId)
+    .transacting(trxs.v3db)
+
+  // 刪除班級日誌
+  await v3db()
+    .delete()
+    .from('clazz_diaries')
+    .where('school_id', schoolId)
+    .transacting(trxs.v3db)
+
   // 刪除工號
   await v3db()
     .delete()
@@ -33,24 +58,6 @@ export default async (trxs: Trxs) => {
   await v3db()
     .delete()
     .from('credits')
-    .where('school_id', schoolId)
-    .transacting(trxs.v3db)
-
-  // 刪除校園通知
-  const announcements = camelcaseKeys(await v3db()
-    .select()
-    .from('announcements')
-    .where('school_id', schoolId)
-    .transacting(trxs.v3db))
-  const announcementIds = Array.from(new Set(announcements.map(a => a.id)))
-  await v3db()
-    .delete()
-    .from('announcement_student_refs')
-    .whereIn('announcement_id', announcementIds)
-    .transacting(trxs.v3db)
-  await v3db()
-    .delete()
-    .from('announcements')
     .where('school_id', schoolId)
     .transacting(trxs.v3db)
 

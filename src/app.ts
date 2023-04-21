@@ -20,6 +20,8 @@ import clear from "@/services/clear";
 import credit from "@/services/credit";
 import chat from "@/services/chat";
 import signDevice from "@/services/signDevice";
+import announcement from "@/services/announcement";
+import clazzDiaries from "@/services/clazzDiaries";
 
 export const run = async (): Promise<void> => {
   console.info('Run')
@@ -86,6 +88,12 @@ export const run = async (): Promise<void> => {
 
         // 轉移簽到機資料
         await signDevice(trxs)
+
+        // 轉移班級日誌
+        await clazzDiaries(trxs)
+
+        // 轉移校園公告
+        await announcement(trxs)
       })
     })
   })
