@@ -58,7 +58,7 @@ export default async (trxs: Trxs) => {
       .whereNull("deleted_at")
       .transacting(trxs.v2db))
 
-    clazzDiaries.push({
+    const diary = {
       id: clazzDiaryId,
       clazzId,
       teacherId,
@@ -80,7 +80,7 @@ export default async (trxs: Trxs) => {
       createdAt: courseDiary.createdAt,
       updatedAt: courseDiary.updatedAt,
       deletedAt: courseDiary.deletedAt,
-    } as ClazzDiaryV3)
+    } as ClazzDiaryV3
+    await createClazzDiaries([diary], trxs);
   }
-  await createClazzDiaries(clazzDiaries, trxs);
 }
