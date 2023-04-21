@@ -2,22 +2,23 @@ import v2db from "@/db/v2db"
 import camelcaseKeys from "camelcase-keys"
 import {Trxs} from "@/types/Trxs";
 
-export interface NotificationV2 {
+export interface CourseDiaryV2 {
   id: number
   hashedId: string
+  courseId: number
   teacherId: number
+  title: string
   content: string
-  sendMode: string
-  smsCount: number
+  isPublic: boolean
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
 }
 
-export const findAllNotifications = async (trxs: Trxs): Promise<NotificationV2[]> => {
+export const findAllCourseDiaries = async (trxs: Trxs): Promise<CourseDiaryV2[]> => {
   const query = v2db()
     .select()
-    .from('notifications')
+    .from('course_diaries')
     .transacting(trxs.v2db)
 
   return camelcaseKeys(await query)

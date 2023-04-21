@@ -2,22 +2,22 @@ import v3db from "@/db/v3db"
 import snakecaseKeys from "snakecase-keys"
 import {Trxs} from "@/types/Trxs";
 
-export interface AnnouncementV3 {
+export interface ClazzDiaryV3 {
   id: string;
+  clazzId: string;
+  teacherId: string;
   schoolId: string;
   payload: any;
-  method: "app" | "app-and-sms" | "sms";
-  publishedAt: Date | null;
-  additionalCharge: number;
+  isPublished: boolean;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;
 }
 
-export const createAnnouncements = async (announcements: AnnouncementV3[], trxs: Trxs): Promise<void> => {
+export const createClazzDiaries = async (clazzDiaries: ClazzDiaryV3[], trxs: Trxs): Promise<void> => {
   const query = v3db()
-    .insert(snakecaseKeys(announcements))
-    .from('announcements')
+    .insert(snakecaseKeys(clazzDiaries))
+    .from('clazz_diaries')
     // @ts-ignore
     .onConflict('id')
     .ignore()
