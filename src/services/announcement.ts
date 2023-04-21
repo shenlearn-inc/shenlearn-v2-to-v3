@@ -52,8 +52,6 @@ export default async (trxs: Trxs) => {
     .transacting(trxs.v3db) as TeacherV3
 
   // 轉移班級通知
-  const announcements = []
-  const announcementStudentRefs: any = []
   for (const notification of notifications) {
     const announcementId = toAnnouncementId(notification.hashedId);
 
