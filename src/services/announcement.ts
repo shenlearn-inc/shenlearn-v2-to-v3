@@ -53,7 +53,7 @@ export default async (trxs: Trxs) => {
 
   // 轉移班級通知
   const announcements = []
-  const announcementStudentRefs = []
+  const announcementStudentRefs: any = []
   for (const notification of notifications) {
     const announcementId = toAnnouncementId(notification.hashedId);
 
