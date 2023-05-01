@@ -30,7 +30,7 @@ export default {
   // teacherRoleId: 'f5144404-2f9b-49f1-a491-fa34ad2013da',
 
   // 預設為舊 siteInfo.hashed_id 轉換成 uuid, 可自定義
-  // schoolId: '6affb283-9281-495f-aab8-501082585fd5',
+  schoolId: '418b2015-3bfb-4dc5-8dca-834c6ca73353',
 
   initTeacherPassword: 'test123',
   zone: 'Asia/Taipei',
