@@ -34,6 +34,26 @@ export default async (trxs: Trxs) => {
     .where('school_id', schoolId)
     .transacting(trxs.v3db)
 
+  // 考試
+  const exams = camelcaseKeys(await v3db()
+    .select()
+    .from('exams')
+    .where('school_id', schoolId)
+    .transacting(trxs.v3db))
+  const examIds = Array.from(new Set(exams.map(e => e.id)))
+  // 刪除成績
+  await v3db()
+    .delete()
+    .from('scores')
+    .whereIn('exam_id', examIds)
+    .transacting(trxs.v3db)
+  // 刪除考試
+  await v3db()
+    .delete()
+    .from('exams')
+    .where('school_id', schoolId)
+    .transacting(trxs.v3db)
+
   // 刪除班級日誌
   await v3db()
     .delete()
@@ -176,26 +196,6 @@ export default async (trxs: Trxs) => {
   await v3db()
     .delete()
     .from('receipts')
-    .where('school_id', schoolId)
-    .transacting(trxs.v3db)
-
-  // 考試
-  const exams = camelcaseKeys(await v3db()
-    .select()
-    .from('exams')
-    .where('school_id', schoolId)
-    .transacting(trxs.v3db))
-  const examIds = Array.from(new Set(exams.map(e => e.id)))
-  // 刪除成績
-  await v3db()
-    .delete()
-    .from('scores')
-    .whereIn('exam_id', examIds)
-    .transacting(trxs.v3db)
-  // 刪除考試
-  await v3db()
-    .delete()
-    .from('exams')
     .where('school_id', schoolId)
     .transacting(trxs.v3db)
 

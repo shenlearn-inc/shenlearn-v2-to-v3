@@ -4,12 +4,12 @@ dotenv.config()
 
 export default {
   // !必改
-  site: 'nms',
+  site: 'yuhao',
 
   // !必改
   // 莘莘集團
   // organizationId: '546694a2-6e6b-4f1d-8bfd-7559fda0ffbf',
-  organizationId: "4d50248d-9120-489c-ba61-bb28f0dfc7d2",
+  organizationId: "24408209-9f2e-4a31-a933-dcf7f3187e69",
   // 是否要刪除聯絡人
   isDeleteContactor: false,
 
@@ -30,7 +30,7 @@ export default {
   // teacherRoleId: 'f5144404-2f9b-49f1-a491-fa34ad2013da',
 
   // 預設為舊 siteInfo.hashed_id 轉換成 uuid, 可自定義
-  // schoolId: '418b2015-3bfb-4dc5-8dca-834c6ca73353',
+  schoolId: '418b2015-3bfb-4dc5-8dca-834c6ca73353',
 
   initTeacherPassword: 'test123',
   zone: 'Asia/Taipei',
