@@ -4,12 +4,12 @@ dotenv.config()
 
 export default {
   // !必改
-  site: 'nms',
+  site: 'bohan',
 
   // !必改
   // 莘莘集團
   // organizationId: '546694a2-6e6b-4f1d-8bfd-7559fda0ffbf',
-  organizationId: "4d50248d-9120-489c-ba61-bb28f0dfc7d2",
+  organizationId: "e10571c9-b377-4d54-afbb-da505b78fca4",
   // 是否要刪除聯絡人
   isDeleteContactor: false,
 
