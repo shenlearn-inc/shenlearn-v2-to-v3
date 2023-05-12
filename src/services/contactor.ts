@@ -27,7 +27,7 @@ export default async (trxs: Trxs) => {
   if (!studentParents.length) return
 
   // 建立 contactor
-  const phoneNumbers = Array.from(new Set(studentParents.map(s => `${s.cellphoneInternationalPrefix}-${s.cellphone}`)))
+  const phoneNumbers = Array.from(new Set(studentParents.filter(s => !!s.cellphoneInternationalPrefix && !!s.cellphone).map(s => `${s.cellphoneInternationalPrefix}-${s.cellphone}`)))
   await createContactors(phoneNumbers.map(pn => {
     const [prefix, phone] = pn.split('-')
     return {
