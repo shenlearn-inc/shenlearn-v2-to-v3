@@ -22,7 +22,8 @@ export default async (trxs: Trxs) => {
   const serviceDirector = await v2db()
     .first()
     .from('teachers')
-    .where('name', 'Service') as TeacherV2
+    .where('name', 'Service')
+    .orWhere('email', 'service@shenlearn.com') as TeacherV2
 
   const numberOfInclassCourse = await getNumberOfInclassCourse(trxs)
   for (let i = 0; i < Math.ceil(numberOfInclassCourse / config.chunkSize); i++) {
@@ -46,7 +47,7 @@ export default async (trxs: Trxs) => {
           name: '',
           startAt: c.inclassAt ?? null,
           endAt: c.outclassAt ?? null,
-          teacherId: c.teacherId in v2TeacherMap && v2TeacherMap[c.teacherId]?.hashedId ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
+          teacherId: c.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
           createdAt: c.createdAt ?? new Date(),
           updatedAt: c.updatedAt ?? new Date(),
           deletedAt: c.deletedAt,

@@ -29,7 +29,8 @@ export default async (trxs: Trxs) => {
   const serviceDirector = await v2db()
     .first()
     .from('teachers')
-    .where('name', 'Service') as TeacherV2
+    .where('name', 'Service')
+    .orWhere('email', 'service@shenlearn.com') as TeacherV2
 
   // 找出電訪
   const v2StudentDiaries = await findAllStudentDiaries(Number.MAX_SAFE_INTEGER, 0, trxs)
