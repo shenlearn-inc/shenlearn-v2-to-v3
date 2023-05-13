@@ -124,7 +124,7 @@ export default async (trxs: Trxs) => {
       },
       schoolId: toSchoolId(siteInfoV2.hashedId),
       method: sendModeToMethod(notification.sendMode),
-      additionalCharge: notification.smsCount,
+      additionalCharge: notification.smsCount ?? 0,
       createdAt: notification.createdAt,
       publishedAt: notification.createdAt,
       updatedAt: notification.updatedAt,
