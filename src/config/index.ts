@@ -4,7 +4,7 @@ dotenv.config()
 
 export default {
   // !必改
-  site: 'lzedu',
+  site: 'lzedu01',
 
   // !必改
   // 莘莘集團
