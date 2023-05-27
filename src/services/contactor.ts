@@ -48,28 +48,32 @@ export default async (trxs: Trxs) => {
   // 建立 contactor chat user
   for (const pn of phoneNumbers) {
     const [prefix, phone] = pn.split('-')
-    await createContactors([{
-      id: toContactorId(prefix, phone),
-      username: `${prefix}${phone}`,
-      password: null,
-      salt: null,
-      accessToken: null,
-      refreshToken: null,
-      roleId: config.contactorRoleId,
-      organizationId: config.organizationId,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
-    }], trxs)
-    await createUsers([{
-      id: toContactorId(prefix, phone),
-      name: `${prefix}-${phone}`,
-      type: 'contactor',
-      avatarUrl: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
-    }], trxs)
+    try {
+      await createContactors([{
+        id: toContactorId(prefix, phone),
+        username: `${prefix}${phone}`,
+        password: null,
+        salt: null,
+        accessToken: null,
+        refreshToken: null,
+        roleId: config.contactorRoleId,
+        organizationId: config.organizationId,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+      }], trxs)
+      await createUsers([{
+        id: toContactorId(prefix, phone),
+        name: `${prefix}-${phone}`,
+        type: 'contactor',
+        avatarUrl: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+      }], trxs)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   // 找出所屬學生
