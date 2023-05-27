@@ -16,6 +16,7 @@ export interface RoomV3 {
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
+  status: 'pending' | 'solved' | 'processing' | 'init' | null
 }
 
 export const createRooms = async (rooms: RoomV3[], trxs: Trxs): Promise<void> => {

@@ -72,6 +72,7 @@ export default async (trxs: Trxs) => {
         id: chatRoomId,
         name: '',
         type: 'teachers-to-student',
+        status: 'init',
         avatarUrl: null,
         externalId: studentId,
         lastMessage: null,
