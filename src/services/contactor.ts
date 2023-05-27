@@ -28,9 +28,27 @@ export default async (trxs: Trxs) => {
 
   // 建立 contactor
   const phoneNumbers = Array.from(new Set(studentParents.map(s => `${s.cellphoneInternationalPrefix}-${s.cellphone}`)))
-  await createContactors(phoneNumbers.map(pn => {
+  // await createContactors(phoneNumbers.map(pn => {
+  //   const [prefix, phone] = pn.split('-')
+  //   return {
+  //     id: toContactorId(prefix, phone),
+  //     username: `${prefix}${phone}`,
+  //     password: null,
+  //     salt: null,
+  //     accessToken: null,
+  //     refreshToken: null,
+  //     roleId: config.contactorRoleId,
+  //     organizationId: config.organizationId,
+  //     createdAt: new Date(),
+  //     updatedAt: new Date(),
+  //     deletedAt: null,
+  //   }
+  // }), trxs)
+
+  // 建立 contactor chat user
+  for (const pn of phoneNumbers) {
     const [prefix, phone] = pn.split('-')
-    return {
+    await createContactors([{
       id: toContactorId(prefix, phone),
       username: `${prefix}${phone}`,
       password: null,
@@ -42,12 +60,7 @@ export default async (trxs: Trxs) => {
       createdAt: new Date(),
       updatedAt: new Date(),
       deletedAt: null,
-    }
-  }), trxs)
-
-  // 建立 contactor chat user
-  for (const pn of phoneNumbers) {
-    const [prefix, phone] = pn.split('-')
+    }], trxs)
     await createUsers([{
       id: toContactorId(prefix, phone),
       name: `${prefix}-${phone}`,
