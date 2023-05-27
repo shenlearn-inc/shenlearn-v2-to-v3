@@ -62,15 +62,15 @@ export default async (trxs: Trxs) => {
         updatedAt: new Date(),
         deletedAt: null,
       }], trxs)
-      await createUsers([{
-        id: toContactorId(prefix, phone),
-        name: `${prefix}-${phone}`,
-        type: 'contactor',
-        avatarUrl: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null,
-      }], trxs)
+      // await createUsers([{
+      //   id: toContactorId(prefix, phone),
+      //   name: `${prefix}-${phone}`,
+      //   type: 'contactor',
+      //   avatarUrl: null,
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      //   deletedAt: null,
+      // }], trxs)
     } catch (e) {
       console.log(e)
     }
