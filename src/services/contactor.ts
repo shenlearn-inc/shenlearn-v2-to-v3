@@ -46,35 +46,18 @@ export default async (trxs: Trxs) => {
   // }), trxs)
 
   // 建立 contactor chat user
-  for (const pn of phoneNumbers) {
+  await createUsers(phoneNumbers.map(pn => {
     const [prefix, phone] = pn.split('-')
-    try {
-      await createContactors([{
-        id: toContactorId(prefix, phone),
-        username: `${prefix}${phone}`,
-        password: null,
-        salt: null,
-        accessToken: null,
-        refreshToken: null,
-        roleId: config.contactorRoleId,
-        organizationId: config.organizationId,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null,
-      }], trxs)
-      // await createUsers([{
-      //   id: toContactorId(prefix, phone),
-      //   name: `${prefix}-${phone}`,
-      //   type: 'contactor',
-      //   avatarUrl: null,
-      //   createdAt: new Date(),
-      //   updatedAt: new Date(),
-      //   deletedAt: null,
-      // }], trxs)
-    } catch (e) {
-      console.log(e)
+    return {
+      id: toContactorId(prefix, phone),
+      name: `${prefix}-${phone}`,
+      type: 'contactor',
+      avatarUrl: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: null,
     }
-  }
+  }), trxs)
 
   // 找出所屬學生
   const students = await findStudentsByIds(Array.from(new Set(studentParents.map(sp => sp.studentId))).filter(id => !!id) as number[], trxs)
