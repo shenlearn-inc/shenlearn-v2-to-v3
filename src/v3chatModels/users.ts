@@ -21,6 +21,8 @@ export const createUsers = async (users: UserV3[], trxs: Trxs): Promise<void> =>
     .ignore()
     .transacting(trxs.v3chatdb)
 
+  console.log(query.toQuery())
+
   await query
   return
 }
