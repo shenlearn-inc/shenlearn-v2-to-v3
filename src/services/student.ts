@@ -82,9 +82,7 @@ export default async (trxs: Trxs) => {
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
-      }], trxs).catch(() => {
-        console.log(`聊天室已存在 studentId = ${studentId}, chatRoomId = ${chatRoomId}`);
-      })
+      }], trxs)
     }
   }
 }

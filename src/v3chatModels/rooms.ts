@@ -22,6 +22,9 @@ export const createRooms = async (rooms: RoomV3[], trxs: Trxs): Promise<void> =>
   const query = v3chatdb()
     .insert(snakecaseKeys(rooms))
     .from('rooms')
+    // @ts-ignore
+    .onConflict('id')
+    .ignore()
     .transacting(trxs.v3chatdb)
 
   await query
