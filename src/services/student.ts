@@ -67,26 +67,24 @@ export default async (trxs: Trxs) => {
         deletedAt: s.deletedAt,
       }], trxs)
 
-      try {
-        // 新建老師與學生的聊天室
-        await createRooms([{
-          id: chatRoomId,
-          name: '',
-          type: 'teachers-to-student',
-          avatarUrl: null,
-          externalId: studentId,
-          lastMessage: null,
-          lastMessageAt: null,
-          lastChatMessageAt: null,
-          lastChatMessage: null,
-          deactivatedAt: null,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          deletedAt: null,
-        }], trxs)
-      } catch (e) {
+      // 新建老師與學生的聊天室
+      await createRooms([{
+        id: chatRoomId,
+        name: '',
+        type: 'teachers-to-student',
+        avatarUrl: null,
+        externalId: studentId,
+        lastMessage: null,
+        lastMessageAt: null,
+        lastChatMessageAt: null,
+        lastChatMessage: null,
+        deactivatedAt: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+      }], trxs).catch(() => {
         console.log(`聊天室已存在 studentId = ${studentId}, chatRoomId = ${chatRoomId}`);
-      }
+      })
     }
   }
 }
