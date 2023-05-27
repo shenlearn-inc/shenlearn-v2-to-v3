@@ -46,18 +46,29 @@ export default async (trxs: Trxs) => {
   // }), trxs)
 
   // 建立 contactor chat user
-  await createUsers(phoneNumbers.map(pn => {
-    const [prefix, phone] = pn.split('-')
-    return {
-      id: toContactorId(prefix, phone),
-      name: `${prefix}-${phone}`,
+  // await createUsers(phoneNumbers.map(pn => {
+  //   const [prefix, phone] = pn.split('-')
+  //   return {
+  //     id: toContactorId(prefix, phone),
+  //     name: `${prefix}-${phone}`,
+  //     type: 'contactor',
+  //     avatarUrl: null,
+  //     createdAt: new Date(),
+  //     updatedAt: new Date(),
+  //     deletedAt: null,
+  //   }
+  // }), trxs)
+  await createUsers([
+    {
+      id: toContactorId("886", "973126810"),
+      name: `886-973126810`,
       type: 'contactor',
       avatarUrl: null,
       createdAt: new Date(),
       updatedAt: new Date(),
       deletedAt: null,
     }
-  }), trxs)
+  ], trxs)
 
   // 找出所屬學生
   const students = await findStudentsByIds(Array.from(new Set(studentParents.map(sp => sp.studentId))).filter(id => !!id) as number[], trxs)
