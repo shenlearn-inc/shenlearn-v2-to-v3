@@ -232,23 +232,25 @@ export default async (trxs: Trxs) => {
     const v2TeacherMap = _.keyBy(v2Teachers, 'id')
 
     await createStudentLessonAttendances(
-      v2StudentAttendances.map(a => {
-        return {
-          id: generateUUID(a.hashedId),
-          schoolId: schoolId,
-          clazzId: toClazzId(v2CourseMap[a.courseId].hashedId),
-          lessonId: toLessonId(v2InclassCourseMap[a.inclassCourseId!].hashedId),
-          studentId: toStudentId(v2StudentMap[a.studentId].hashedId),
-          studentSchoolAttendanceId: null,
-          attendAt: a.attendedAt,
-          leaveAt: a.leftAt,
-          remark: a.remark ?? '',
-          teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : serviceDirector.id,
-          createdAt: a.createdAt ?? new Date(),
-          updatedAt: a.updatedAt ?? new Date(),
-          deletedAt: a.deletedAt,
-        }
-      }),
+      v2StudentAttendances
+        .filter(a => a.inclassCourseId && a.inclassCourseId in v2InclassCourseMap)
+        .map(a => {
+          return {
+            id: generateUUID(a.hashedId),
+            schoolId: schoolId,
+            clazzId: toClazzId(v2CourseMap[a.courseId].hashedId),
+            lessonId: toLessonId(v2InclassCourseMap[a.inclassCourseId!].hashedId),
+            studentId: toStudentId(v2StudentMap[a.studentId].hashedId),
+            studentSchoolAttendanceId: null,
+            attendAt: a.attendedAt,
+            leaveAt: a.leftAt,
+            remark: a.remark ?? '',
+            teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : serviceDirector.id,
+            createdAt: a.createdAt ?? new Date(),
+            updatedAt: a.updatedAt ?? new Date(),
+            deletedAt: a.deletedAt,
+          }
+        }),
       trxs,
     )
   }
