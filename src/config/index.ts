@@ -4,12 +4,12 @@ dotenv.config()
 
 export default {
   // !必改
-  site: 'shenew',
+  site: 'lzedu',
 
   // !必改
   // 莘莘集團
   // organizationId: '546694a2-6e6b-4f1d-8bfd-7559fda0ffbf',
-  organizationId: "a097595a-b68a-4d6d-9d1e-cc571951db47",
+  organizationId: "12baaae9-02ed-4ede-bdc5-572ffb12c485",
   // 是否要刪除聯絡人
   isDeleteContactor: false,
 
