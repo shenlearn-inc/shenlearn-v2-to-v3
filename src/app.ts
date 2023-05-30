@@ -41,7 +41,7 @@ export const run = async (): Promise<void> => {
         } as Trxs
 
         // 清空學校資料
-        await clear(trxs)
+        // await clear(trxs)
 
         // // 轉移學校
         // await school(trxs)
