@@ -4,7 +4,7 @@ import generateUUID from "@/utils/generateUUID";
 import {findSiteInfo} from "@/v2models/siteInfo";
 import toSchoolId from "@/utils/toSchoolId";
 import {findCoursesByIds} from "@/v2models/courses";
-import {keyBy} from "lodash"
+import {forEach, keyBy} from "lodash"
 import toClazzId from "@/utils/toClazzId";
 import {findTeachersByIds, TeacherV2} from "@/v2models/teachers";
 import toTeacherId from "@/utils/toTeacherId";
@@ -61,9 +61,18 @@ export default async (trxs: Trxs) => {
     return;
   }
 
+  formatted.forEach(i => {
+    const undefinedData = Object.values(i).filter((v) => v === undefined)
+    if (undefinedData.length > 0) {
+      console.log(i)
+    }
+  })
+
+  console.log([formatted[0], formatted[1], formatted[2]])
+
   // 建立電訪資料
   await createStudentDiaries(
-    [formatted[0]],
+    [formatted[0], formatted[1], formatted[2]],
     trxs,
   )
   throw new Error('custom')
