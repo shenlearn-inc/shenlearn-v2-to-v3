@@ -43,37 +43,48 @@ export default async (trxs: Trxs) => {
   const v2Teachers = await findTeachersByIds(Array.from(new Set(v2StudentDiaries.map(c => c.teacherId))), trxs)
   const v2TeacherMap = keyBy(v2Teachers, 'id')
 
-  const formatted = v2StudentDiaries.map((diary) => {
-    return {
-      id: toStudentDiaryId(diary.hashedId),
-      schoolId: toSchoolId(siteInfoV2.hashedId),
-      lessonId: null,
-      teacherId: diary.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[diary.teacherId]?.hashedId) : toTeacherId(serviceDirector.hashedId),
-      studentId: toStudentId(v2StudentMap[diary.studentId].hashedId),
-      content: diary.content ?? "",
-      createdAt: diary.createdAt ?? new Date(),
-      updatedAt: diary.updatedAt ?? new Date(),
-      deletedAt: diary.deletedAt,
-    }
-  })
+  // const formatted = v2StudentDiaries.map((diary) => {
+  //   return {
+  //     id: toStudentDiaryId(diary.hashedId),
+  //     schoolId: toSchoolId(siteInfoV2.hashedId),
+  //     lessonId: null,
+  //     teacherId: diary.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[diary.teacherId]?.hashedId) : toTeacherId(serviceDirector.hashedId),
+  //     studentId: toStudentId(v2StudentMap[diary.studentId].hashedId),
+  //     content: diary.content ?? "",
+  //     createdAt: diary.createdAt ?? new Date(),
+  //     updatedAt: diary.updatedAt ?? new Date(),
+  //     deletedAt: diary.deletedAt,
+  //   }
+  // })
 
-  if (formatted.length === 0) {
-    return;
+  try {
+    for (const diary of v2StudentDiaries) {
+      // 建立電訪資料
+      await createStudentDiaries(
+        [{
+          id: toStudentDiaryId(diary.hashedId),
+          schoolId: toSchoolId(siteInfoV2.hashedId),
+          lessonId: null,
+          teacherId: diary.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[diary.teacherId]?.hashedId) : toTeacherId(serviceDirector.hashedId),
+          studentId: toStudentId(v2StudentMap[diary.studentId].hashedId),
+          content: diary.content ?? "",
+          createdAt: diary.createdAt ?? new Date(),
+          updatedAt: diary.updatedAt ?? new Date(),
+          deletedAt: diary.deletedAt,
+        }],
+        trxs,
+      )
+    }
+  } catch (e) {
+    console.log(e)
   }
 
-  formatted.forEach(i => {
-    const undefinedData = Object.values(i).filter((v) => v === undefined)
-    if (undefinedData.length > 0) {
-      console.log(i)
-    }
-  })
+  // formatted.forEach(i => {
+  //   const undefinedData = Object.values(i).filter((v) => v === undefined)
+  //   if (undefinedData.length > 0) {
+  //     console.log(i)
+  //   }
+  // })
 
-  console.log([formatted[0], formatted[1], formatted[2]])
-
-  // 建立電訪資料
-  await createStudentDiaries(
-    [formatted[0], formatted[1], formatted[2]],
-    trxs,
-  )
   throw new Error('custom')
 }
