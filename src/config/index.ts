@@ -4,7 +4,7 @@ dotenv.config()
 
 export default {
   // !必改
-  site: 'alltrueshaoyang',
+  site: 'alltruesh',
 
   // !必改
   // 莘莘集團
