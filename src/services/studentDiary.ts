@@ -43,6 +43,10 @@ export default async (trxs: Trxs) => {
   const v2Teachers = await findTeachersByIds(Array.from(new Set(v2StudentDiaries.map(c => c.teacherId))), trxs)
   const v2TeacherMap = keyBy(v2Teachers, 'id')
 
+  if (v2StudentDiaries.length === 0) {
+    return;
+  }
+
   // 建立電訪資料
   await createStudentDiaries(
     v2StudentDiaries.map((diary) => {
