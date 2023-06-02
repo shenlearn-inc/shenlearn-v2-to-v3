@@ -56,6 +56,7 @@ export default async (trxs: Trxs) => {
       deletedAt: diary.deletedAt,
     }
   })
+  console.log("formatted", formatted)
 
   if (formatted.length === 0) {
     return;
