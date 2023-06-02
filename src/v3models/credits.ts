@@ -23,6 +23,9 @@ export const createCredits = async (credits: CreditV3[], trxs: Trxs): Promise<vo
   const query = v3db()
     .insert(snakecaseKeys(credits))
     .from('credits')
+    // @ts-ignore
+    .onConflict('id')
+    .ignore()
     .transacting(trxs.v3db)
 
   await query
