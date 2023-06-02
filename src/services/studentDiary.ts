@@ -43,48 +43,21 @@ export default async (trxs: Trxs) => {
   const v2Teachers = await findTeachersByIds(Array.from(new Set(v2StudentDiaries.map(c => c.teacherId))), trxs)
   const v2TeacherMap = keyBy(v2Teachers, 'id')
 
-  // const formatted = v2StudentDiaries.map((diary) => {
-  //   return {
-  //     id: toStudentDiaryId(diary.hashedId),
-  //     schoolId: toSchoolId(siteInfoV2.hashedId),
-  //     lessonId: null,
-  //     teacherId: diary.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[diary.teacherId]?.hashedId) : toTeacherId(serviceDirector.hashedId),
-  //     studentId: toStudentId(v2StudentMap[diary.studentId].hashedId),
-  //     content: diary.content ?? "",
-  //     createdAt: diary.createdAt ?? new Date(),
-  //     updatedAt: diary.updatedAt ?? new Date(),
-  //     deletedAt: diary.deletedAt,
-  //   }
-  // })
-
-  try {
-    for (const diary of v2StudentDiaries) {
-      // 建立電訪資料
-      await createStudentDiaries(
-        [{
-          id: toStudentDiaryId(diary.hashedId),
-          schoolId: toSchoolId(siteInfoV2.hashedId),
-          lessonId: null,
-          teacherId: diary.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[diary.teacherId]?.hashedId) : toTeacherId(serviceDirector.hashedId),
-          studentId: toStudentId(v2StudentMap[diary.studentId].hashedId),
-          content: diary.content ?? "",
-          createdAt: diary.createdAt ?? new Date(),
-          updatedAt: diary.updatedAt ?? new Date(),
-          deletedAt: diary.deletedAt,
-        }],
-        trxs,
-      )
-    }
-  } catch (e) {
-    console.log(e)
+  for (const diary of v2StudentDiaries) {
+    // 建立電訪資料
+    await createStudentDiaries(
+      [{
+        id: toStudentDiaryId(diary.hashedId),
+        schoolId: toSchoolId(siteInfoV2.hashedId),
+        lessonId: null,
+        teacherId: diary.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[diary.teacherId]?.hashedId) : toTeacherId(serviceDirector.hashedId),
+        studentId: toStudentId(v2StudentMap[diary.studentId].hashedId),
+        content: diary.content ?? "",
+        createdAt: diary.createdAt ?? new Date(),
+        updatedAt: diary.updatedAt ?? new Date(),
+        deletedAt: diary.deletedAt,
+      }],
+      trxs,
+    )
   }
-
-  // formatted.forEach(i => {
-  //   const undefinedData = Object.values(i).filter((v) => v === undefined)
-  //   if (undefinedData.length > 0) {
-  //     console.log(i)
-  //   }
-  // })
-
-  throw new Error('custom')
 }
