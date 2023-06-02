@@ -43,25 +43,27 @@ export default async (trxs: Trxs) => {
   const v2Teachers = await findTeachersByIds(Array.from(new Set(v2StudentDiaries.map(c => c.teacherId))), trxs)
   const v2TeacherMap = keyBy(v2Teachers, 'id')
 
-  if (v2StudentDiaries.length === 0) {
+  const formatted = v2StudentDiaries.map((diary) => {
+    return {
+      id: toStudentDiaryId(diary.hashedId),
+      schoolId: toSchoolId(siteInfoV2.hashedId),
+      lessonId: null,
+      teacherId: diary.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[diary.teacherId]?.hashedId) : toTeacherId(serviceDirector.hashedId),
+      studentId: toStudentId(v2StudentMap[diary.studentId].hashedId),
+      content: diary.content ?? "",
+      createdAt: diary.createdAt ?? new Date(),
+      updatedAt: diary.updatedAt ?? new Date(),
+      deletedAt: diary.deletedAt,
+    }
+  })
+
+  if (formatted.length === 0) {
     return;
   }
 
   // 建立電訪資料
   await createStudentDiaries(
-    v2StudentDiaries.map((diary) => {
-      return {
-        id: toStudentDiaryId(diary.hashedId),
-        schoolId: toSchoolId(siteInfoV2.hashedId),
-        lessonId: null,
-        teacherId: diary.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[diary.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
-        studentId: toStudentId(v2StudentMap[diary.studentId].hashedId),
-        content: diary.content ?? "",
-        createdAt: diary.createdAt ?? new Date(),
-        updatedAt: diary.updatedAt ?? new Date(),
-        deletedAt: diary.deletedAt,
-      }
-    }),
+    formatted,
     trxs,
   )
 }
