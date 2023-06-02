@@ -50,7 +50,7 @@ export default async (trxs: Trxs) => {
       lessonId: null,
       teacherId: diary.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[diary.teacherId]?.hashedId) : toTeacherId(serviceDirector.hashedId),
       studentId: toStudentId(v2StudentMap[diary.studentId].hashedId),
-      content: JSON.stringify(diary.content ?? ""),
+      content: diary.content ?? "",
       createdAt: diary.createdAt ?? new Date(),
       updatedAt: diary.updatedAt ?? new Date(),
       deletedAt: diary.deletedAt,
