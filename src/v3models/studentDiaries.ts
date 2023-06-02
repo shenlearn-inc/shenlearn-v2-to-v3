@@ -20,8 +20,6 @@ export const createStudentDiaries = async (studentDiaries: StudentDiaryV3[], trx
     .from('student_diaries')
     .transacting(trxs.v3db)
 
-  console.log(query.toQuery())
-
   await query
   return
 }

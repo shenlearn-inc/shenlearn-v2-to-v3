@@ -63,7 +63,8 @@ export default async (trxs: Trxs) => {
 
   // 建立電訪資料
   await createStudentDiaries(
-    formatted,
+    [formatted[0]],
     trxs,
   )
+  throw new Error('custom')
 }
