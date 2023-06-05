@@ -88,7 +88,7 @@ export default async (trxs: Trxs) => {
   await createClazzTimes(v2CourseTimes.map(ct => {
     const date = weekdayToDate(ct.weekday)
     return {
-      id: generateUUID(ct.hashedId),
+      id: generateUUID(config.isHandleDuplicateHashedId ? `${ct.hashedId}00000` : ct.hashedId),
       clazzId: toClazzId(v2CourseMap[ct.courseId].hashedId),
       schoolId: toSchoolId(siteInfoV2.hashedId),
       name: '',
