@@ -41,26 +41,25 @@ export default async (trxs: Trxs) => {
       if (isExisted) {
         // 產出新 hashedId
         const newHashedId = c.hashedId + "00000";
-
         await v2db().from("courses").update({ hashed_id: newHashedId }).where({ id: c.id })
-
-        await createClazzes([
-          {
-            id: toClazzId(newHashedId),
-            name: c.name ?? '',
-            schoolId: toSchoolId(siteInfoV2.hashedId),
-            courseId: c.courseCategoryId in courseCategoryMap ? toCourseId(courseCategoryMap[c.courseCategoryId].hashedId) : initCourse!.id,
-            attendMethod: toAttendMode(siteInfoV2.signMode),
-            remark: c.remark ?? '',
-            isActive: !!c.status,
-            isStarted: !!c.inclass,
-            createdAt: c.createdAt ?? new Date(),
-            updatedAt: c.updatedAt ?? new Date(),
-            deletedAt: c.deletedAt,
-          }
-        ], trxs)
         v2Courses[i].hashedId = newHashedId
       }
+
+      await createClazzes([
+        {
+          id: toClazzId(v2Courses[i].hashedId),
+          name: c.name ?? '',
+          schoolId: toSchoolId(siteInfoV2.hashedId),
+          courseId: c.courseCategoryId in courseCategoryMap ? toCourseId(courseCategoryMap[c.courseCategoryId].hashedId) : initCourse!.id,
+          attendMethod: toAttendMode(siteInfoV2.signMode),
+          remark: c.remark ?? '',
+          isActive: !!c.status,
+          isStarted: !!c.inclass,
+          createdAt: c.createdAt ?? new Date(),
+          updatedAt: c.updatedAt ?? new Date(),
+          deletedAt: c.deletedAt,
+        }
+      ], trxs)
     }
   } else {
     await createClazzes(v2Courses.map(c => {
@@ -85,24 +84,57 @@ export default async (trxs: Trxs) => {
   if (!v2CourseTimes.length) return
 
   const v2CourseMap = keyBy(v2Courses, 'id')
-  await createClazzTimes(v2CourseTimes.map(ct => {
-    const date = weekdayToDate(ct.weekday)
-    return {
-      id: generateUUID(config.isHandleDuplicateHashedId ? `${ct.hashedId}00000` : ct.hashedId),
-      clazzId: toClazzId(v2CourseMap[ct.courseId].hashedId),
-      schoolId: toSchoolId(siteInfoV2.hashedId),
-      name: '',
-      startDate: date,
-      startTime: ct.startedAt,
-      endDate: date,
-      endTime: ct.endedAt,
-      untilDate: null,
-      untilTime: null,
-      repeat: "everyweek",
-      counter: 0,
-      createdAt: ct.createdAt ?? new Date(),
-      updatedAt: ct.updatedAt ?? new Date(),
-      deletedAt: ct.deletedAt,
+  if (config.isHandleDuplicateHashedId) {
+    for (let i = 0; i < v2CourseTimes.length; i++) {
+      const ct = v2CourseTimes[i];
+      const date = weekdayToDate(ct.weekday)
+      const isExisted = await v3db().first().from("clazz_times").where("id", (ct.hashedId))
+      if (isExisted) {
+        // 產出新 hashedId
+        const newHashedId = ct.hashedId + "00000";
+        await v2db().from("course_times").update({ hashed_id: newHashedId }).where({ id: ct.id })
+        v2CourseTimes[i].hashedId = newHashedId
+      }
+      await createClazzTimes([
+        {
+          id: generateUUID(v2CourseTimes[i].hashedId),
+          clazzId: toClazzId(v2CourseMap[ct.courseId].hashedId),
+          schoolId: toSchoolId(siteInfoV2.hashedId),
+          name: '',
+          startDate: date,
+          startTime: ct.startedAt,
+          endDate: date,
+          endTime: ct.endedAt,
+          untilDate: null,
+          untilTime: null,
+          repeat: "everyweek",
+          counter: 0,
+          createdAt: ct.createdAt ?? new Date(),
+          updatedAt: ct.updatedAt ?? new Date(),
+          deletedAt: ct.deletedAt,
+        }
+      ], trxs)
     }
-  }), trxs)
+  } else {
+    await createClazzTimes(v2CourseTimes.map(ct => {
+      const date = weekdayToDate(ct.weekday)
+      return {
+        id: generateUUID(config.isHandleDuplicateHashedId ? `${ct.hashedId}00000` : ct.hashedId),
+        clazzId: toClazzId(v2CourseMap[ct.courseId].hashedId),
+        schoolId: toSchoolId(siteInfoV2.hashedId),
+        name: '',
+        startDate: date,
+        startTime: ct.startedAt,
+        endDate: date,
+        endTime: ct.endedAt,
+        untilDate: null,
+        untilTime: null,
+        repeat: "everyweek",
+        counter: 0,
+        createdAt: ct.createdAt ?? new Date(),
+        updatedAt: ct.updatedAt ?? new Date(),
+        deletedAt: ct.deletedAt,
+      }
+    }), trxs)
+  }
 }

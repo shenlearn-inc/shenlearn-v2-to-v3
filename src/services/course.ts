@@ -38,23 +38,21 @@ export default async (trxs: Trxs) => {
       if (isExisted) {
         // 產出新 hashedId
         const newHashedId = c.hashedId + "00000";
-
         await v2db().from("course_categories").update({ hashed_id: newHashedId }).where({ id: c.id })
-
-        await createCourses([
-          {
-            id: toCourseId(newHashedId),
-            schoolId: toSchoolId(siteInfoV2.hashedId),
-            name: c.name ?? '',
-            remark: c.remark ?? '',
-            type: toCourseType(c.courseType),
-            createdAt: c.createdAt ?? new Date(),
-            updatedAt: c.updatedAt ?? new Date(),
-            deletedAt: c.deletedAt,
-          }
-        ], trxs)
         v2CourseCategories[i].hashedId = newHashedId
       }
+      await createCourses([
+        {
+          id: toCourseId(v2CourseCategories[i].hashedId),
+          schoolId: toSchoolId(siteInfoV2.hashedId),
+          name: c.name ?? '',
+          remark: c.remark ?? '',
+          type: toCourseType(c.courseType),
+          createdAt: c.createdAt ?? new Date(),
+          updatedAt: c.updatedAt ?? new Date(),
+          deletedAt: c.deletedAt,
+        }
+      ], trxs)
     }
   } else {
     await createCourses(v2CourseCategories.map(c => {

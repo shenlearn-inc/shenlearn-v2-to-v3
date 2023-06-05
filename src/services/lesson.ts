@@ -12,6 +12,7 @@ import {findTeachersByIds, TeacherV2} from "@/v2models/teachers";
 import toTeacherId from "@/utils/toTeacherId";
 import v2db from "@/db/v2db";
 import toValidDateObj from "@/utils/toValidDateObj";
+import v3db from "@/db/v3db";
 
 export default async (trxs: Trxs) => {
   console.info('轉移課堂資料')
@@ -38,23 +39,53 @@ export default async (trxs: Trxs) => {
     const v2Teachers = await findTeachersByIds(inclassCourses.map(c => c.teacherId), trxs)
     const v2TeacherMap = keyBy(v2Teachers, 'id')
 
-    // 轉移課堂
-    await createLessons(
-      inclassCourses.map(c => {
-        return {
-          id: generateUUID(c.hashedId),
-          schoolId: toSchoolId(siteInfoV2.hashedId),
-          clazzId: toClazzId(v2CourseMap[c.courseId].hashedId),
-          name: '',
-          startAt: toValidDateObj(c.inclassAt) ?? null,
-          endAt: toValidDateObj(c.outclassAt) ?? null,
-          teacherId: c.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
-          createdAt: toValidDateObj(c.createdAt) ?? new Date(),
-          updatedAt: toValidDateObj(c.updatedAt) ?? new Date(),
-          deletedAt: toValidDateObj(c.deletedAt),
+    if (config.isHandleDuplicateHashedId) {
+      for (let i = 0; i < inclassCourses.length; i++) {
+        const c = inclassCourses[i];
+        const isExisted = await v3db().first().from("lessons").where("id", generateUUID(c.hashedId))
+        if (isExisted) {
+          // 產出新 hashedId
+          const newHashedId = c.hashedId + "00000";
+          await v2db().from("inclass_courses").update({hashed_id: newHashedId}).where({id: c.id})
+          inclassCourses[i].hashedId = newHashedId
         }
-      }),
-      trxs,
-    )
+        await createLessons(
+          [
+            {
+              id: generateUUID(inclassCourses[i].hashedId),
+              schoolId: toSchoolId(siteInfoV2.hashedId),
+              clazzId: toClazzId(v2CourseMap[c.courseId].hashedId),
+              name: '',
+              startAt: toValidDateObj(c.inclassAt) ?? null,
+              endAt: toValidDateObj(c.outclassAt) ?? null,
+              teacherId: c.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
+              createdAt: toValidDateObj(c.createdAt) ?? new Date(),
+              updatedAt: toValidDateObj(c.updatedAt) ?? new Date(),
+              deletedAt: toValidDateObj(c.deletedAt),
+            }
+          ],
+          trxs,
+        )
+      }
+    } else {
+      // 轉移課堂
+      await createLessons(
+        inclassCourses.map(c => {
+          return {
+            id: generateUUID(c.hashedId),
+            schoolId: toSchoolId(siteInfoV2.hashedId),
+            clazzId: toClazzId(v2CourseMap[c.courseId].hashedId),
+            name: '',
+            startAt: toValidDateObj(c.inclassAt) ?? null,
+            endAt: toValidDateObj(c.outclassAt) ?? null,
+            teacherId: c.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
+            createdAt: toValidDateObj(c.createdAt) ?? new Date(),
+            updatedAt: toValidDateObj(c.updatedAt) ?? new Date(),
+            deletedAt: toValidDateObj(c.deletedAt),
+          }
+        }),
+        trxs,
+      )
+    }
   }
 }
