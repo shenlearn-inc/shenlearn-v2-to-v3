@@ -6,24 +6,25 @@ dotenv.config()
 export default {
   // !必改
   sites: [
-    {
-      name: 'commastnew',
-    },
-    {
-      name: 'commasun',
-    },
-    {
-      name: 'commapolarlights',
-    },
+    // {
+    //   name: 'commastnew',
+    // },
+    // {
+    //   name: 'commasun',
+    // },
+    // {
+    //   name: 'commapolarlights',
+    // },
     // {
     //   name: 'commacpnew',
     //   isHandleDuplicateHashedId: true,
     // },
-    {
-      name: 'commanew',
-    },
+    // {
+    //   name: 'commanew',
+    // },
     {
       name: 'commaarknew',
+      isHandleDuplicateHashedId: true,
     },
     {
       name: 'commaclassqy',
