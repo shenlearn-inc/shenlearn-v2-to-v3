@@ -16,8 +16,9 @@ import v2chatdb from "@/db/v2chatdb";
 import v3db from "@/db/v3db";
 import v2db from "@/db/v2db";
 import camelcaseKeys from "camelcase-keys";
+import {Site} from "@/types/Site";
 
-export default async (trxs: Trxs) => {
+export default async (site: Site, trxs: Trxs) => {
   console.info('轉移學生資料')
 
   // 取得站台資料
@@ -33,7 +34,7 @@ export default async (trxs: Trxs) => {
 
     // 轉移學生
     for (const s of students) {
-      if (config.isHandleDuplicateHashedId) {
+      if (site?.isHandleDuplicateHashedId) {
         const isExisted = await v3db().first().from("students").where("id", toStudentId(s.hashedId)).transacting(trxs.v3db)
         // 替換 hashedId
         if (isExisted) {

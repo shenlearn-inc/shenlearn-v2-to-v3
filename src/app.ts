@@ -29,7 +29,7 @@ import v2chatdb from "@/db/v2chatdb";
 export const run = async (): Promise<void> => {
   for (const site of config.sites) {
     console.info(`${site} migration started`)
-    v2db(site, true)
+    v2db(site.name, true)
     v3db(config.v3db.database)
     v3chatdb(config.v3chatdb.database)
 
@@ -51,7 +51,7 @@ export const run = async (): Promise<void> => {
             await school(trxs)
 
             // 轉移學生
-            await student(trxs)
+            await student(site, trxs)
 
             // 轉移家長
             await contactor(trxs)
@@ -60,10 +60,10 @@ export const run = async (): Promise<void> => {
             await teacher(trxs)
 
             // 轉移課種
-            await course(trxs)
+            await course(site, trxs)
 
             // 轉移班級與班級時間
-            await clazz(trxs)
+            await clazz(site, trxs)
 
             // 轉移班級關係
             await clazzRef(trxs)
@@ -72,19 +72,19 @@ export const run = async (): Promise<void> => {
             await teacherAndStudentChatRoomRefs(trxs)
 
             // 轉移聊天室訊息
-            // await chat(trxs)
+            await chat(trxs)
 
             // 轉移課堂
-            // await lesson(trxs)
+            await lesson(site, trxs)
 
             // 轉移繳費
-            // await payment(trxs)
+            await payment(trxs)
 
             // 轉移收據
-            // await receipt(trxs)
+            await receipt(trxs)
 
             // 轉移出勤
-            // await attendance(trxs)
+            await attendance(site, trxs)
 
             // 轉移請假
             await studentSchedule(trxs)
@@ -93,7 +93,7 @@ export const run = async (): Promise<void> => {
             await credit(trxs)
 
             // 轉移電訪資料
-            await studentDiary(trxs)
+            await studentDiary(site, trxs)
 
             // 轉移簽到機資料
             await signDevice(trxs)
@@ -106,7 +106,6 @@ export const run = async (): Promise<void> => {
 
             // 轉移校園公告
             await announcement(trxs)
-            throw new Error("err")
           })
         })
       })

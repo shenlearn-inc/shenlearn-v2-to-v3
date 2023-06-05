@@ -1,26 +1,18 @@
 import {Trxs} from "@/types/Trxs";
-import {findAllExams} from "@/v2models/exams";
-import generateUUID from "@/utils/generateUUID";
 import {findSiteInfo} from "@/v2models/siteInfo";
 import toSchoolId from "@/utils/toSchoolId";
-import {findCoursesByIds} from "@/v2models/courses";
-import {forEach, keyBy} from "lodash"
-import toClazzId from "@/utils/toClazzId";
+import {keyBy} from "lodash"
 import {findTeachersByIds, TeacherV2} from "@/v2models/teachers";
 import toTeacherId from "@/utils/toTeacherId";
 import v2db from "@/db/v2db";
-import {createExams} from "@/v3models/exams";
 import {findStudentsByIds, StudentV2} from "@/v2models/students";
-import {findScoresByExamId} from "@/v2models/scores";
 import toStudentId from "@/utils/toStudentId";
-import {createScores} from "@/v3models/scores";
-import toScoreId from "@/utils/toScoreId";
 import {findAllStudentDiaries} from "@/v2models/studentDiaries";
 import {createStudentDiaries} from "@/v3models/studentDiaries";
 import toStudentDiaryId from "@/utils/toStudentDiaryId";
-import config from "@/config";
+import {Site} from "@/types/Site";
 
-export default async (trxs: Trxs) => {
+export default async (site: Site, trxs: Trxs) => {
   console.info('轉移電訪資料')
 
   // 取得站台資料
@@ -48,7 +40,7 @@ export default async (trxs: Trxs) => {
     // 建立電訪資料
     await createStudentDiaries(
       [{
-        id: toStudentDiaryId(config.isHandleDuplicateHashedId ? `${diary.hashedId}00000` : diary.hashedId),
+        id: toStudentDiaryId(site?.isHandleDuplicateHashedId ? `${diary.hashedId}00000` : diary.hashedId),
         schoolId: toSchoolId(siteInfoV2.hashedId),
         lessonId: null,
         teacherId: diary.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[diary.teacherId]?.hashedId) : toTeacherId(serviceDirector.hashedId),

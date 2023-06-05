@@ -1,5 +1,5 @@
 import {findSiteInfo} from "@/v2models/siteInfo"
-import {findAllTeachers, TeacherV2} from "@/v2models/teachers";
+import {findAllTeachers} from "@/v2models/teachers";
 import {createTeachers} from "@/v3models/teachers";
 import toTeacherId from "@/utils/toTeacherId";
 import {randomBytes} from "crypto"
@@ -10,7 +10,6 @@ import toRoleId from "@/utils/toRoleId";
 import {Trxs} from "@/types/Trxs";
 import {createUsers} from "@/v3chatModels/users";
 import generateUUID from "@/utils/generateUUID";
-import v2db from "@/db/v2db";
 
 // 轉移老師資料
 export default async (trxs: Trxs) => {

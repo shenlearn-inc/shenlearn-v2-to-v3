@@ -1,10 +1,16 @@
 import dotenv from 'dotenv'
+import {Site} from "@/types/Site";
 
 dotenv.config()
 
 export default {
   // !必改
-  sites: ['commacpnew'],
+  sites: [
+    {
+      name: 'commacpnew',
+      isHandleDuplicateHashedId: true,
+    }
+  ] as Site[],
 
   // !必改
   // 莘莘集團

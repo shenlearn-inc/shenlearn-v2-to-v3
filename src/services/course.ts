@@ -6,11 +6,11 @@ import toSchoolId from "@/utils/toSchoolId";
 import toCourseType from "@/utils/toCourseType";
 import generateUUID from "@/utils/generateUUID";
 import {Trxs} from "@/types/Trxs";
-import config from "@/config";
 import v3db from "@/db/v3db";
 import v2db from "@/db/v2db";
+import {Site} from "@/types/Site";
 
-export default async (trxs: Trxs) => {
+export default async (site: Site, trxs: Trxs) => {
   console.info('轉移課種資料')
 
   const siteInfoV2 = await findSiteInfo(trxs)
@@ -31,7 +31,7 @@ export default async (trxs: Trxs) => {
   const v2CourseCategories = await findAllCourseCategories(99999, 0, trxs)
   if (!v2CourseCategories.length) return
 
-  if (config.isHandleDuplicateHashedId) {
+  if (site?.isHandleDuplicateHashedId) {
     for (let i = 0; i < v2CourseCategories.length; i++) {
       const c = v2CourseCategories[i];
       const isExisted = await v3db().first().from("courses").where("id", toCourseId(c.hashedId)).transacting(trxs.v3db)

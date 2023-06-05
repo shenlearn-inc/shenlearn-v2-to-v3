@@ -24,8 +24,9 @@ import {findInclassCoursesByIds, InclassCourseV2} from "@/v2models/inclassCourse
 import v3db from "@/db/v3db";
 import {TeacherV3} from "@/v3models/teachers";
 import toLessonId from "@/utils/toLessonId";
+import {Site} from "@/types/Site";
 
-export default async (trxs: Trxs) => {
+export default async (site: Site, trxs: Trxs) => {
   console.info('轉移出勤')
 
   // 取得站台資料
@@ -110,7 +111,7 @@ export default async (trxs: Trxs) => {
     for (let i = 0; i < studentSignIns.length; i++) {
       let attendances: StudentLessonAttendanceV3[] = []
 
-      if (config.isHandleDuplicateHashedId) {
+      if (site?.isHandleDuplicateHashedId) {
         const isExisted = await v3db().first().from("student_school_attendances").where("id", generateUUID(studentSignIns[i].hashedId))
         if (isExisted) {
           // 產出新 hashedId
@@ -156,7 +157,7 @@ export default async (trxs: Trxs) => {
       }
 
       for (let j = 0; j < v2StudentAttendances.length; j++) {
-        if (config.isHandleDuplicateHashedId) {
+        if (site?.isHandleDuplicateHashedId) {
           // const isExisted = await v3db().first().from("student_lesson_attendances").where("id", generateUUID(v2StudentAttendances[j].hashedId))
           // if (isExisted) {
             // 產出新 hashedId
@@ -254,7 +255,7 @@ export default async (trxs: Trxs) => {
         .filter(a => a.inclassCourseId && a.inclassCourseId in v2InclassCourseMap)
         .map(a => {
           return {
-            id: generateUUID(config.isHandleDuplicateHashedId ? `${a.hashedId}00000` : a.hashedId),
+            id: generateUUID(site?.isHandleDuplicateHashedId ? `${a.hashedId}00000` : a.hashedId),
             schoolId: schoolId,
             clazzId: toClazzId(v2CourseMap[a.courseId].hashedId),
             lessonId: toLessonId(v2InclassCourseMap[a.inclassCourseId!].hashedId),

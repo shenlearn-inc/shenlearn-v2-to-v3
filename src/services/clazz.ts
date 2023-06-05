@@ -15,9 +15,9 @@ import generateUUID from "@/utils/generateUUID";
 import weekdayToDate from "@/utils/weekdayToDate";
 import v3db from "@/db/v3db";
 import v2db from "@/db/v2db";
-import config from "@/config";
+import {Site} from "@/types/Site";
 
-export default async (trxs: Trxs) => {
+export default async (site: Site, trxs: Trxs) => {
   console.info('轉移班級資料')
 
   const siteInfoV2 = await findSiteInfo(trxs)
@@ -34,7 +34,7 @@ export default async (trxs: Trxs) => {
   const initCourse = await findInitCourse(trxs)
 
   // 轉換班級
-  if (config.isHandleDuplicateHashedId) {
+  if (site?.isHandleDuplicateHashedId) {
     for (let i = 0; i < v2Courses.length; i++) {
       const c = v2Courses[i];
       const isExisted = await v3db().first().from("clazzes").where("id", toClazzId(c.hashedId)).transacting(trxs.v3db)
@@ -84,7 +84,7 @@ export default async (trxs: Trxs) => {
   if (!v2CourseTimes.length) return
 
   const v2CourseMap = keyBy(v2Courses, 'id')
-  if (config.isHandleDuplicateHashedId) {
+  if (site?.isHandleDuplicateHashedId) {
     for (let i = 0; i < v2CourseTimes.length; i++) {
       const ct = v2CourseTimes[i];
       const date = weekdayToDate(ct.weekday)
@@ -119,7 +119,7 @@ export default async (trxs: Trxs) => {
     await createClazzTimes(v2CourseTimes.map(ct => {
       const date = weekdayToDate(ct.weekday)
       return {
-        id: generateUUID(config.isHandleDuplicateHashedId ? `${ct.hashedId}00000` : ct.hashedId),
+        id: generateUUID(site?.isHandleDuplicateHashedId ? `${ct.hashedId}00000` : ct.hashedId),
         clazzId: toClazzId(v2CourseMap[ct.courseId].hashedId),
         schoolId: toSchoolId(siteInfoV2.hashedId),
         name: '',

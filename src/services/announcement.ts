@@ -1,25 +1,19 @@
 import {Trxs} from "@/types/Trxs";
-import {findAllInclassCourses, getNumberOfInclassCourse} from "@/v2models/inclassCourses";
-import config from "@/config";
-import {createLessons} from "@/v3models/lessons";
 import generateUUID from "@/utils/generateUUID";
 import {findSiteInfo} from "@/v2models/siteInfo";
 import toSchoolId from "@/utils/toSchoolId";
-import {findCoursesByIds} from "@/v2models/courses";
-import {keyBy} from "lodash"
-import toClazzId from "@/utils/toClazzId";
-import {findTeacherById, findTeachersByIds, TeacherV2} from "@/v2models/teachers";
+import {findTeacherById} from "@/v2models/teachers";
 import toTeacherId from "@/utils/toTeacherId";
 import v2db from "@/db/v2db";
 import {findAllNotifications} from "@/v2models/notifications";
 import toAnnouncementId from "@/utils/toAnnouncementId";
 import v3db from "@/db/v3db";
 import {TeacherV3} from "@/v3models/teachers";
-import {AnnouncementV3, createAnnouncements} from "@/v3models/announcements";
+import {createAnnouncements} from "@/v3models/announcements";
 import camelcaseKeys from "camelcase-keys";
 import {findStudentsByIds} from "@/v2models/students";
 import toStudentId from "@/utils/toStudentId";
-import {AnnouncementStudentRefV3, createAnnouncementStudentRefs} from "@/v3models/announcementStudentRefs";
+import {createAnnouncementStudentRefs} from "@/v3models/announcementStudentRefs";
 
 const sendModeToMethod = (sendMode: string) => {
   switch (sendMode) {

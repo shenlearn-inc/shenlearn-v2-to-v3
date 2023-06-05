@@ -13,8 +13,9 @@ import toTeacherId from "@/utils/toTeacherId";
 import v2db from "@/db/v2db";
 import toValidDateObj from "@/utils/toValidDateObj";
 import v3db from "@/db/v3db";
+import {Site} from "@/types/Site";
 
-export default async (trxs: Trxs) => {
+export default async (site: Site, trxs: Trxs) => {
   console.info('轉移課堂資料')
 
   // 取得站台資料
@@ -39,7 +40,7 @@ export default async (trxs: Trxs) => {
     const v2Teachers = await findTeachersByIds(inclassCourses.map(c => c.teacherId), trxs)
     const v2TeacherMap = keyBy(v2Teachers, 'id')
 
-    if (config.isHandleDuplicateHashedId) {
+    if (site?.isHandleDuplicateHashedId) {
       for (let i = 0; i < inclassCourses.length; i++) {
         const c = inclassCourses[i];
         const isExisted = await v3db().first().from("lessons").where("id", generateUUID(c.hashedId)).transacting(trxs.v3db)
