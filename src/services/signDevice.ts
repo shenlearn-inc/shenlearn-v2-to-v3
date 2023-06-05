@@ -51,7 +51,7 @@ export default async (trxs: Trxs) => {
   );
   const terminalMap = keyBy(terminals, "terminal_name");
 
-  await v3db().insert(
+  const r = await v3db().insert(
     Object.values(terminalMap).map((terminal) => snakecaseKeys({
       id: terminal.terminalName,
       macAddress: terminal.macAddress,
@@ -64,7 +64,8 @@ export default async (trxs: Trxs) => {
       updatedAt: terminal.updatedAt.toISOString(),
       deletedAt: terminal.deletedAt ? terminal.deletedAt.toISOString() : null,
     }))
-  ).from("sign_devices").transacting(trxs.v3db)
+  ).from("sign_devices").transacting(trxs.v3db).returning('*')
+  console.log(r);
 
   // 轉移學生工號
   const studentTerminals: StudentTerminalV2[] = camelcaseKeys(
