@@ -14,6 +14,7 @@ import {ReceiptPaymentItemRefV2} from "@/v2models/receiptPaymentItemRefs";
 import v3db from "@/db/v3db";
 import {findPaymentItemsByIds} from "@/v2models/paymentItems";
 import camelcaseKeys from "camelcase-keys";
+import {TeacherV3} from "@/v3models/teachers";
 
 export default async (trxs: Trxs) => {
   console.info('轉移收據')
@@ -21,6 +22,13 @@ export default async (trxs: Trxs) => {
   // 取得站台資料
   const siteInfoV2 = await findSiteInfo(trxs)
   const schoolId = toSchoolId(siteInfoV2.hashedId)
+
+  // 取得 service 帳號
+  const serviceDirector = await v3db()
+    .first()
+    .from('teachers')
+    .where('no', 'T00000001')
+    .transacting(trxs.v3db) as TeacherV3
 
   const numberOfReceipt = await getNumberOfReceipt(trxs)
   for (let i = 0; i < Math.ceil(numberOfReceipt / config.chunkSize); i++) {
@@ -35,12 +43,13 @@ export default async (trxs: Trxs) => {
       if (!student || !student.hashedId) continue;
 
       const [teacher] = await findTeachersByIds([v2Receipt.teacherId!], trxs)
+      let teacherId = !teacher || !teacher.hashedId ? serviceDirector.id : toTeacherId(teacher.hashedId)
 
       await createReceipts([{
         id: receiptId,
         schoolId: schoolId,
         studentId: toStudentId(student.hashedId),
-        teacherId: toTeacherId(teacher.hashedId),
+        teacherId: teacherId,
         number: v2Receipt.number ?? '',
         payType: v2Receipt.payType ?? 'others',
         totalPrice: v2Receipt.price ?? 0,
