@@ -58,6 +58,8 @@ export default async (trxs: Trxs) => {
 
           // 更新 chat.user_room_refs: room_id
           await v2chatdb().from("user_room_refs").update({ room_id: newChatRoomId }).where("room_id", generateUUID(s.hashedId)).transacting(trxs.v2chatdb);
+          s.hashedId = newHashedId;
+          s.chatRoomId = newChatRoomId;
         }
       }
 

@@ -52,59 +52,59 @@ export const run = async (): Promise<void> => {
           // 轉移學生
           await student(trxs)
 
-          // // 轉移家長
-          // await contactor(trxs)
-          //
-          // // 轉移老師
-          // await teacher(trxs)
-          //
-          // // 轉移課種
-          // await course(trxs)
-          //
-          // // 轉移班級與班級時間
-          // await clazz(trxs)
-          //
-          // // 轉移班級關係
-          // await clazzRef(trxs)
-          //
-          // // 轉移老師與學生聊天室關係
-          // await teacherAndStudentChatRoomRefs(trxs)
-          //
-          // // 轉移聊天室訊息
-          // await chat(trxs)
-          //
-          // // 轉移課堂
-          // await lesson(trxs)
-          //
-          // // 轉移繳費
-          // await payment(trxs)
-          //
-          // // 轉移收據
-          // await receipt(trxs)
-          //
-          // // 轉移出勤
-          // await attendance(trxs)
-          //
-          // // 轉移請假
-          // await studentSchedule(trxs)
-          //
-          // // 轉移堂次
-          // await credit(trxs)
-          //
-          // // 轉移電訪資料
-          // await studentDiary(trxs)
-          //
-          // // 轉移簽到機資料
-          // await signDevice(trxs)
-          //
-          // // 轉移班級日誌
-          // await clazzDiaries(trxs)
-          //
-          // // 轉移考試
-          // await exam(trxs)
-          //
-          // // 轉移校園公告
-          // await announcement(trxs)
+          // 轉移家長
+          await contactor(trxs)
+
+          // 轉移老師
+          await teacher(trxs)
+
+          // 轉移課種
+          await course(trxs)
+
+          // 轉移班級與班級時間
+          await clazz(trxs)
+
+          // 轉移班級關係
+          await clazzRef(trxs)
+
+          // 轉移老師與學生聊天室關係
+          await teacherAndStudentChatRoomRefs(trxs)
+
+          // 轉移聊天室訊息
+          await chat(trxs)
+
+          // 轉移課堂
+          await lesson(trxs)
+
+          // 轉移繳費
+          await payment(trxs)
+
+          // 轉移收據
+          await receipt(trxs)
+
+          // 轉移出勤
+          await attendance(trxs)
+
+          // 轉移請假
+          await studentSchedule(trxs)
+
+          // 轉移堂次
+          await credit(trxs)
+
+          // 轉移電訪資料
+          await studentDiary(trxs)
+
+          // 轉移簽到機資料
+          await signDevice(trxs)
+
+          // 轉移班級日誌
+          await clazzDiaries(trxs)
+
+          // 轉移考試
+          await exam(trxs)
+
+          // 轉移校園公告
+          await announcement(trxs)
         })
       })
     })
