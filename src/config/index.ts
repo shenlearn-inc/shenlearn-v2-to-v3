@@ -7,8 +7,26 @@ export default {
   // !必改
   sites: [
     {
-      name: 'commacpnew',
-      isHandleDuplicateHashedId: true,
+      name: 'commastnew',
+    },
+    {
+      name: 'commasun',
+    },
+    {
+      name: 'commapolarlights',
+    },
+    // {
+    //   name: 'commacpnew',
+    //   isHandleDuplicateHashedId: true,
+    // },
+    {
+      name: 'commanew',
+    },
+    {
+      name: 'commaarknew',
+    },
+    {
+      name: 'commaclassqy',
     }
   ] as Site[],
 
