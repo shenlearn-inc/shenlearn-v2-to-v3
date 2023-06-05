@@ -68,7 +68,7 @@ export default async (trxs: Trxs) => {
           deletedAt: s.deletedAt,
         }], trxs)
       } catch (e) {
-        console.log("hashedId", s.hashedId)
+        console.log("hashedId duplicate", s.hashedId)
       }
 
       // 新建老師與學生的聊天室
