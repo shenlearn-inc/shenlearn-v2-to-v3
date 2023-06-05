@@ -129,7 +129,7 @@ export default async (trxs: Trxs) => {
       additionalCharge: notification.smsCount ?? 0,
       createdAt: notification?.createdAt ?? new Date(),
       publishedAt: notification?.createdAt ?? new Date(),
-      updatedAt: notification.updatedAt,
+      updatedAt: notification?.updatedAt ?? new Date(),
       deletedAt: notification.deletedAt,
     }
     await createAnnouncements([announcement as any], trxs);
