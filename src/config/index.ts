@@ -4,7 +4,7 @@ dotenv.config()
 
 export default {
   // !必改
-  site: 'commanew',
+  site: 'commacpnew',
 
   // !必改
   // 莘莘集團
@@ -12,6 +12,8 @@ export default {
   organizationId: "c21b4b15-576f-4b5f-a22d-d5815b791ad1",
   // 是否要刪除聯絡人
   isDeleteContactor: false,
+  // 是否要處理學生 hashedId 重複
+  isHandleDuplicateHashedId: true,
 
   // !必改
   // 旗艦版

@@ -68,3 +68,14 @@ export const findStudentsByIds = async (studentIds: number[], trxs: Trxs): Promi
 
   return camelcaseKeys(await query)
 }
+
+export const updateStudentHashedIdById = async ({ hashedId, chatRoomId }: { hashedId: string; chatRoomId: string }, studentId: number, trxs: Trxs): Promise<void> => {
+  await v2db()
+    .update({
+      "hashed_id": hashedId,
+      "chat_room_id": chatRoomId,
+    })
+    .from('students')
+    .where('id', studentId)
+    .transacting(trxs.v2db)
+}

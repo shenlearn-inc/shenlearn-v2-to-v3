@@ -39,6 +39,7 @@ export default async (trxs: Trxs) => {
 
     // 班級
     const [course] = await findCoursesByIds([courseDiary.courseId], trxs);
+    if (!course?.hashedId) continue;
     const clazzId = toClazzId(course.hashedId);
 
     // 老師
