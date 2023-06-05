@@ -40,6 +40,7 @@ export default async (trxs: Trxs) => {
   // 取得站台資料
   const siteInfoV2 = await findSiteInfo(trxs)
   const schoolId = toSchoolId(siteInfoV2.hashedId)
+  console.log("schoolId", schoolId);
 
   // 轉移簽到機
   const terminals: TerminalV2[] = camelcaseKeys(
