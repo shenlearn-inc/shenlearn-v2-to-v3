@@ -68,7 +68,7 @@ export const run = async (): Promise<void> => {
         await teacherAndStudentChatRoomRefs(trxs)
 
         // 轉移聊天室訊息
-        // await chat(trxs)
+        await chat(trxs)
 
         // 轉移課堂
         await lesson(trxs)
