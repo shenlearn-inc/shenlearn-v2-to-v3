@@ -21,17 +21,23 @@ const convertPayloadV2ToPayloadV3 = (message: any) => {
       url: payload.url,
     }
   } else if (type === "info") {
-    const payload = JSON.parse(message.payload);
-    return {
-      title: payload?.title ?? "",
-      text: payload?.content ?? "",
-      images: payload.images?.map((image: any) => ({
-        url: image.url,
-      })) ?? [],
-      actions: payload.actions?.map((action: any) => ({
-        name: action?.name ?? action?.text ?? "",
-        url: action.url
-      }))
+    try {
+      const payload = JSON.parse(message.payload);
+      return {
+        title: payload?.title ?? "",
+        text: payload?.content ?? "",
+        images: payload.images?.map((image: any) => ({
+          url: image.url,
+        })) ?? [],
+        actions: payload.actions?.map((action: any) => ({
+          name: action?.name ?? action?.text ?? "",
+          url: action.url
+        }))
+      }
+    } catch (e) {
+      return {
+        text: message.payload ?? ""
+      }
     }
   } else if (type === "file") {
     const payload = JSON.parse(message.payload);
