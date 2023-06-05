@@ -4,12 +4,12 @@ dotenv.config()
 
 export default {
   // !必改
-  site: 'poetry88new',
+  site: 'commastnew',
 
   // !必改
   // 莘莘集團
   // organizationId: '546694a2-6e6b-4f1d-8bfd-7559fda0ffbf',
-  organizationId: "d9581944-0b41-45b3-8cfa-7d8e813d6e4e",
+  organizationId: "c21b4b15-576f-4b5f-a22d-d5815b791ad1",
   // 是否要刪除聯絡人
   isDeleteContactor: false,
 
