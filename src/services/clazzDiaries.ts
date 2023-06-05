@@ -44,7 +44,7 @@ export default async (trxs: Trxs) => {
     // 老師
     const teacherV2 = await findTeacherById(courseDiary.teacherId, trxs);
     let teacherId = ""
-    if (teacherV2.hashedId) {
+    if (teacherV2?.hashedId) {
       teacherId = toTeacherId(teacherV2.hashedId);
     } else {
       teacherId = serviceDirector.id;
