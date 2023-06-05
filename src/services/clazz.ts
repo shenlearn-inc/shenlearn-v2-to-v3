@@ -13,6 +13,9 @@ import {findAllCourseTimes} from "@/v2models/courseTimes";
 import {createClazzTimes} from "@/v3models/clazzTimes";
 import generateUUID from "@/utils/generateUUID";
 import weekdayToDate from "@/utils/weekdayToDate";
+import v3db from "@/db/v3db";
+import v2db from "@/db/v2db";
+import config from "@/config";
 
 export default async (trxs: Trxs) => {
   console.info('轉移班級資料')
@@ -31,21 +34,51 @@ export default async (trxs: Trxs) => {
   const initCourse = await findInitCourse(trxs)
 
   // 轉換班級
-  await createClazzes(v2Courses.map(c => {
-    return {
-      id: toClazzId(c.hashedId),
-      name: c.name ?? '',
-      schoolId: toSchoolId(siteInfoV2.hashedId),
-      courseId: c.courseCategoryId in courseCategoryMap ? toCourseId(courseCategoryMap[c.courseCategoryId].hashedId) : initCourse!.id,
-      attendMethod: toAttendMode(siteInfoV2.signMode),
-      remark: c.remark ?? '',
-      isActive: !!c.status,
-      isStarted: !!c.inclass,
-      createdAt: c.createdAt ?? new Date(),
-      updatedAt: c.updatedAt ?? new Date(),
-      deletedAt: c.deletedAt,
+  if (config.isHandleDuplicateHashedId) {
+    for (let i = 0; i < v2Courses.length; i++) {
+      const c = v2Courses[i];
+      const isExisted = await v3db().first().from("clazzes").where("id", toClazzId(c.hashedId))
+      if (isExisted) {
+        // 產出新 hashedId
+        const newHashedId = c.hashedId + "00000";
+
+        await v2db().from("courses").update({ hashed_id: newHashedId }).where({ id: c.id })
+
+        await createClazzes([
+          {
+            id: toClazzId(newHashedId),
+            name: c.name ?? '',
+            schoolId: toSchoolId(siteInfoV2.hashedId),
+            courseId: c.courseCategoryId in courseCategoryMap ? toCourseId(courseCategoryMap[c.courseCategoryId].hashedId) : initCourse!.id,
+            attendMethod: toAttendMode(siteInfoV2.signMode),
+            remark: c.remark ?? '',
+            isActive: !!c.status,
+            isStarted: !!c.inclass,
+            createdAt: c.createdAt ?? new Date(),
+            updatedAt: c.updatedAt ?? new Date(),
+            deletedAt: c.deletedAt,
+          }
+        ], trxs)
+        v2Courses[i].hashedId = newHashedId
+      }
     }
-  }), trxs)
+  } else {
+    await createClazzes(v2Courses.map(c => {
+      return {
+        id: toClazzId(c.hashedId),
+        name: c.name ?? '',
+        schoolId: toSchoolId(siteInfoV2.hashedId),
+        courseId: c.courseCategoryId in courseCategoryMap ? toCourseId(courseCategoryMap[c.courseCategoryId].hashedId) : initCourse!.id,
+        attendMethod: toAttendMode(siteInfoV2.signMode),
+        remark: c.remark ?? '',
+        isActive: !!c.status,
+        isStarted: !!c.inclass,
+        createdAt: c.createdAt ?? new Date(),
+        updatedAt: c.updatedAt ?? new Date(),
+        deletedAt: c.deletedAt,
+      }
+    }), trxs)
+  }
 
   // 轉換班級時間
   const v2CourseTimes = await findAllCourseTimes(99999, 0, trxs)

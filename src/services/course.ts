@@ -6,6 +6,9 @@ import toSchoolId from "@/utils/toSchoolId";
 import toCourseType from "@/utils/toCourseType";
 import generateUUID from "@/utils/generateUUID";
 import {Trxs} from "@/types/Trxs";
+import config from "@/config";
+import v3db from "@/db/v3db";
+import v2db from "@/db/v2db";
 
 export default async (trxs: Trxs) => {
   console.info('轉移課種資料')
@@ -27,16 +30,44 @@ export default async (trxs: Trxs) => {
   // 轉換課種
   const v2CourseCategories = await findAllCourseCategories(99999, 0, trxs)
   if (!v2CourseCategories.length) return
-  await createCourses(v2CourseCategories.map(c => {
-    return {
-      id: toCourseId(c.hashedId),
-      schoolId: toSchoolId(siteInfoV2.hashedId),
-      name: c.name ?? '',
-      remark: c.remark ?? '',
-      type: toCourseType(c.courseType),
-      createdAt: c.createdAt ?? new Date(),
-      updatedAt: c.updatedAt ?? new Date(),
-      deletedAt: c.deletedAt,
+
+  if (config.isHandleDuplicateHashedId) {
+    for (let i = 0; i < v2CourseCategories.length; i++) {
+      const c = v2CourseCategories[i];
+      const isExisted = await v3db().first().from("courses").where("id", toCourseId(c.hashedId))
+      if (isExisted) {
+        // 產出新 hashedId
+        const newHashedId = c.hashedId + "00000";
+
+        await v2db().from("course_categories").update({ hashed_id: newHashedId }).where({ id: c.id })
+
+        await createCourses([
+          {
+            id: toCourseId(newHashedId),
+            schoolId: toSchoolId(siteInfoV2.hashedId),
+            name: c.name ?? '',
+            remark: c.remark ?? '',
+            type: toCourseType(c.courseType),
+            createdAt: c.createdAt ?? new Date(),
+            updatedAt: c.updatedAt ?? new Date(),
+            deletedAt: c.deletedAt,
+          }
+        ], trxs)
+        v2CourseCategories[i].hashedId = newHashedId
+      }
     }
-  }), trxs)
+  } else {
+    await createCourses(v2CourseCategories.map(c => {
+      return {
+        id: toCourseId(c.hashedId),
+        schoolId: toSchoolId(siteInfoV2.hashedId),
+        name: c.name ?? '',
+        remark: c.remark ?? '',
+        type: toCourseType(c.courseType),
+        createdAt: c.createdAt ?? new Date(),
+        updatedAt: c.updatedAt ?? new Date(),
+        deletedAt: c.deletedAt,
+      }
+    }), trxs)
+  }
 }
