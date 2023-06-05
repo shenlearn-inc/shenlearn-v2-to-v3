@@ -106,6 +106,7 @@ export const run = async (): Promise<void> => {
 
             // 轉移校園公告
             await announcement(trxs)
+            throw new Error("err")
           })
         })
       })
