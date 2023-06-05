@@ -72,19 +72,19 @@ export const run = async (): Promise<void> => {
             await teacherAndStudentChatRoomRefs(trxs)
 
             // 轉移聊天室訊息
-            await chat(trxs)
+            // await chat(trxs)
 
             // 轉移課堂
-            await lesson(trxs)
+            // await lesson(trxs)
 
             // 轉移繳費
-            await payment(trxs)
+            // await payment(trxs)
 
             // 轉移收據
-            await receipt(trxs)
+            // await receipt(trxs)
 
             // 轉移出勤
-            await attendance(trxs)
+            // await attendance(trxs)
 
             // 轉移請假
             await studentSchedule(trxs)
