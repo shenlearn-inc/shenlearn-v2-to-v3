@@ -55,7 +55,7 @@ export default async (trxs: Trxs) => {
 
     // 轉換老師關係
     await createClazzTeacherRefs(v2CourseTeacherRefs
-      .filter(r => !!r.courseId)
+      .filter(r => !!r.courseId && !!r.teacherId && !!v2TeacherMap[r.teacherId]?.hashedId)
       .map(r => {
 
         return {
