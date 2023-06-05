@@ -19,6 +19,7 @@ import camelcaseKeys from "camelcase-keys";
 import v3db from "@/db/v3db";
 import {TeacherV3} from "@/v3models/teachers";
 import toDateStr from "@/utils/toDateStr";
+import toValidDateObj from "@/utils/toValidDateObj";
 
 export default async (trxs: Trxs) => {
   console.info('轉移繳費')
@@ -65,9 +66,9 @@ export default async (trxs: Trxs) => {
         price: v2Payment.price ?? 0,
         remark: v2Payment.remark ?? '',
         isPublic: v2Payment.isPublic ?? false,
-        deadlineDate: v2Payment.deadlineAt?.toISOString().slice(0, 10) ?? null,
-        startedDate: v2Payment.startedAt?.toISOString().slice(0, 10) ?? null,
-        endedDate: v2Payment.endedAt?.toISOString().slice(0, 10) ?? null,
+        deadlineDate: toValidDateObj(v2Payment.deadlineAt)?.toISOString().slice(0, 10) ?? null,
+        startedDate: toValidDateObj(v2Payment.startedAt)?.toISOString().slice(0, 10) ?? null,
+        endedDate: toValidDateObj(v2Payment.endedAt)?.toISOString().slice(0, 10) ?? null,
         courseId: null,
         creditCount: null,
         createdAt: v2Payment.createdAt ?? new Date(),
