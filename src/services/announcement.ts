@@ -53,6 +53,8 @@ export default async (trxs: Trxs) => {
 
   // 轉移班級通知
   for (const notification of notifications) {
+    const newHashedId = notification.hashedId + "00000";
+    notification.hashedId = newHashedId
     const announcementId = toAnnouncementId(notification.hashedId);
 
     // 老師
