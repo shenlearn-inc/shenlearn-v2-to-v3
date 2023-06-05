@@ -12,7 +12,7 @@ export default async (trxs: Trxs) => {
 
   const v2SiteInfo = await v2db().first().from('site_info').transacting(trxs.v2db);
   if (!v2SiteInfo || !v2SiteInfo.hashed_id) {
-    throw new Error(`${config.site} siteInfo does not exist`);
+    throw new Error(`siteInfo does not exist`);
   }
   const schoolId = toSchoolId(v2SiteInfo.hashed_id);
 
