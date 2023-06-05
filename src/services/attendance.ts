@@ -156,6 +156,15 @@ export default async (trxs: Trxs) => {
       }
 
       for (let j = 0; j < v2StudentAttendances.length; j++) {
+        if (config.isHandleDuplicateHashedId) {
+          const isExisted = await v3db().first().from("student_lesson_attendances").where("id", generateUUID(v2StudentAttendances[j].hashedId))
+          if (isExisted) {
+            // 產出新 hashedId
+            const newHashedId = v2StudentAttendances[j].hashedId + "00000";
+            await v2db().from("student_attendances").update({ hashed_id: newHashedId }).where({ id: v2StudentAttendances[j].id }).transacting(trxs.v2db)
+            v2StudentAttendances[j].hashedId = newHashedId
+          }
+        }
         if (i === 0) {
           if (moment(v2StudentAttendances[j].attendedAt).isSameOrAfter(studentSignIns[i].createdAt)) {
             const a = v2StudentAttendances[j]
@@ -245,7 +254,7 @@ export default async (trxs: Trxs) => {
         .filter(a => a.inclassCourseId && a.inclassCourseId in v2InclassCourseMap)
         .map(a => {
           return {
-            id: generateUUID(a.hashedId),
+            id: generateUUID(config.isHandleDuplicateHashedId ? `${a.hashedId}00000` : a.hashedId),
             schoolId: schoolId,
             clazzId: toClazzId(v2CourseMap[a.courseId].hashedId),
             lessonId: toLessonId(v2InclassCourseMap[a.inclassCourseId!].hashedId),
