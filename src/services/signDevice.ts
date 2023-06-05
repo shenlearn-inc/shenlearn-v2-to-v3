@@ -83,6 +83,7 @@ export default async (trxs: Trxs) => {
   }
 
   const v2Students = await findStudentsByIds(v2StudentIds, trxs);
+  console.log(v2Students)
   if (!v2Students.length) {
     return;
   }
