@@ -18,6 +18,7 @@ import toScoreId from "@/utils/toScoreId";
 import {findAllStudentDiaries} from "@/v2models/studentDiaries";
 import {createStudentDiaries} from "@/v3models/studentDiaries";
 import toStudentDiaryId from "@/utils/toStudentDiaryId";
+import config from "@/config";
 
 export default async (trxs: Trxs) => {
   console.info('轉移電訪資料')
@@ -47,7 +48,7 @@ export default async (trxs: Trxs) => {
     // 建立電訪資料
     await createStudentDiaries(
       [{
-        id: toStudentDiaryId(diary.hashedId),
+        id: toStudentDiaryId(config.isHandleDuplicateHashedId ? `${diary.hashedId}00000` : diary.hashedId),
         schoolId: toSchoolId(siteInfoV2.hashedId),
         lessonId: null,
         teacherId: diary.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[diary.teacherId]?.hashedId) : toTeacherId(serviceDirector.hashedId),
