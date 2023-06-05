@@ -39,36 +39,22 @@ export default async (trxs: Trxs) => {
     const v2TeacherMap = keyBy(v2Teachers, 'id')
 
     // 轉移課堂
-    for (const c of inclassCourses) {
-      try {
-        await createLessons([{
+    await createLessons(
+      inclassCourses.map(c => {
+        return {
           id: generateUUID(c.hashedId),
           schoolId: toSchoolId(siteInfoV2.hashedId),
           clazzId: toClazzId(v2CourseMap[c.courseId].hashedId),
           name: '',
-          startAt: c.inclassAt ?? null,
-          endAt: c.outclassAt ?? null,
+          startAt: toValidDateObj(c.inclassAt) ?? null,
+          endAt: toValidDateObj(c.outclassAt) ?? null,
           teacherId: c.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
           createdAt: toValidDateObj(c.createdAt) ?? new Date(),
           updatedAt: toValidDateObj(c.updatedAt) ?? new Date(),
           deletedAt: toValidDateObj(c.deletedAt),
-        }], trxs)
-      } catch (e) {
-        console.log({
-          id: generateUUID(c.hashedId),
-          schoolId: toSchoolId(siteInfoV2.hashedId),
-          clazzId: toClazzId(v2CourseMap[c.courseId].hashedId),
-          name: '',
-          startAt: c.inclassAt ?? null,
-          endAt: c.outclassAt ?? null,
-          teacherId: c.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
-          createdAt: toValidDateObj(c.createdAt) ?? new Date(),
-          updatedAt: toValidDateObj(c.updatedAt) ?? new Date(),
-          deletedAt: toValidDateObj(c.deletedAt),
-        })
-        console.log(e)
-        throw new Error("error")
-      }
-    }
+        }
+      }),
+      trxs,
+    )
   }
 }
