@@ -32,6 +32,8 @@ export default async (trxs: Trxs) => {
       const receiptId = generateUUID(v2Receipt.hashedId)
 
       const [student] = await findStudentsByIds([v2Receipt.studentId!], trxs)
+      if (!student || !student.hashedId) continue;
+
       const [teacher] = await findTeachersByIds([v2Receipt.teacherId!], trxs)
 
       await createReceipts([{
