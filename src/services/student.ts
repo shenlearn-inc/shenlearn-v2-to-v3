@@ -34,7 +34,7 @@ export default async (trxs: Trxs) => {
     // 轉移學生
     for (const s of students) {
       if (config.isHandleDuplicateHashedId) {
-        const isExisted = await v3db().first().from("students").where("id", toStudentId(s.hashedId))
+        const isExisted = await v3db().first().from("students").where("id", toStudentId(s.hashedId)).transacting(trxs.v3db)
         // 替換 hashedId
         if (isExisted) {
           // 產出新 hashedId

@@ -37,11 +37,11 @@ export default async (trxs: Trxs) => {
   if (config.isHandleDuplicateHashedId) {
     for (let i = 0; i < v2Courses.length; i++) {
       const c = v2Courses[i];
-      const isExisted = await v3db().first().from("clazzes").where("id", toClazzId(c.hashedId))
+      const isExisted = await v3db().first().from("clazzes").where("id", toClazzId(c.hashedId)).transacting(trxs.v3db)
       if (isExisted) {
         // 產出新 hashedId
         const newHashedId = c.hashedId + "00000";
-        await v2db().from("courses").update({ hashed_id: newHashedId }).where({ id: c.id })
+        await v2db().from("courses").update({ hashed_id: newHashedId }).where({ id: c.id }).transacting(trxs.v2db)
         v2Courses[i].hashedId = newHashedId
       }
 
@@ -88,11 +88,11 @@ export default async (trxs: Trxs) => {
     for (let i = 0; i < v2CourseTimes.length; i++) {
       const ct = v2CourseTimes[i];
       const date = weekdayToDate(ct.weekday)
-      const isExisted = await v3db().first().from("clazz_times").where("id", generateUUID(ct.hashedId))
+      const isExisted = await v3db().first().from("clazz_times").where("id", generateUUID(ct.hashedId)).transacting(trxs.v3db)
       if (isExisted) {
         // 產出新 hashedId
         const newHashedId = ct.hashedId + "00000";
-        await v2db().from("course_times").update({ hashed_id: newHashedId }).where({ id: ct.id })
+        await v2db().from("course_times").update({ hashed_id: newHashedId }).where({ id: ct.id }).transacting(trxs.v2db)
         v2CourseTimes[i].hashedId = newHashedId
       }
       await createClazzTimes([

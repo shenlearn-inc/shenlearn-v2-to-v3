@@ -42,11 +42,11 @@ export default async (trxs: Trxs) => {
     if (config.isHandleDuplicateHashedId) {
       for (let i = 0; i < inclassCourses.length; i++) {
         const c = inclassCourses[i];
-        const isExisted = await v3db().first().from("lessons").where("id", generateUUID(c.hashedId))
+        const isExisted = await v3db().first().from("lessons").where("id", generateUUID(c.hashedId)).transacting(trxs.v3db)
         if (isExisted) {
           // 產出新 hashedId
           const newHashedId = c.hashedId + "00000";
-          await v2db().from("inclass_courses").update({hashed_id: newHashedId}).where({id: c.id})
+          await v2db().from("inclass_courses").update({hashed_id: newHashedId}).where({id: c.id}).transacting(trxs.v2db)
           inclassCourses[i].hashedId = newHashedId
         }
         await createLessons(
