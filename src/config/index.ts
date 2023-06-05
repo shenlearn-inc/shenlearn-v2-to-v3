@@ -4,7 +4,7 @@ dotenv.config()
 
 export default {
   // !必改
-  site: 'commapolarlights',
+  site: 'commacpnew',
 
   // !必改
   // 莘莘集團
