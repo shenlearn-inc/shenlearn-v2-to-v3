@@ -22,12 +22,13 @@ export default {
     // {
     //   name: 'commanew',
     // },
-    {
-      name: 'commaarknew',
-      isHandleDuplicateHashedId: true,
-    },
+    // {
+    //   name: 'commaarknew',
+    //   isHandleDuplicateHashedId: true,
+    // },
     {
       name: 'commaclassqy',
+      isHandleDuplicateHashedId: true,
     }
   ] as Site[],
 
