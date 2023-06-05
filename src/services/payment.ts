@@ -58,46 +58,23 @@ export default async (trxs: Trxs) => {
 
       // Payment
       const paymentId = generateUUID(v2Payment.hashedId)
-      try {
-        await createPayments([{
-          id: paymentId,
-          schoolId: schoolId,
-          teacherId: serviceDirector.id,
-          paymentRootId: paymentRootId,
-          price: v2Payment.price ?? 0,
-          remark: v2Payment.remark ?? '',
-          isPublic: v2Payment.isPublic ?? false,
-          deadlineDate: toValidDateObj(v2Payment.deadlineAt)?.toISOString().slice(0, 10) ?? null,
-          startedDate: toValidDateObj(v2Payment.startedAt)?.toISOString().slice(0, 10) ?? null,
-          endedDate: toValidDateObj(v2Payment.endedAt)?.toISOString().slice(0, 10) ?? null,
-          courseId: null,
-          creditCount: null,
-          createdAt: v2Payment.createdAt ?? new Date(),
-          updatedAt: v2Payment.updatedAt ?? new Date(),
-          deletedAt: v2Payment.deletedAt,
-        }], trxs)
-      } catch (e) {
-        console.log(v2Payment.deadlineAt)
-        console.log({
-          id: paymentId,
-          schoolId: schoolId,
-          teacherId: serviceDirector.id,
-          paymentRootId: paymentRootId,
-          price: v2Payment.price ?? 0,
-          remark: v2Payment.remark ?? '',
-          isPublic: v2Payment.isPublic ?? false,
-          deadlineDate: toValidDateObj(v2Payment.deadlineAt)?.toISOString().slice(0, 10) ?? null,
-          startedDate: toValidDateObj(v2Payment.startedAt)?.toISOString().slice(0, 10) ?? null,
-          endedDate: toValidDateObj(v2Payment.endedAt)?.toISOString().slice(0, 10) ?? null,
-          courseId: null,
-          creditCount: null,
-          createdAt: v2Payment.createdAt ?? new Date(),
-          updatedAt: v2Payment.updatedAt ?? new Date(),
-          deletedAt: v2Payment.deletedAt,
-        })
-        console.log(e)
-        throw new Error("error")
-      }
+      await createPayments([{
+        id: paymentId,
+        schoolId: schoolId,
+        teacherId: serviceDirector.id,
+        paymentRootId: paymentRootId,
+        price: v2Payment.price ?? 0,
+        remark: v2Payment.remark ?? '',
+        isPublic: v2Payment.isPublic ?? false,
+        deadlineDate: toValidDateObj(v2Payment.deadlineAt)?.toISOString().slice(0, 10) ?? null,
+        startedDate: toValidDateObj(v2Payment.startedAt)?.toISOString().slice(0, 10) ?? null,
+        endedDate: toValidDateObj(v2Payment.endedAt)?.toISOString().slice(0, 10) ?? null,
+        courseId: null,
+        creditCount: null,
+        createdAt: v2Payment.createdAt ?? new Date(),
+        updatedAt: v2Payment.updatedAt ?? new Date(),
+        deletedAt: v2Payment.deletedAt,
+      }], trxs)
 
       // Payment item
       const v2PaymentItems = camelcaseKeys(
