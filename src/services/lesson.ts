@@ -11,6 +11,7 @@ import toClazzId from "@/utils/toClazzId";
 import {findTeachersByIds, TeacherV2} from "@/v2models/teachers";
 import toTeacherId from "@/utils/toTeacherId";
 import v2db from "@/db/v2db";
+import toValidDateObj from "@/utils/toValidDateObj";
 
 export default async (trxs: Trxs) => {
   console.info('轉移課堂資料')
@@ -48,9 +49,9 @@ export default async (trxs: Trxs) => {
           startAt: c.inclassAt ?? null,
           endAt: c.outclassAt ?? null,
           teacherId: c.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
-          createdAt: c.createdAt ?? new Date(),
-          updatedAt: c.updatedAt ?? new Date(),
-          deletedAt: c.deletedAt,
+          createdAt: toValidDateObj(c.createdAt) ?? new Date(),
+          updatedAt: toValidDateObj(c.updatedAt) ?? new Date(),
+          deletedAt: toValidDateObj(c.deletedAt),
         }
       }),
       trxs,
