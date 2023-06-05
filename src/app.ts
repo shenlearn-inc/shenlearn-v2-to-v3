@@ -28,7 +28,7 @@ import v2chatdb from "@/db/v2chatdb";
 
 export const run = async (): Promise<void> => {
   for (const site of config.sites) {
-    console.info(`${site} migration started`)
+    console.info(`${site.name} migration started`)
     v2db(site.name, true)
     v3db(config.v3db.database)
     v3chatdb(config.v3chatdb.database)
@@ -110,6 +110,6 @@ export const run = async (): Promise<void> => {
         })
       })
     })
-    console.info(`${site} migration done`)
+    console.info(`${site.name} migration done`)
   }
 }
