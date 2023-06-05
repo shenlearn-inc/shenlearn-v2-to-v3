@@ -88,7 +88,7 @@ export default async (trxs: Trxs) => {
     for (let i = 0; i < v2CourseTimes.length; i++) {
       const ct = v2CourseTimes[i];
       const date = weekdayToDate(ct.weekday)
-      const isExisted = await v3db().first().from("clazz_times").where("id", (ct.hashedId))
+      const isExisted = await v3db().first().from("clazz_times").where("id", generateUUID(ct.hashedId))
       if (isExisted) {
         // 產出新 hashedId
         const newHashedId = ct.hashedId + "00000";
