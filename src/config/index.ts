@@ -27,15 +27,15 @@ export default {
     //   isHandleDuplicateHashedId: true,
     // },
     {
-      name: 'commaclassqy',
-      isHandleDuplicateHashedId: true,
+      name: 'nzhnew',
+      isHandleDuplicateHashedId: false,
     }
   ] as Site[],
 
   // !必改
   // 莘莘集團
   // organizationId: '546694a2-6e6b-4f1d-8bfd-7559fda0ffbf',
-  organizationId: "c21b4b15-576f-4b5f-a22d-d5815b791ad1",
+  organizationId: "efa7c9d2-98a9-4d24-b2c2-f9e4ca39564b",
   // 是否要刪除聯絡人
   isDeleteContactor: false,
   // 是否要處理學生 hashedId 重複
