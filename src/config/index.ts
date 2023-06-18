@@ -27,7 +27,7 @@ export default {
     //   isHandleDuplicateHashedId: true,
     // },
     {
-      name: 'nzhnew',
+      name: 'pauhwanew',
       isHandleDuplicateHashedId: false,
     }
   ] as Site[],
@@ -35,7 +35,7 @@ export default {
   // !必改
   // 莘莘集團
   // organizationId: '546694a2-6e6b-4f1d-8bfd-7559fda0ffbf',
-  organizationId: "efa7c9d2-98a9-4d24-b2c2-f9e4ca39564b",
+  organizationId: "368c8e2f-525c-4ad0-8c19-b7f592da2bc1",
   // 是否要刪除聯絡人
   isDeleteContactor: false,
   // 是否要處理學生 hashedId 重複
