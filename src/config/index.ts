@@ -19,15 +19,16 @@ export default {
     //   name: 'commacpnew',
     //   isHandleDuplicateHashedId: true,
     // },
-    // {
-    //   name: 'commanew',
-    // },
-    // {
-    //   name: 'commaarknew',
-    //   isHandleDuplicateHashedId: true,
-    // },
     {
-      name: 'pauhwanew',
+      name: 'alltrueshaoyang',
+      isHandleDuplicateHashedId: false,
+    },
+    {
+      name: 'alltruesh',
+      isHandleDuplicateHashedId: false,
+    },
+    {
+      name: 'alltrueluzhiu',
       isHandleDuplicateHashedId: false,
     }
   ] as Site[],
@@ -35,7 +36,7 @@ export default {
   // !必改
   // 莘莘集團
   // organizationId: '546694a2-6e6b-4f1d-8bfd-7559fda0ffbf',
-  organizationId: "368c8e2f-525c-4ad0-8c19-b7f592da2bc1",
+  organizationId: "84063c50-e529-4a94-a9a2-cf53bd1440ff",
   // 是否要刪除聯絡人
   isDeleteContactor: false,
   // 是否要處理學生 hashedId 重複
