@@ -29,7 +29,7 @@ export default async (trxs: Trxs) => {
 
     // 轉換學生關係
     await createClazzStudentRefs(v2CourseStudentRefs
-      .filter(r => !!r.courseId)
+      .filter(r => !!r.courseId && !!r.studentId && r.courseId in v2CourseMap && r.studentId in v2StudentMap)
       .map(r => {
         return {
           id: generateUUID(),
