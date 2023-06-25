@@ -64,7 +64,7 @@ export default async (trxs: Trxs) => {
 
     // 建立成績
     await createScores(
-      v2Scores.map(s => {
+      v2Scores.filter(s => s.studentId in v2StudentMap).map(s => {
         const id = toScoreId(s.hashedId)
         const studentId = toStudentId(v2StudentMap[s.studentId].hashedId)
 
