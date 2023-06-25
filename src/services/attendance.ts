@@ -169,21 +169,23 @@ export default async (site: Site, trxs: Trxs) => {
         if (i === 0) {
           if (moment(v2StudentAttendances[j].attendedAt).isSameOrAfter(studentSignIns[i].createdAt)) {
             const a = v2StudentAttendances[j]
-            attendances.push({
-              id: generateUUID(a.hashedId),
-              schoolId: schoolId,
-              clazzId: toClazzId(v2CourseMap[a.courseId].hashedId),
-              lessonId: generateUUID(v2InclassCourseMap[a.inclassCourseId!].hashedId),
-              studentId: studentId,
-              studentSchoolAttendanceId: generateUUID(studentSignIns[i].hashedId),
-              attendAt: a.attendedAt,
-              leaveAt: a.leftAt,
-              remark: a.remark ?? '',
-              teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : serviceDirector.id,
-              createdAt: a.createdAt ?? new Date(),
-              updatedAt: a.updatedAt ?? new Date(),
-              deletedAt: a.deletedAt,
-            });
+            if (a.courseId in v2CourseMap) {
+              attendances.push({
+                id: generateUUID(a.hashedId),
+                schoolId: schoolId,
+                clazzId: toClazzId(v2CourseMap[a.courseId].hashedId),
+                lessonId: generateUUID(v2InclassCourseMap[a.inclassCourseId!].hashedId),
+                studentId: studentId,
+                studentSchoolAttendanceId: generateUUID(studentSignIns[i].hashedId),
+                attendAt: a.attendedAt,
+                leaveAt: a.leftAt,
+                remark: a.remark ?? '',
+                teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : serviceDirector.id,
+                createdAt: a.createdAt ?? new Date(),
+                updatedAt: a.updatedAt ?? new Date(),
+                deletedAt: a.deletedAt,
+              });
+            }
             v2StudentAttendances.splice(j, 1);
             j = -1;
           }
