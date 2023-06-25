@@ -14,6 +14,8 @@ import {CourseV2, findCoursesByIds} from "@/v2models/courses";
 import toClazzId from "@/utils/toClazzId";
 import toStudentScheduleType from "@/utils/toStudentScheduleType";
 import toTeacherId from "@/utils/toTeacherId";
+import v3db from "@/db/v3db";
+import {TeacherV3} from "@/v3models/teachers";
 
 export default async (trxs: Trxs) => {
   console.info('轉移請假')
@@ -21,6 +23,13 @@ export default async (trxs: Trxs) => {
   // 取得站台資料
   const siteInfoV2 = await findSiteInfo(trxs)
   const schoolId = toSchoolId(siteInfoV2.hashedId)
+
+  // 取得 service 帳號
+  const serviceDirector = await v3db()
+    .first()
+    .from('teachers')
+    .where('no', 'T00000001')
+    .transacting(trxs.v3db) as TeacherV3
 
   const numberOfSchedule = await getNumberOfStudentSchedule(trxs)
   for (let i = 0; i < Math.ceil(numberOfSchedule / config.chunkSize); i++) {
@@ -51,7 +60,7 @@ export default async (trxs: Trxs) => {
           type,
           date: s.handleAt.toISOString().slice(0, 10),
           remark: '',
-          createdBy: toTeacherId(v2TeacherMap[s.teacherId].hashedId),
+          createdBy: s.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[s.teacherId].hashedId) : serviceDirector.id,
           createdAt: s.createdAt ?? new Date(),
           updatedAt: s.updatedAt ?? new Date(),
           deletedAt: s.deletedAt,
