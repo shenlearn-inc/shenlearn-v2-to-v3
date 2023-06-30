@@ -20,7 +20,7 @@ export default {
     //   isHandleDuplicateHashedId: true,
     // },
     {
-      name: 'alltureluchou',
+      name: 'alltrueluzhiu',
       isHandleDuplicateHashedId: false,
     },
     {
