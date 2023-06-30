@@ -20,15 +20,7 @@ export default {
     //   isHandleDuplicateHashedId: true,
     // },
     {
-      name: 'alltrueluzhiu',
-      isHandleDuplicateHashedId: false,
-    },
-    {
-      name: 'alltrueshaoyang',
-      isHandleDuplicateHashedId: false,
-    },
-    {
-      name: 'alltruesh',
+      name: 'aschloehknew',
       isHandleDuplicateHashedId: false,
     },
   ] as Site[],
@@ -36,7 +28,7 @@ export default {
   // !必改
   // 莘莘集團
   // organizationId: '546694a2-6e6b-4f1d-8bfd-7559fda0ffbf',
-  organizationId: "84063c50-e529-4a94-a9a2-cf53bd1440ff",
+  organizationId: "847a840d-3dde-49d3-a2d4-f31f7576a77f",
   // 是否要刪除聯絡人
   isDeleteContactor: false,
   // 是否要處理學生 hashedId 重複
