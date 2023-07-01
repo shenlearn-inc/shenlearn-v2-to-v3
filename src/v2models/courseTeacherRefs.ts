@@ -11,13 +11,11 @@ export interface CourseTeacherRefV2 {
   deletedAt: Date | null
 }
 
-export const findAllCourseTeacherRefs = async (limit: number, offset: number, trxs: Trxs): Promise<CourseTeacherRefV2[]> => {
+export const findAllCourseTeacherRefs = async (trxs: Trxs): Promise<CourseTeacherRefV2[]> => {
   const query = v2db()
     .select()
     .from('course_teacher_refs')
     .groupBy(['teacher_id', 'course_id', 'deleted_at'])
-    .limit(limit ?? Number.MAX_SAFE_INTEGER)
-    .offset(offset ?? 0)
     .transacting(trxs.v2db)
 
   return camelcaseKeys(await query as any)
