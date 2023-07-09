@@ -20,7 +20,7 @@ export default {
     //   isHandleDuplicateHashedId: true,
     // },
     {
-      name: 'alltrueluzhiu',
+      name: 'hungming',
       isHandleDuplicateHashedId: false,
     },
   ] as Site[],
@@ -28,7 +28,7 @@ export default {
   // !必改
   // 莘莘集團
   // organizationId: '546694a2-6e6b-4f1d-8bfd-7559fda0ffbf',
-  organizationId: "84063c50-e529-4a94-a9a2-cf53bd1440ff",
+  organizationId: "c635dc89-7d69-4990-8e5a-94cddf34b2ac",
   // 是否要刪除聯絡人
   isDeleteContactor: false,
   // 是否要處理學生 hashedId 重複
