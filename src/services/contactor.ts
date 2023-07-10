@@ -45,10 +45,10 @@ export default async (trxs: Trxs) => {
     }
   })
   console.log(contactors[0])
-  await createContactors([contactors[0]], trxs)
+  await createContactors(contactors, trxs)
 
   // 建立 contactor chat user
-  await createUsers(phoneNumbers.map(pn => {
+  const users = phoneNumbers.map(pn => {
     const [prefix, phone] = pn.split('-')
     return {
       id: toContactorId(prefix, phone),
@@ -59,7 +59,10 @@ export default async (trxs: Trxs) => {
       updatedAt: new Date(),
       deletedAt: null,
     }
-  }), trxs)
+  })
+  console.log(users[0])
+  // @ts-ignore
+  await createUsers(users, trxs)
 
   // 找出所屬學生
   const students = await findStudentsByIds(Array.from(new Set(studentParents.map(sp => sp.studentId))).filter(id => !!id) as number[], trxs)
