@@ -26,52 +26,68 @@ export default async (trxs: Trxs) => {
   const studentParents = (await findAllStudentParents(999999, 0, trxs)).filter(s => !!s?.cellphoneInternationalPrefix && !!s?.cellphone)
   if (!studentParents.length) return
 
-  // 建立 contactor
   const phoneNumbers = Array.from(new Set(studentParents.map(s => `${s.cellphoneInternationalPrefix}-${s.cellphone}`)))
-  const chunks = [];
-  const chunkSize = 100;
+  // 建立 contactor
+  const handlerContactors = async () => {
+    const chunks = [];
+    const chunkSize = 100;
 
-  for (let i = 0; i < phoneNumbers.length; i += chunkSize) {
-    const chunk = phoneNumbers.slice(i, i + chunkSize);
-    const contactors = chunk.map(pn => {
+    for (let i = 0; i < phoneNumbers.length; i += chunkSize) {
+      const chunk = phoneNumbers.slice(i, i + chunkSize);
+      const contactors = chunk.map(pn => {
+        const [prefix, phone] = pn.split('-');
+        return {
+          id: toContactorId(prefix, phone),
+          username: `${prefix}${phone}`,
+          password: null,
+          salt: null,
+          accessToken: null,
+          refreshToken: null,
+          roleId: config.contactorRoleId,
+          organizationId: config.organizationId,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          deletedAt: null,
+        };
+      });
+      chunks.push(contactors);
+    }
+
+    for (const chunk of chunks) {
+      await createContactors(chunk, trxs);
+    }
+  }
+  await handlerContactors();
+
+  // 建立 contactor chat user
+  const handlerUsers = async () => {
+    const users = phoneNumbers.map(pn => {
       const [prefix, phone] = pn.split('-');
       return {
         id: toContactorId(prefix, phone),
-        username: `${prefix}${phone}`,
-        password: null,
-        salt: null,
-        accessToken: null,
-        refreshToken: null,
-        roleId: config.contactorRoleId,
-        organizationId: config.organizationId,
+        name: `${prefix}-${phone}`,
+        type: 'contactor',
+        avatarUrl: null,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: null,
       };
     });
-    chunks.push(contactors);
-  }
 
-  for (const chunk of chunks) {
-    await createContactors(chunk, trxs);
-  }
+    const chunks = [];
+    const chunkSize = 100;
 
-  // 建立 contactor chat user
-  const users = phoneNumbers.map(pn => {
-    const [prefix, phone] = pn.split('-')
-    return {
-      id: toContactorId(prefix, phone),
-      name: `${prefix}-${phone}`,
-      type: 'contactor',
-      avatarUrl: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
+    for (let i = 0; i < users.length; i += chunkSize) {
+      const chunk = users.slice(i, i + chunkSize);
+      chunks.push(chunk);
     }
-  })
-  console.log(users[0])
-  // @ts-ignore
-  await createUsers(users, trxs)
+
+    for (const chunk of chunks) {
+      // @ts-ignore
+      await createUsers(chunk, trxs);
+    }
+  }
+  await handlerUsers();
 
   // 找出所屬學生
   const students = await findStudentsByIds(Array.from(new Set(studentParents.map(sp => sp.studentId))).filter(id => !!id) as number[], trxs)
