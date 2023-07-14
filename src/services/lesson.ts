@@ -79,7 +79,7 @@ export default async (site: Site, trxs: Trxs) => {
             name: '',
             startAt: toValidDateObj(c.inclassAt) ?? null,
             endAt: toValidDateObj(c.outclassAt) ?? null,
-            teacherId: c.teacherId in v2TeacherMap && v2TeacherMap[c.teacherId]?.hashedId ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
+            teacherId: c.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
             createdAt: toValidDateObj(c.createdAt) ?? new Date(),
             updatedAt: toValidDateObj(c.updatedAt) ?? new Date(),
             deletedAt: toValidDateObj(c.deletedAt),
