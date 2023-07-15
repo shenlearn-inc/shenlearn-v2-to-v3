@@ -10,9 +10,10 @@ import toRoleId from "@/utils/toRoleId";
 import {Trxs} from "@/types/Trxs";
 import {createUsers} from "@/v3chatModels/users";
 import generateUUID from "@/utils/generateUUID";
+import {Site} from "@/types/Site";
 
 // 轉移老師資料
-export default async (trxs: Trxs) => {
+export default async (site: Site, trxs: Trxs) => {
   console.info('轉移老師資料')
 
   // 取得站台資料
@@ -38,7 +39,7 @@ export default async (trxs: Trxs) => {
       accessToken: null,
       refreshToken: null,
       schoolId: toSchoolId(siteInfoV2.hashedId),
-      roleId: toRoleId('director'),
+      roleId: toRoleId('director', site),
       name: 'Service',
       no: 'T00000001',
       avatarUrl: null,
@@ -88,7 +89,7 @@ export default async (trxs: Trxs) => {
       accessToken: null,
       refreshToken: null,
       schoolId: toSchoolId(siteInfoV2.hashedId),
-      roleId: toRoleId(t.position!),
+      roleId: toRoleId(t.position!, site),
       name: t.name ?? '',
       no: t.aftsId ?? `T${`${++counter}`.padStart(8, "0")}`,
       avatarUrl: null,

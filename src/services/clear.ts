@@ -1,13 +1,13 @@
 import {Trxs} from "@/types/Trxs";
 import v3db from "@/db/v3db";
 import camelcaseKeys from "camelcase-keys";
-import config from "@/config";
 import v3chatdb from "@/db/v3chatdb";
 import v2db from "@/db/v2db";
 import toSchoolId from "@/utils/toSchoolId";
 import toStudentId from "@/utils/toStudentId";
+import {Site} from "@/types/Site";
 
-export default async (trxs: Trxs) => {
+export default async (site: Site, trxs: Trxs) => {
   console.info('清除新資料庫中的學校資料')
 
   const v2SiteInfo = await v2db().first().from('site_info').transacting(trxs.v2db);
@@ -92,7 +92,7 @@ export default async (trxs: Trxs) => {
   await v3db()
     .delete()
     .from('app_codes')
-    .where('organization_id', config.organizationId)
+    .where('organization_id', site.organizationId)
     .transacting(trxs.v3db)
 
   // 班級
@@ -153,11 +153,11 @@ export default async (trxs: Trxs) => {
     .transacting(trxs.v3db)
 
   // 刪除聯絡人
-  if (config.isDeleteContactor) {
+  if (site.isDeleteContactor) {
     const contactors = await v3db()
       .select()
       .from('contactors')
-      .where('organization_id', config.organizationId)
+      .where('organization_id', site.organizationId)
       .transacting(trxs.v3db)
     await v3chatdb()
       .delete()
@@ -166,7 +166,7 @@ export default async (trxs: Trxs) => {
     await v3db()
       .delete()
       .from('contactors')
-      .where('organization_id', config.organizationId)
+      .where('organization_id', site.organizationId)
       .transacting(trxs.v3db)
   }
   // 刪除子聯絡人

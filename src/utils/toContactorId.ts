@@ -1,6 +1,6 @@
 import generateUUID from "@/utils/generateUUID"
-import config from "@/config";
+import {Site} from "@/types/Site";
 
-export default (prefix: string, phone: string): string => {
-  return generateUUID(`${prefix}_${phone}_${config.organizationId}`)
+export default (prefix: string, phone: string, site: Site): string => {
+  return generateUUID(`${prefix}_${phone}_${site.organizationId}`)
 }

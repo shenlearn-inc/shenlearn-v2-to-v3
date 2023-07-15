@@ -4,8 +4,9 @@ import config from "@/config"
 import moment from "moment"
 import toSchoolId from "@/utils/toSchoolId"
 import {Trxs} from "@/types/Trxs";
+import {Site} from "@/types/Site";
 
-export default async (trxs: Trxs) => {
+export default async (site: Site, trxs: Trxs) => {
   console.info('轉移站台資料')
 
   // 取得站台資料
@@ -14,8 +15,8 @@ export default async (trxs: Trxs) => {
   // 轉移站台資料
   await createSchool({
     id: toSchoolId(siteInfoV2.hashedId),
-    organizationId: config.organizationId,
-    planId: config.planId,
+    organizationId: site.organizationId,
+    planId: site.planId,
     name: siteInfoV2.name,
     imageUrl: siteInfoV2.imageUrl,
     domain: siteInfoV2.databaseName,

@@ -15,8 +15,9 @@ import toSchoolId from "@/utils/toSchoolId";
 import toStudentChatRoomId from "@/utils/toStudentChatRoomId";
 import {Trxs} from "@/types/Trxs";
 import {createUsers} from "@/v3chatModels/users";
+import {Site} from "@/types/Site";
 
-export default async (trxs: Trxs) => {
+export default async (site: Site, trxs: Trxs) => {
   console.info('轉移聯絡人資料')
 
   // 取得站台資料
@@ -37,14 +38,14 @@ export default async (trxs: Trxs) => {
       const contactors = chunk.map(pn => {
         const [prefix, phone] = pn.split('-');
         return {
-          id: toContactorId(prefix, phone),
+          id: toContactorId(prefix, phone, site),
           username: `${prefix}${phone}`,
           password: null,
           salt: null,
           accessToken: null,
           refreshToken: null,
           roleId: config.contactorRoleId,
-          organizationId: config.organizationId,
+          organizationId: site.organizationId,
           createdAt: new Date(),
           updatedAt: new Date(),
           deletedAt: null,
@@ -64,7 +65,7 @@ export default async (trxs: Trxs) => {
     const users = phoneNumbers.map(pn => {
       const [prefix, phone] = pn.split('-');
       return {
-        id: toContactorId(prefix, phone),
+        id: toContactorId(prefix, phone, site),
         name: `${prefix}-${phone}`,
         type: 'contactor',
         avatarUrl: null,
@@ -100,7 +101,7 @@ export default async (trxs: Trxs) => {
 
     await createSubContactors([{
       id: generateUUID(),
-      contactorId: toContactorId(sp.cellphoneInternationalPrefix!, sp.cellphone!),
+      contactorId: toContactorId(sp.cellphoneInternationalPrefix!, sp.cellphone!, site),
       schoolId: toSchoolId(siteInfoV2.hashedId),
       studentId: studentId,
       name: sp.name ?? '',
@@ -138,7 +139,7 @@ export default async (trxs: Trxs) => {
         // 所有聯絡人聊天室
         {
           id: generateUUID(),
-          userId: toContactorId(sp.cellphoneInternationalPrefix!, sp.cellphone!),
+          userId: toContactorId(sp.cellphoneInternationalPrefix!, sp.cellphone!, site),
           userName: `${sp.relationship ?? 'others'}(${sp.cellphoneInternationalPrefix!}-${sp.cellphone!})`,
           userAvatarUrl: null,
           roomId: toStudentChatRoomId(studentMap[sp.studentId!].hashedId),
@@ -154,7 +155,7 @@ export default async (trxs: Trxs) => {
         // 單獨聊天室
         {
           id: generateUUID(),
-          userId: toContactorId(sp.cellphoneInternationalPrefix!, sp.cellphone!),
+          userId: toContactorId(sp.cellphoneInternationalPrefix!, sp.cellphone!, site),
           userName: `${sp.relationship ?? 'others'}(${sp.cellphoneInternationalPrefix!}-${sp.cellphone!})`,
           userAvatarUrl: null,
           roomId: chatRoomId,

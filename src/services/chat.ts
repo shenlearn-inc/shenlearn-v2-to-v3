@@ -11,6 +11,8 @@ import {findMessagesByRoomId} from "@/v2chatModels/messages";
 import {findUsersByIds} from "@/v2chatModels/users";
 import toContactorId from "@/utils/toContactorId";
 import {createMessages, MessageV3} from "@/v3chatModels/messages";
+import {Site} from "@/types/Site";
+import toSchoolId from "@/utils/toSchoolId";
 
 const convertPayloadV2ToPayloadV3 = (message: any) => {
   const type = message.type;
@@ -54,9 +56,10 @@ const convertPayloadV2ToPayloadV3 = (message: any) => {
 interface HandleStudentChatProps {
   student: StudentV2
   serviceDirector: TeacherV3
+  site: Site
   trxs: Trxs
 }
-const handleStudentChat = async ({ student, serviceDirector, trxs }: HandleStudentChatProps) => {
+const handleStudentChat = async ({ student, serviceDirector, site, trxs }: HandleStudentChatProps) => {
   if (!student.hashedId) {
     return;
   }
@@ -80,7 +83,7 @@ const handleStudentChat = async ({ student, serviceDirector, trxs }: HandleStude
     } else if (user.externalRole === "parent") {
       const result = /^(886|86|852)([0-9]+)$/.exec(user.externalId);
       if (result) {
-        userIdMap[user.id] = toContactorId(result[1], result[2]);
+        userIdMap[user.id] = toContactorId(result[1], result[2], site);
         continue;
       }
     }
@@ -104,7 +107,7 @@ const handleStudentChat = async ({ student, serviceDirector, trxs }: HandleStude
   await createMessages(v3Messages, trxs);
 }
 
-export default async (trxs: Trxs) => {
+export default async (site: Site, trxs: Trxs) => {
   console.info('轉移聊天訊息')
 
   // 取得站台資料
@@ -115,6 +118,7 @@ export default async (trxs: Trxs) => {
     .first()
     .from('teachers')
     .where('no', 'T00000001')
+    .where('school_id', toSchoolId(siteInfoV2.hashedId))
     .transacting(trxs.v3db) as TeacherV3
 
   const students = await findAllStudents(999999, 0, trxs);
@@ -126,6 +130,7 @@ export default async (trxs: Trxs) => {
     queue.add(() => handleStudentChat({
       student,
       serviceDirector,
+      site,
       trxs
     })).catch((error: any) => {
       console.log('處理學生聊天訊息出錯: ', {

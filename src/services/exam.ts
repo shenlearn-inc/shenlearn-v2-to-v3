@@ -15,6 +15,8 @@ import {findScoresByExamId} from "@/v2models/scores";
 import toStudentId from "@/utils/toStudentId";
 import {createScores} from "@/v3models/scores";
 import toScoreId from "@/utils/toScoreId";
+import v3db from "@/db/v3db";
+import {TeacherV3} from "@/v3models/teachers";
 
 export default async (trxs: Trxs) => {
   console.info('轉移考試資料')
@@ -23,11 +25,12 @@ export default async (trxs: Trxs) => {
   const siteInfoV2 = await findSiteInfo(trxs)
 
   // 取得 service 帳號
-  const serviceDirector = await v2db()
+  const serviceDirector = await v3db()
     .first()
     .from('teachers')
-    .where('name', 'Service')
-    .orWhere('email', 'service@shenlearn.com') as TeacherV2
+    .where('no', 'T00000001')
+    .where('school_id', toSchoolId(siteInfoV2.hashedId))
+    .transacting(trxs.v3db) as TeacherV3
 
   // 找出考試
   const exams = await findAllExams(Number.MAX_SAFE_INTEGER, 0, trxs)
@@ -46,7 +49,7 @@ export default async (trxs: Trxs) => {
         name: exam.name,
         schoolId: toSchoolId(siteInfoV2.hashedId),
         clazzId: toClazzId(v2CourseMap[exam.courseId].hashedId),
-        teacherId: exam.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[exam.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
+        teacherId: exam.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[exam.teacherId].hashedId) : serviceDirector.id,
         remark: exam.remark ?? "",
         createdAt: exam.createdAt ?? new Date(),
         updatedAt: exam.updatedAt ?? new Date(),

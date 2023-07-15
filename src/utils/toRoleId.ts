@@ -1,13 +1,13 @@
-import config from "@/config"
+import {Site} from "@/types/Site";
 
-export default (position: string): string => {
+export default (position: string, site: Site): string => {
   switch (position) {
     case 'director':
-      return config.directorRoleId
+      return site.roles.directorRoleId
     case 'manager':
-      return config.managerRoleId
+      return site.roles.managerRoleId
     case 'teacher':
-      return config.teacherRoleId
+      return site.roles.teacherRoleId
   }
-  return config.teacherRoleId
+  return site.roles.teacherRoleId
 }

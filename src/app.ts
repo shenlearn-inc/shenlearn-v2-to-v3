@@ -46,19 +46,19 @@ export const run = async (): Promise<void> => {
             } as Trxs
 
             // 清空學校資料
-            await clear(trxs)
+            await clear(site, trxs)
 
             // 轉移學校
-            await school(trxs)
+            await school(site, trxs)
 
             // 轉移學生
             await student(site, trxs)
 
             // 轉移家長
-            await contactor(trxs)
+            await contactor(site, trxs)
 
             // 轉移老師
-            await teacher(trxs)
+            await teacher(site, trxs)
 
             // 轉移課種
             await course(site, trxs)
@@ -73,7 +73,7 @@ export const run = async (): Promise<void> => {
             await teacherAndStudentChatRoomRefs(trxs)
 
             // 轉移聊天室訊息
-            await chat(trxs)
+            await chat(site, trxs)
 
             // 轉移課堂
             await lesson(site, trxs)
@@ -97,7 +97,7 @@ export const run = async (): Promise<void> => {
             await studentDiary(site, trxs)
 
             // 轉移簽到機資料
-            await signDevice(trxs)
+            await signDevice(site, trxs)
 
             // 轉移班級日誌
             await clazzDiaries(trxs)

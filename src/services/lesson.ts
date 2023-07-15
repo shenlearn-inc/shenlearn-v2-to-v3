@@ -8,12 +8,13 @@ import toSchoolId from "@/utils/toSchoolId";
 import {findCoursesByIds} from "@/v2models/courses";
 import {keyBy} from "lodash"
 import toClazzId from "@/utils/toClazzId";
-import {findTeachersByIds, TeacherV2} from "@/v2models/teachers";
+import {findTeachersByIds} from "@/v2models/teachers";
 import toTeacherId from "@/utils/toTeacherId";
 import v2db from "@/db/v2db";
 import toValidDateObj from "@/utils/toValidDateObj";
 import v3db from "@/db/v3db";
 import {Site} from "@/types/Site";
+import {TeacherV3} from "@/v3models/teachers";
 
 export default async (site: Site, trxs: Trxs) => {
   console.info('轉移課堂資料')
@@ -22,11 +23,12 @@ export default async (site: Site, trxs: Trxs) => {
   const siteInfoV2 = await findSiteInfo(trxs)
 
   // 取得 service 帳號
-  const serviceDirector = await v2db()
+  const serviceDirector = await v3db()
     .first()
     .from('teachers')
-    .where('name', 'Service')
-    .orWhere('email', 'service@shenlearn.com') as TeacherV2
+    .where('no', 'T00000001')
+    .where('school_id', toSchoolId(siteInfoV2.hashedId))
+    .transacting(trxs.v3db) as TeacherV3
 
   const numberOfInclassCourse = await getNumberOfInclassCourse(trxs)
   for (let i = 0; i < Math.ceil(numberOfInclassCourse / config.chunkSize); i++) {
@@ -59,7 +61,7 @@ export default async (site: Site, trxs: Trxs) => {
               name: '',
               startAt: toValidDateObj(c.inclassAt) ?? null,
               endAt: toValidDateObj(c.outclassAt) ?? null,
-              teacherId: c.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
+              teacherId: c.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : serviceDirector.id,
               createdAt: toValidDateObj(c.createdAt) ?? new Date(),
               updatedAt: toValidDateObj(c.updatedAt) ?? new Date(),
               deletedAt: toValidDateObj(c.deletedAt),
@@ -79,7 +81,7 @@ export default async (site: Site, trxs: Trxs) => {
             name: '',
             startAt: toValidDateObj(c.inclassAt) ?? null,
             endAt: toValidDateObj(c.outclassAt) ?? null,
-            teacherId: c.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : toTeacherId(serviceDirector.hashedId),
+            teacherId: c.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : serviceDirector.id,
             createdAt: toValidDateObj(c.createdAt) ?? new Date(),
             updatedAt: toValidDateObj(c.updatedAt) ?? new Date(),
             deletedAt: toValidDateObj(c.deletedAt),

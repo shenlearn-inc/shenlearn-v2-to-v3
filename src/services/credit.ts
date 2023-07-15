@@ -31,6 +31,7 @@ export default async (trxs: Trxs) => {
     .first()
     .from('teachers')
     .where('no', 'T00000001')
+    .where('school_id', schoolId)
     .transacting(trxs.v3db) as TeacherV3
 
   const numberOfCredit = await getNumberOfCredit(trxs)

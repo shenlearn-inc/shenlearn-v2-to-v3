@@ -29,6 +29,7 @@ export default async (trxs: Trxs) => {
     .first()
     .from('teachers')
     .where('no', 'T00000001')
+    .where('school_id', toSchoolId(siteInfoV2.hashedId))
     .transacting(trxs.v3db) as TeacherV3
 
   const numberOfSchedule = await getNumberOfStudentSchedule(trxs)

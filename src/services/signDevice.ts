@@ -12,6 +12,7 @@ import snakecaseKeys from "snakecase-keys";
 import v2db from "@/db/v2db";
 import {createPersonSignPins} from "@/v3models/personSignPin";
 import generateUUID from "@/utils/generateUUID";
+import {Site} from "@/types/Site";
 
 interface TerminalV2 {
   id: string
@@ -34,7 +35,7 @@ interface StudentTerminalV2 {
   deletedAt: Date | null;
 }
 
-export default async (trxs: Trxs) => {
+export default async (site: Site, trxs: Trxs) => {
   console.info('轉移簽到機資料與工號')
 
   // 取得站台資料
@@ -55,7 +56,7 @@ export default async (trxs: Trxs) => {
     Object.values(terminalMap).map((terminal) => snakecaseKeys({
       id: terminal.terminalName,
       macAddress: terminal.macAddress,
-      organizationId: config.organizationId,
+      organizationId: site.organizationId,
       schoolId: terminal.siteId,
       clazzId: null,
       zone: "Asia/Taipei",

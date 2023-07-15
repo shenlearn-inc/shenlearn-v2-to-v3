@@ -11,6 +11,8 @@ import {findAllStudentDiaries} from "@/v2models/studentDiaries";
 import {createStudentDiaries} from "@/v3models/studentDiaries";
 import toStudentDiaryId from "@/utils/toStudentDiaryId";
 import {Site} from "@/types/Site";
+import v3db from "@/db/v3db";
+import {TeacherV3} from "@/v3models/teachers";
 
 export default async (site: Site, trxs: Trxs) => {
   console.info('轉移電訪資料')
@@ -19,11 +21,12 @@ export default async (site: Site, trxs: Trxs) => {
   const siteInfoV2 = await findSiteInfo(trxs)
 
   // 取得 service 帳號
-  const serviceDirector = await v2db()
+  const serviceDirector = await v3db()
     .first()
     .from('teachers')
-    .where('name', 'Service')
-    .orWhere('email', 'service@shenlearn.com') as TeacherV2
+    .where('no', 'T00000001')
+    .where('school_id', toSchoolId(siteInfoV2.hashedId))
+    .transacting(trxs.v3db) as TeacherV3
 
   // 找出電訪
   const v2StudentDiaries = await findAllStudentDiaries(Number.MAX_SAFE_INTEGER, 0, trxs)
@@ -43,7 +46,7 @@ export default async (site: Site, trxs: Trxs) => {
         id: toStudentDiaryId(site?.isHandleDuplicateHashedId ? `${diary.hashedId}00000` : diary.hashedId),
         schoolId: toSchoolId(siteInfoV2.hashedId),
         lessonId: null,
-        teacherId: diary.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[diary.teacherId]?.hashedId) : toTeacherId(serviceDirector.hashedId),
+        teacherId: diary.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[diary.teacherId]?.hashedId) : serviceDirector.id,
         studentId: toStudentId(v2StudentMap[diary.studentId].hashedId),
         content: diary.content ?? "",
         createdAt: diary.createdAt ?? new Date(),

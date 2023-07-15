@@ -245,6 +245,7 @@ export default async (site: Site, trxs: Trxs) => {
     .first()
     .from('teachers')
     .where('no', 'T00000001')
+    .where('school_id', schoolId)
     .transacting(trxs.v3db) as TeacherV3
 
   const v2AllStudents = await findAllStudents(Number.MAX_SAFE_INTEGER, 0, trxs)
