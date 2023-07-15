@@ -254,7 +254,7 @@ export default async (site: Site, trxs: Trxs) => {
 
   const v2AllStudents = await findAllStudents(Number.MAX_SAFE_INTEGER, 0, trxs)
 
-  const queue = new PQueue({concurrency: 100});
+  const queue = new PQueue({concurrency: 10});
 
   v2AllStudents.forEach(v2Student => {
     queue.add(() => handleStudentAttendance({
