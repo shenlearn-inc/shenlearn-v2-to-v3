@@ -276,14 +276,16 @@ export default async (site: Site, trxs: Trxs) => {
 
   // 轉移全部班級出勤
   const allAttendanceStartTime = new Date().getTime();
-  const queue2 = new PQueue({concurrency: 5});
-  let counter = 0;
+  const queue2 = new PQueue({concurrency: 10});
   const numberOfNotAttendedStudentAttendance = await getNumberOfNotAttendedStudentAttendance(trxs)
-  console.log(`轉移全部班級出勤, 轉換為 ${Math.ceil(numberOfNotAttendedStudentAttendance / config.chunkSize)} 個批次處理`);
-  for (let i = 0; i < Math.ceil(numberOfNotAttendedStudentAttendance / config.chunkSize); i++) {
+  const chunkSize = 1000;
+  const numberOfChunks = Math.ceil(numberOfNotAttendedStudentAttendance / chunkSize);
+  let counter = 0;
+  console.log(`轉移全部班級出勤, 轉換為 ${numberOfChunks} 個批次處理`);
+  for (let i = 0; i < numberOfChunks; i++) {
     queue2.add(async () => {
       const startTime = new Date().getTime();
-      const v2StudentAttendances = (await findAllNotAttendedStudentAttendances(config.chunkSize, i * config.chunkSize, trxs)).filter(a => !!a.studentId)
+      const v2StudentAttendances = (await findAllNotAttendedStudentAttendances(chunkSize, i * chunkSize, trxs)).filter(a => !!a.studentId)
 
       const [v2Courses, v2InclassCourses, v2Students, v2Teachers] = await Promise.all([
         findCoursesByIds(Array.from(new Set(v2StudentAttendances.map(a => a.courseId))), trxs),
@@ -320,7 +322,7 @@ export default async (site: Site, trxs: Trxs) => {
         trxs,
       )
       counter++;
-      console.log(`已處理批次 ${counter}/${numberOfNotAttendedStudentAttendance}, time elapsed: ${(new Date().getTime() - startTime) / 1000}s`)
+      console.log(`已處理批次 ${counter}/${numberOfChunks}, time elapsed: ${(new Date().getTime() - startTime) / 1000}s`)
     });
   }
   console.log(`轉移全部班級出勤完成, time elapsed: ${(new Date().getTime() - allAttendanceStartTime) / 1000}s`);
