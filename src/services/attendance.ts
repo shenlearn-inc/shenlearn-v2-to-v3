@@ -278,7 +278,7 @@ export default async (site: Site, trxs: Trxs) => {
   const allAttendanceStartTime = new Date().getTime();
   const queue2 = new PQueue({concurrency: 10});
   const numberOfNotAttendedStudentAttendance = await getNumberOfNotAttendedStudentAttendance(trxs)
-  const chunkSize = 1000;
+  const chunkSize = 2000;
   const numberOfChunks = Math.ceil(numberOfNotAttendedStudentAttendance / chunkSize);
   let counter = 0;
   console.log(`轉移全部班級出勤, 轉換為 ${numberOfChunks} 個批次處理`);
@@ -325,5 +325,6 @@ export default async (site: Site, trxs: Trxs) => {
       console.log(`已處理批次 ${counter}/${numberOfChunks}, time elapsed: ${(new Date().getTime() - startTime) / 1000}s`)
     });
   }
+  await queue2.onIdle();
   console.log(`轉移全部班級出勤完成, time elapsed: ${(new Date().getTime() - allAttendanceStartTime) / 1000}s`);
 }
