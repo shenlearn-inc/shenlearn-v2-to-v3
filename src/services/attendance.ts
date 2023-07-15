@@ -259,7 +259,7 @@ export default async (site: Site, trxs: Trxs) => {
       schoolId,
       site,
       trxs
-    })).catch(error => {
+    })).catch((error: any) => {
       console.log('處理學生出勤出錯: ', {
         studentId: v2Student.hashedId,
         error

@@ -127,7 +127,7 @@ export default async (trxs: Trxs) => {
       student,
       serviceDirector,
       trxs
-    })).catch(error => {
+    })).catch((error: any) => {
       console.log('處理學生聊天訊息出錯: ', {
         studentId: student.hashedId,
         error
