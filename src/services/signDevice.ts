@@ -51,20 +51,20 @@ export default async (site: Site, trxs: Trxs) => {
   );
   const terminalMap = _.keyBy(terminals, "terminal_name");
 
-  await v3db().insert(
-    Object.values(terminalMap).map((terminal) => snakecaseKeys({
-      id: terminal.terminalName,
-      macAddress: terminal.macAddress,
-      organizationId: site.organizationId,
-      schoolId: terminal.siteId,
-      clazzId: null,
-      zone: "Asia/Taipei",
-      remark: "",
-      createdAt: terminal.createdAt.toISOString(),
-      updatedAt: terminal.updatedAt.toISOString(),
-      deletedAt: terminal.deletedAt ? terminal.deletedAt.toISOString() : null,
-    }))
-  ).from("sign_devices").transacting(trxs.v3db)
+  const devices = Object.values(terminalMap).map((terminal) => snakecaseKeys({
+    id: terminal.terminalName,
+    macAddress: terminal.macAddress,
+    organizationId: site.organizationId,
+    schoolId: terminal.siteId,
+    clazzId: null,
+    zone: "Asia/Taipei",
+    remark: "",
+    createdAt: terminal.createdAt.toISOString(),
+    updatedAt: terminal.updatedAt.toISOString(),
+    deletedAt: terminal.deletedAt ? terminal.deletedAt.toISOString() : null,
+  }))
+  const deviceMap = _.keyBy(devices, "id")
+  await v3db().insert(devices).from("sign_devices").transacting(trxs.v3db)
 
   // 轉移學生工號
   const studentTerminals: StudentTerminalV2[] = camelcaseKeys(
@@ -89,7 +89,8 @@ export default async (site: Site, trxs: Trxs) => {
 
   const v2StudentMap = _.keyBy(v2Students, "id");
   for (const studentTerminal of studentTerminals) {
-    if (!(studentTerminal.studentId in v2StudentMap)) {
+    // 學生不存在 或是 簽到機沒有建立 都不轉移
+    if (!(studentTerminal.studentId in v2StudentMap) || !(studentTerminal.terminalName in deviceMap)) {
       continue;
     }
     const v2student = v2StudentMap[studentTerminal.studentId];
