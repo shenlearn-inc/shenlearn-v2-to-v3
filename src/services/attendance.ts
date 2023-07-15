@@ -24,7 +24,6 @@ import v3db from "@/db/v3db";
 import {TeacherV3} from "@/v3models/teachers";
 import toLessonId from "@/utils/toLessonId";
 import {Site} from "@/types/Site";
-import PQueue from 'p-queue';
 
 interface HandleStudentAttendanceProps {
   v2Student: StudentV2
@@ -250,6 +249,7 @@ export default async (site: Site, trxs: Trxs) => {
 
   const v2AllStudents = await findAllStudents(Number.MAX_SAFE_INTEGER, 0, trxs)
 
+  const { default: PQueue } = await import("p-queue");
   const queue = new PQueue({concurrency: 10});
 
   v2AllStudents.forEach(v2Student => {

@@ -11,7 +11,6 @@ import {findMessagesByRoomId} from "@/v2chatModels/messages";
 import {findUsersByIds} from "@/v2chatModels/users";
 import toContactorId from "@/utils/toContactorId";
 import {createMessages, MessageV3} from "@/v3chatModels/messages";
-import PQueue from "p-queue";
 
 const convertPayloadV2ToPayloadV3 = (message: any) => {
   const type = message.type;
@@ -120,6 +119,7 @@ export default async (trxs: Trxs) => {
 
   const students = await findAllStudents(999999, 0, trxs);
 
+  const { default: PQueue } = await import("p-queue");
   const queue = new PQueue({concurrency: 10});
 
   students.forEach(student => {
