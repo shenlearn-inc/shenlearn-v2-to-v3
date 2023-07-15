@@ -8,7 +8,7 @@ import _ from "lodash"
 import camelcaseKeys from "camelcase-keys";
 import {CourseV2, findCoursesByIds} from "../v2models/courses.js";
 import {
-  findAllNotAttendedStudentAttendances,
+  findAllNotAttendedStudentAttendances, getNumberOfNotAttendedStudentAttendance,
   StudentAttendanceV2
 } from "../v2models/studentAttendances.js";
 import moment from "moment";
@@ -25,6 +25,7 @@ import {TeacherV3} from "../v3models/teachers.js";
 import toLessonId from "../utils/toLessonId.js";
 import {Site} from "../types/Site.js";
 import PQueue from "p-queue";
+import config from "../config/index.js";
 
 interface HandleStudentAttendanceProps {
   v2Student: StudentV2
@@ -42,9 +43,8 @@ const handleStudentAttendance = async ({
                                          site,
                                          trxs
                                        }: HandleStudentAttendanceProps) => {
+  const startTime = new Date().getTime();
   // 找出學生
-  console.info(`正在處理學生 ${v2Student.hashedId}`)
-
   const studentId = toStudentId(v2Student.hashedId)
 
   const studentSignIns = camelcaseKeys(
@@ -232,10 +232,13 @@ const handleStudentAttendance = async ({
 
     await createStudentLessonAttendances(attendances, trxs)
   }
+
+  console.info(`已處理學生出勤 ${v2Student.hashedId}, time elapsed: ${(new Date().getTime() - startTime)/1000}s`)
 }
 
 export default async (site: Site, trxs: Trxs) => {
-  console.info('轉移出勤')
+  console.log('轉移出勤')
+  const startTime = new Date().getTime();
 
   // 取得站台資料
   const siteInfoV2 = await findSiteInfo(trxs)
@@ -269,44 +272,50 @@ export default async (site: Site, trxs: Trxs) => {
   });
 
   await queue.onIdle();
-  console.log('所有學生出勤處理完成');
+  console.log(`所有學生出勤處理完成, time elapsed: ${(new Date().getTime() - startTime)/1000}s`);
 
   // 轉移全部班級出勤
-  // 找出班級出勤
-  const v2StudentAttendances = (await findAllNotAttendedStudentAttendances(Number.MAX_SAFE_INTEGER, 0, trxs)).filter(a => !!a.studentId)
+  console.log('轉移全部班級出勤');
+  const allAttendanceStartTime = new Date().getTime();
+  const numberOfNotAttendedStudentAttendance = await getNumberOfNotAttendedStudentAttendance(trxs)
+  for (let i = 0; i < Math.ceil(numberOfNotAttendedStudentAttendance / config.chunkSize); i++) {
+    // 找出班級出勤
+    const v2StudentAttendances = (await findAllNotAttendedStudentAttendances(config.chunkSize, i * config.chunkSize, trxs)).filter(a => !!a.studentId)
 
-  const [v2Courses, v2InclassCourses, v2Students, v2Teachers] = await Promise.all([
-    findCoursesByIds(Array.from(new Set(v2StudentAttendances.map(a => a.courseId))), trxs),
-    findInclassCoursesByIds(Array.from(new Set(v2StudentAttendances.map(a => a.inclassCourseId))).filter(id => !!id) as number[], trxs),
-    findStudentsByIds(Array.from(new Set(v2StudentAttendances.map(a => a.studentId))), trxs),
-    findTeachersByIds(Array.from(new Set(v2StudentAttendances.map(a => a.studentId))), trxs)
-  ]) as [CourseV2[], InclassCourseV2[], StudentV2[], TeacherV2[]]
+    const [v2Courses, v2InclassCourses, v2Students, v2Teachers] = await Promise.all([
+      findCoursesByIds(Array.from(new Set(v2StudentAttendances.map(a => a.courseId))), trxs),
+      findInclassCoursesByIds(Array.from(new Set(v2StudentAttendances.map(a => a.inclassCourseId))).filter(id => !!id) as number[], trxs),
+      findStudentsByIds(Array.from(new Set(v2StudentAttendances.map(a => a.studentId))), trxs),
+      findTeachersByIds(Array.from(new Set(v2StudentAttendances.map(a => a.studentId))), trxs)
+    ]) as [CourseV2[], InclassCourseV2[], StudentV2[], TeacherV2[]]
 
-  const v2CourseMap = _.keyBy(v2Courses, 'id')
-  const v2InclassCourseMap = _.keyBy(v2InclassCourses, 'id')
-  const v2StudentMap = _.keyBy(v2Students, 'id')
-  const v2TeacherMap = _.keyBy(v2Teachers, 'id')
+    const v2CourseMap = _.keyBy(v2Courses, 'id')
+    const v2InclassCourseMap = _.keyBy(v2InclassCourses, 'id')
+    const v2StudentMap = _.keyBy(v2Students, 'id')
+    const v2TeacherMap = _.keyBy(v2Teachers, 'id')
 
-  await createStudentLessonAttendances(
-    v2StudentAttendances
-      .filter(a => a.inclassCourseId && a.inclassCourseId in v2InclassCourseMap)
-      .map(a => {
-        return {
-          id: generateUUID(site?.isHandleDuplicateHashedId ? `${a.hashedId}00000` : a.hashedId),
-          schoolId: schoolId,
-          clazzId: toClazzId(v2CourseMap[a.courseId].hashedId),
-          lessonId: toLessonId(v2InclassCourseMap[a.inclassCourseId!].hashedId),
-          studentId: toStudentId(v2StudentMap[a.studentId].hashedId),
-          studentSchoolAttendanceId: null,
-          attendAt: a.attendedAt,
-          leaveAt: a.leftAt,
-          remark: a.remark ?? '',
-          teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : serviceDirector.id,
-          createdAt: a.createdAt ?? new Date(),
-          updatedAt: a.updatedAt ?? new Date(),
-          deletedAt: a.deletedAt,
-        }
-      }),
-    trxs,
-  )
+    await createStudentLessonAttendances(
+      v2StudentAttendances
+        .filter(a => a.inclassCourseId && a.inclassCourseId in v2InclassCourseMap)
+        .map(a => {
+          return {
+            id: generateUUID(site?.isHandleDuplicateHashedId ? `${a.hashedId}00000` : a.hashedId),
+            schoolId: schoolId,
+            clazzId: toClazzId(v2CourseMap[a.courseId].hashedId),
+            lessonId: toLessonId(v2InclassCourseMap[a.inclassCourseId!].hashedId),
+            studentId: toStudentId(v2StudentMap[a.studentId].hashedId),
+            studentSchoolAttendanceId: null,
+            attendAt: a.attendedAt,
+            leaveAt: a.leftAt,
+            remark: a.remark ?? '',
+            teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : serviceDirector.id,
+            createdAt: a.createdAt ?? new Date(),
+            updatedAt: a.updatedAt ?? new Date(),
+            deletedAt: a.deletedAt,
+          }
+        }),
+      trxs,
+    )
+  }
+  console.log(`轉移全部班級出勤完成, time elapsed: ${(new Date().getTime() - allAttendanceStartTime)/1000}s`);
 }
