@@ -1,21 +1,21 @@
-import {findSiteInfo} from "@/v2models/siteInfo"
-import toSchoolId from "@/utils/toSchoolId";
-import {findAllCourses} from "@/v2models/courses";
-import toClazzId from "@/utils/toClazzId";
-import {createClazzes} from "@/v3models/clazzes";
-import {findCourseCategoriesByIds} from "@/v2models/courseCategories";
-import {keyBy} from "lodash"
-import toCourseId from "@/utils/toCourseId";
-import toAttendMode from "@/utils/toAttendMode";
-import {findInitCourse} from "@/v3models/courses";
-import {Trxs} from "@/types/Trxs";
-import {findAllCourseTimes} from "@/v2models/courseTimes";
-import {createClazzTimes} from "@/v3models/clazzTimes";
-import generateUUID from "@/utils/generateUUID";
-import weekdayToDate from "@/utils/weekdayToDate";
-import v3db from "@/db/v3db";
-import v2db from "@/db/v2db";
-import {Site} from "@/types/Site";
+import {findSiteInfo} from "../v2models/siteInfo.js";
+import toSchoolId from "../utils/toSchoolId.js";
+import {findAllCourses} from "../v2models/courses.js";
+import toClazzId from "../utils/toClazzId.js";
+import {createClazzes} from "../v3models/clazzes.js";
+import {findCourseCategoriesByIds} from "../v2models/courseCategories.js";
+import _ from "lodash"
+import toCourseId from "../utils/toCourseId.js";
+import toAttendMode from "../utils/toAttendMode.js";
+import {findInitCourse} from "../v3models/courses.js";
+import {Trxs} from "../types/Trxs.js";
+import {findAllCourseTimes} from "../v2models/courseTimes.js";
+import {createClazzTimes} from "../v3models/clazzTimes.js";
+import generateUUID from "../utils/generateUUID.js";
+import weekdayToDate from "../utils/weekdayToDate.js";
+import v3db from "../db/v3db.js";
+import v2db from "../db/v2db.js";
+import {Site} from "../types/Site.js";
 
 export default async (site: Site, trxs: Trxs) => {
   console.info('轉移班級資料')
@@ -28,7 +28,7 @@ export default async (site: Site, trxs: Trxs) => {
 
   // 取得課種
   const v2CourseCategories = await findCourseCategoriesByIds(Array.from(new Set(v2Courses.map(c => c.courseCategoryId))), trxs)
-  const courseCategoryMap = keyBy(v2CourseCategories, 'id')
+  const courseCategoryMap = _.keyBy(v2CourseCategories, 'id')
 
   // 取得初始課種
   const initCourse = await findInitCourse(trxs)
@@ -83,7 +83,7 @@ export default async (site: Site, trxs: Trxs) => {
   const v2CourseTimes = await findAllCourseTimes(99999, 0, trxs)
   if (!v2CourseTimes.length) return
 
-  const v2CourseMap = keyBy(v2Courses, 'id')
+  const v2CourseMap = _.keyBy(v2Courses, 'id')
   if (site?.isHandleDuplicateHashedId) {
     for (let i = 0; i < v2CourseTimes.length; i++) {
       const ct = v2CourseTimes[i];

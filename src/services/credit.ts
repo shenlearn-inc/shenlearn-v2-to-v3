@@ -1,23 +1,23 @@
-import {Trxs} from "@/types/Trxs";
-import {findSiteInfo} from "@/v2models/siteInfo";
-import toSchoolId from "@/utils/toSchoolId";
-import {findTeachersByIds, TeacherV2} from "@/v2models/teachers";
-import config from "@/config";
-import {findStudentsByIds, StudentV2} from "@/v2models/students";
-import _, {keyBy} from "lodash";
-import toStudentId from "@/utils/toStudentId";
-import {CourseV2, findCoursesByIds} from "@/v2models/courses";
-import toClazzId from "@/utils/toClazzId";
-import toTeacherId from "@/utils/toTeacherId";
-import {findAllCredits} from "@/v2models/credits";
-import {CourseCategoryV2, findCourseCategoriesByIds} from "@/v2models/courseCategories";
-import {findInclassCoursesByIds, InclassCourseV2} from "@/v2models/inclassCourses";
-import {createCredits, getNumberOfCredit} from "@/v3models/credits";
-import toCourseId from "@/utils/toCourseId";
-import toLessonId from "@/utils/toLessonId";
-import toCreditId from "@/utils/toCreditId";
-import v3db from "@/db/v3db";
-import {TeacherV3} from "@/v3models/teachers";
+import {Trxs} from "../types/Trxs.js";
+import {findSiteInfo} from "../v2models/siteInfo.js";
+import toSchoolId from "../utils/toSchoolId.js";
+import {findTeachersByIds, TeacherV2} from "../v2models/teachers.js";
+import config from "../config/index.js";
+import {findStudentsByIds, StudentV2} from "../v2models/students.js";
+import _ from "lodash";
+import toStudentId from "../utils/toStudentId.js";
+import {CourseV2, findCoursesByIds} from "../v2models/courses.js";
+import toClazzId from "../utils/toClazzId.js";
+import toTeacherId from "../utils/toTeacherId.js";
+import {findAllCredits} from "../v2models/credits.js";
+import {CourseCategoryV2, findCourseCategoriesByIds} from "../v2models/courseCategories.js";
+import {findInclassCoursesByIds, InclassCourseV2} from "../v2models/inclassCourses.js";
+import {createCredits, getNumberOfCredit} from "../v3models/credits.js";
+import toCourseId from "../utils/toCourseId.js";
+import toLessonId from "../utils/toLessonId.js";
+import toCreditId from "../utils/toCreditId.js";
+import v3db from "../db/v3db.js";
+import {TeacherV3} from "../v3models/teachers.js";
 
 export default async (trxs: Trxs) => {
   console.info('轉移堂次')
@@ -41,7 +41,7 @@ export default async (trxs: Trxs) => {
     const v2Credits = await findAllCredits(config.chunkSize, i * config.chunkSize, trxs)
 
     const v2Students = await findStudentsByIds(Array.from(new Set(v2Credits.map(pi => pi.studentId))), trxs) as StudentV2[]
-    const v2StudentMap = keyBy(v2Students, 'id')
+    const v2StudentMap = _.keyBy(v2Students, 'id')
 
     const v2Courses = await findCoursesByIds(Array.from(new Set(v2Credits.filter(a => !!a.courseId).map(a => a.courseId) as number[])), trxs) as CourseV2[]
     const v2CourseMap = _.keyBy(v2Courses, 'id')

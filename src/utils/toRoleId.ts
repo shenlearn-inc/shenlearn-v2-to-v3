@@ -1,4 +1,4 @@
-import {Site} from "@/types/Site";
+import {Site} from "../types/Site.js";
 
 export default (position: string, site: Site): string => {
   switch (position) {

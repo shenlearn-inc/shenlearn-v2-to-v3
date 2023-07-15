@@ -1,18 +1,17 @@
-import {findStudentsByIds} from "@/v2models/students"
-import {keyBy} from "lodash"
-import {findSiteInfo} from "@/v2models/siteInfo"
-import config from "@/config"
-import toStudentId from "@/utils/toStudentId"
-import toSchoolId from "@/utils/toSchoolId"
-import {Trxs} from "@/types/Trxs";
+import {findStudentsByIds} from "../v2models/students.js";
+import _ from "lodash";
+import {findSiteInfo} from "../v2models/siteInfo.js";
+import toStudentId from "../utils/toStudentId.js";
+import toSchoolId from "../utils/toSchoolId.js";
+import {Trxs} from "../types/Trxs.js";
 import camelcaseKeys from "camelcase-keys";
-import v2signdb from "@/db/v2signdb";
-import v3db from "@/db/v3db";
+import v2signdb from "../db/v2signdb.js";
+import v3db from "../db/v3db.js";
 import snakecaseKeys from "snakecase-keys";
-import v2db from "@/db/v2db";
-import {createPersonSignPins} from "@/v3models/personSignPin";
-import generateUUID from "@/utils/generateUUID";
-import {Site} from "@/types/Site";
+import v2db from "../db/v2db.js";
+import {createPersonSignPins} from "../v3models/personSignPin.js";
+import generateUUID from "../utils/generateUUID.js";
+import {Site} from "../types/Site.js";
 
 interface TerminalV2 {
   id: string
@@ -50,7 +49,7 @@ export default async (site: Site, trxs: Trxs) => {
       .where("site_id", schoolId)
       .whereNull("deleted_at")
   );
-  const terminalMap = keyBy(terminals, "terminal_name");
+  const terminalMap = _.keyBy(terminals, "terminal_name");
 
   await v3db().insert(
     Object.values(terminalMap).map((terminal) => snakecaseKeys({
@@ -88,7 +87,7 @@ export default async (site: Site, trxs: Trxs) => {
     return;
   }
 
-  const v2StudentMap = keyBy(v2Students, "id");
+  const v2StudentMap = _.keyBy(v2Students, "id");
   for (const studentTerminal of studentTerminals) {
     if (!(studentTerminal.studentId in v2StudentMap)) {
       continue;

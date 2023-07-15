@@ -1,22 +1,20 @@
-import {findAllStudents, getNumberOfStudent, updateStudentHashedIdById} from "@/v2models/students"
-import {findTeachersByIds} from "@/v2models/teachers"
-import {keyBy} from "lodash"
-import {createStudents} from "@/v3models/students"
-import toGradeNumber from "@/utils/toGradeNumber"
-import {findSiteInfo} from "@/v2models/siteInfo"
-import config from "@/config"
-import {createRooms} from "@/v3chatModels/rooms"
-import toStudentChatRoomId from "@/utils/toStudentChatRoomId"
-import toStudentId from "@/utils/toStudentId"
-import toSchoolId from "@/utils/toSchoolId"
-import toTeacherId from "@/utils/toTeacherId"
-import {Trxs} from "@/types/Trxs";
-import generateUUID from "@/utils/generateUUID";
-import v2chatdb from "@/db/v2chatdb";
-import v3db from "@/db/v3db";
-import v2db from "@/db/v2db";
-import camelcaseKeys from "camelcase-keys";
-import {Site} from "@/types/Site";
+import {findAllStudents, getNumberOfStudent, updateStudentHashedIdById} from "../v2models/students.js";
+import {findTeachersByIds} from "../v2models/teachers.js";
+import _ from "lodash";
+import {createStudents} from "../v3models/students.js";
+import toGradeNumber from "../utils/toGradeNumber.js";
+import {findSiteInfo} from "../v2models/siteInfo.js";
+import config from "../config/index.js";
+import {createRooms} from "../v3chatModels/rooms.js";
+import toStudentChatRoomId from "../utils/toStudentChatRoomId.js";
+import toStudentId from "../utils/toStudentId.js";
+import toSchoolId from "../utils/toSchoolId.js";
+import toTeacherId from "../utils/toTeacherId.js";
+import {Trxs} from "../types/Trxs.js";
+import generateUUID from "../utils/generateUUID.js";
+import v2chatdb from "../db/v2chatdb.js";
+import v3db from "../db/v3db.js";
+import {Site} from "../types/Site.js";
 
 export default async (site: Site, trxs: Trxs) => {
   console.info('轉移學生資料')
@@ -30,7 +28,7 @@ export default async (site: Site, trxs: Trxs) => {
     const students = await findAllStudents(config.chunkSize, i * config.chunkSize, trxs)
     // 找出負責老師
     const teachers = await findTeachersByIds(Array.from(new Set(students.map(s => s.teacherId))).filter(s => !!s) as number[], trxs)
-    const teacherMap = keyBy(teachers, 'id')
+    const teacherMap = _.keyBy(teachers, 'id')
 
     // 轉移學生
     for (const s of students) {

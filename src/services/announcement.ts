@@ -1,19 +1,19 @@
-import {Trxs} from "@/types/Trxs";
-import generateUUID from "@/utils/generateUUID";
-import {findSiteInfo} from "@/v2models/siteInfo";
-import toSchoolId from "@/utils/toSchoolId";
-import {findTeacherById} from "@/v2models/teachers";
-import toTeacherId from "@/utils/toTeacherId";
-import v2db from "@/db/v2db";
-import {findAllNotifications} from "@/v2models/notifications";
-import toAnnouncementId from "@/utils/toAnnouncementId";
-import v3db from "@/db/v3db";
-import {TeacherV3} from "@/v3models/teachers";
-import {createAnnouncements} from "@/v3models/announcements";
+import {Trxs} from "../types/Trxs.js";
+import generateUUID from "../utils/generateUUID.js";
+import {findSiteInfo} from "../v2models/siteInfo.js";
+import toSchoolId from "../utils/toSchoolId.js";
+import {findTeacherById} from "../v2models/teachers.js";
+import toTeacherId from "../utils/toTeacherId.js";
+import v2db from "../db/v2db.js";
+import {findAllNotifications} from "../v2models/notifications.js";
+import toAnnouncementId from "../utils/toAnnouncementId.js";
+import v3db from "../db/v3db.js";
+import {TeacherV3} from "../v3models/teachers.js";
+import {createAnnouncements} from "../v3models/announcements.js";
 import camelcaseKeys from "camelcase-keys";
-import {findStudentsByIds} from "@/v2models/students";
-import toStudentId from "@/utils/toStudentId";
-import {createAnnouncementStudentRefs} from "@/v3models/announcementStudentRefs";
+import {findStudentsByIds} from "../v2models/students.js";
+import toStudentId from "../utils/toStudentId.js";
+import {createAnnouncementStudentRefs} from "../v3models/announcementStudentRefs.js";
 
 const sendModeToMethod = (sendMode: string) => {
   switch (sendMode) {

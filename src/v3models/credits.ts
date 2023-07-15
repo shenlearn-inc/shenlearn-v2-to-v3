@@ -1,7 +1,7 @@
-import v3db from "@/db/v3db"
+import v3db from "../db/v3db.js"
 import snakecaseKeys from "snakecase-keys"
-import {Trxs} from "@/types/Trxs"
-import v2db from "@/db/v2db";
+import {Trxs} from "../types/Trxs.js"
+import v2db from "../db/v2db.js";
 
 export interface CreditV3 {
   id: string

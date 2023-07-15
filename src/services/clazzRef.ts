@@ -1,17 +1,17 @@
-import {Trxs} from "@/types/Trxs";
-import {findAllCourseStudentRefs, getNumberOfCourseStudentRef} from "@/v2models/courseStudentRefs";
-import config from "@/config";
-import {findCoursesByIds} from "@/v2models/courses";
-import {findStudentsByIds} from "@/v2models/students";
-import {keyBy} from "lodash"
-import {createClazzStudentRefs} from "@/v3models/clazzStudentRefs";
-import generateUUID from "@/utils/generateUUID";
-import toClazzId from "@/utils/toClazzId";
-import toTeacherId from "@/utils/toTeacherId";
-import toStudentId from "@/utils/toStudentId";
-import {findTeachersByIds} from "@/v2models/teachers";
-import {findAllCourseTeacherRefs} from "@/v2models/courseTeacherRefs";
-import {createClazzTeacherRefs} from "@/v3models/clazzTeacherRefs";
+import {Trxs} from "../types/Trxs.js";
+import {findAllCourseStudentRefs, getNumberOfCourseStudentRef} from "../v2models/courseStudentRefs.js";
+import config from "../config/index.js";
+import {findCoursesByIds} from "../v2models/courses.js";
+import {findStudentsByIds} from "../v2models/students.js";
+import _ from "lodash"
+import {createClazzStudentRefs} from "../v3models/clazzStudentRefs.js";
+import generateUUID from "../utils/generateUUID.js";
+import toClazzId from "../utils/toClazzId.js";
+import toTeacherId from "../utils/toTeacherId.js";
+import toStudentId from "../utils/toStudentId.js";
+import {findTeachersByIds} from "../v2models/teachers.js";
+import {findAllCourseTeacherRefs} from "../v2models/courseTeacherRefs.js";
+import {createClazzTeacherRefs} from "../v3models/clazzTeacherRefs.js";
 
 export default async (trxs: Trxs) => {
   console.info('轉移班級關係')
@@ -22,10 +22,10 @@ export default async (trxs: Trxs) => {
     const v2CourseStudentRefs = await findAllCourseStudentRefs(config.chunkSize, i * config.chunkSize, trxs)
 
     const v2Courses = await findCoursesByIds(Array.from(new Set(v2CourseStudentRefs.map(r => r.courseId))), trxs)
-    const v2CourseMap = keyBy(v2Courses, 'id')
+    const v2CourseMap = _.keyBy(v2Courses, 'id')
 
     const v2Students = await findStudentsByIds(Array.from(new Set(v2CourseStudentRefs.map(r => r.studentId))), trxs)
-    const v2StudentMap = keyBy(v2Students, 'id')
+    const v2StudentMap = _.keyBy(v2Students, 'id')
 
     // 轉換學生關係
     await createClazzStudentRefs(v2CourseStudentRefs
@@ -46,10 +46,10 @@ export default async (trxs: Trxs) => {
   const v2CourseTeacherRefs = await findAllCourseTeacherRefs(trxs)
 
   const v2Courses = await findCoursesByIds(Array.from(new Set(v2CourseTeacherRefs.map(r => r.courseId))), trxs)
-  const v2CourseMap = keyBy(v2Courses, 'id')
+  const v2CourseMap = _.keyBy(v2Courses, 'id')
 
   const v2Teachers = await findTeachersByIds(Array.from(new Set(v2CourseTeacherRefs.map(r => r.teacherId))), trxs)
-  const v2TeacherMap = keyBy(v2Teachers, 'id')
+  const v2TeacherMap = _.keyBy(v2Teachers, 'id')
 
   // 轉換老師關係
   await createClazzTeacherRefs(v2CourseTeacherRefs

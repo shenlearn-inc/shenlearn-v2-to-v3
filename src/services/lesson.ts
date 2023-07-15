@@ -1,20 +1,20 @@
-import {Trxs} from "@/types/Trxs";
-import {findAllInclassCourses, getNumberOfInclassCourse} from "@/v2models/inclassCourses";
-import config from "@/config";
-import {createLessons} from "@/v3models/lessons";
-import generateUUID from "@/utils/generateUUID";
-import {findSiteInfo} from "@/v2models/siteInfo";
-import toSchoolId from "@/utils/toSchoolId";
-import {findCoursesByIds} from "@/v2models/courses";
-import {keyBy} from "lodash"
-import toClazzId from "@/utils/toClazzId";
-import {findTeachersByIds} from "@/v2models/teachers";
-import toTeacherId from "@/utils/toTeacherId";
-import v2db from "@/db/v2db";
-import toValidDateObj from "@/utils/toValidDateObj";
-import v3db from "@/db/v3db";
-import {Site} from "@/types/Site";
-import {TeacherV3} from "@/v3models/teachers";
+import {Trxs} from "../types/Trxs.js";
+import {findAllInclassCourses, getNumberOfInclassCourse} from "../v2models/inclassCourses.js";
+import config from "../config/index.js";
+import {createLessons} from "../v3models/lessons.js";
+import generateUUID from "../utils/generateUUID.js";
+import {findSiteInfo} from "../v2models/siteInfo.js";
+import toSchoolId from "../utils/toSchoolId.js";
+import {findCoursesByIds} from "../v2models/courses.js";
+import _ from "lodash"
+import toClazzId from "../utils/toClazzId.js";
+import {findTeachersByIds} from "../v2models/teachers.js";
+import toTeacherId from "../utils/toTeacherId.js";
+import v2db from "../db/v2db.js";
+import toValidDateObj from "../utils/toValidDateObj.js";
+import v3db from "../db/v3db.js";
+import {Site} from "../types/Site.js";
+import {TeacherV3} from "../v3models/teachers.js";
 
 export default async (site: Site, trxs: Trxs) => {
   console.info('轉移課堂資料')
@@ -37,10 +37,10 @@ export default async (site: Site, trxs: Trxs) => {
     const inclassCourses = await findAllInclassCourses(config.chunkSize, i * config.chunkSize, trxs)
 
     const v2Courses = await findCoursesByIds(inclassCourses.map(c => c.courseId), trxs)
-    const v2CourseMap = keyBy(v2Courses, 'id')
+    const v2CourseMap = _.keyBy(v2Courses, 'id')
 
     const v2Teachers = await findTeachersByIds(inclassCourses.map(c => c.teacherId), trxs)
-    const v2TeacherMap = keyBy(v2Teachers, 'id')
+    const v2TeacherMap = _.keyBy(v2Teachers, 'id')
 
     if (site?.isHandleDuplicateHashedId) {
       for (let i = 0; i < inclassCourses.length; i++) {

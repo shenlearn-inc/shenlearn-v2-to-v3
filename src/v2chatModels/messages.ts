@@ -1,4 +1,4 @@
-import v2chatdb from "@/db/v2chatdb";
+import v2chatdb from "../db/v2chatdb.js";
 import camelcaseKeys from "camelcase-keys";
 
 export interface MessageV2 {

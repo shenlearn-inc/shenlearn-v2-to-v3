@@ -1,6 +1,6 @@
-import v3db from "@/db/v3db"
+import v3db from "../db/v3db.js";
 import snakecaseKeys from "snakecase-keys"
-import {Trxs} from "@/types/Trxs";
+import {Trxs} from "../types/Trxs.js";
 
 export interface ExamV3 {
   id: string;

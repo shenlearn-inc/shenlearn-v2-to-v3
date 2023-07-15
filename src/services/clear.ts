@@ -1,11 +1,11 @@
-import {Trxs} from "@/types/Trxs";
-import v3db from "@/db/v3db";
+import {Trxs} from "../types/Trxs.js";
+import v3db from "../db/v3db.js";
 import camelcaseKeys from "camelcase-keys";
-import v3chatdb from "@/db/v3chatdb";
-import v2db from "@/db/v2db";
-import toSchoolId from "@/utils/toSchoolId";
-import toStudentId from "@/utils/toStudentId";
-import {Site} from "@/types/Site";
+import v3chatdb from "../db/v3chatdb.js";
+import v2db from "../db/v2db.js";
+import toSchoolId from "../utils/toSchoolId.js";
+import toStudentId from "../utils/toStudentId.js";
+import {Site} from "../types/Site.js";
 
 export default async (site: Site, trxs: Trxs) => {
   console.info('清除新資料庫中的學校資料')

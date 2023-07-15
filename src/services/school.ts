@@ -1,10 +1,10 @@
-import {findSiteInfo} from "@/v2models/siteInfo"
-import {createSchool} from "@/v3models/schools"
-import config from "@/config"
-import moment from "moment"
-import toSchoolId from "@/utils/toSchoolId"
-import {Trxs} from "@/types/Trxs";
-import {Site} from "@/types/Site";
+import {findSiteInfo} from "../v2models/siteInfo.js";
+import {createSchool} from "../v3models/schools.js";
+import config from "../config/index.js";
+import moment from "moment";
+import toSchoolId from "../utils/toSchoolId.js";
+import {Trxs} from "../types/Trxs.js";
+import {Site} from "../types/Site.js";
 
 export default async (site: Site, trxs: Trxs) => {
   console.info('轉移站台資料')

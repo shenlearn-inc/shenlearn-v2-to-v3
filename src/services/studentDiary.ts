@@ -1,18 +1,17 @@
-import {Trxs} from "@/types/Trxs";
-import {findSiteInfo} from "@/v2models/siteInfo";
-import toSchoolId from "@/utils/toSchoolId";
-import {keyBy} from "lodash"
-import {findTeachersByIds, TeacherV2} from "@/v2models/teachers";
-import toTeacherId from "@/utils/toTeacherId";
-import v2db from "@/db/v2db";
-import {findStudentsByIds, StudentV2} from "@/v2models/students";
-import toStudentId from "@/utils/toStudentId";
-import {findAllStudentDiaries} from "@/v2models/studentDiaries";
-import {createStudentDiaries} from "@/v3models/studentDiaries";
-import toStudentDiaryId from "@/utils/toStudentDiaryId";
-import {Site} from "@/types/Site";
-import v3db from "@/db/v3db";
-import {TeacherV3} from "@/v3models/teachers";
+import {Trxs} from "../types/Trxs.js";
+import {findSiteInfo} from "../v2models/siteInfo.js";
+import toSchoolId from "../utils/toSchoolId.js";
+import _ from "lodash";
+import {findTeachersByIds} from "../v2models/teachers.js";
+import toTeacherId from "../utils/toTeacherId.js";
+import {findStudentsByIds, StudentV2} from "../v2models/students.js";
+import toStudentId from "../utils/toStudentId.js";
+import {findAllStudentDiaries} from "../v2models/studentDiaries.js";
+import {createStudentDiaries} from "../v3models/studentDiaries.js";
+import toStudentDiaryId from "../utils/toStudentDiaryId.js";
+import {Site} from "../types/Site.js";
+import v3db from "../db/v3db.js";
+import {TeacherV3} from "../v3models/teachers.js";
 
 export default async (site: Site, trxs: Trxs) => {
   console.info('轉移電訪資料')
@@ -33,11 +32,11 @@ export default async (site: Site, trxs: Trxs) => {
 
   // 找出學生
   const v2Students = await findStudentsByIds(Array.from(new Set(v2StudentDiaries.map(s => s.studentId))), trxs) as StudentV2[]
-  const v2StudentMap = keyBy(v2Students, 'id')
+  const v2StudentMap = _.keyBy(v2Students, 'id')
 
   // 找出老師
   const v2Teachers = await findTeachersByIds(Array.from(new Set(v2StudentDiaries.map(c => c.teacherId))), trxs)
-  const v2TeacherMap = keyBy(v2Teachers, 'id')
+  const v2TeacherMap = _.keyBy(v2Teachers, 'id')
 
   for (const diary of v2StudentDiaries) {
     // 建立電訪資料

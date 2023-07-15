@@ -1,17 +1,17 @@
-import {Trxs} from "@/types/Trxs";
-import {findSiteInfo} from "@/v2models/siteInfo";
-import toSchoolId from "@/utils/toSchoolId";
-import {findTeacherById} from "@/v2models/teachers";
-import toTeacherId from "@/utils/toTeacherId";
-import v2db from "@/db/v2db";
-import v3db from "@/db/v3db";
-import {TeacherV3} from "@/v3models/teachers";
+import {Trxs} from "../types/Trxs.js";
+import {findSiteInfo} from "../v2models/siteInfo.js";
+import toSchoolId from "../utils/toSchoolId.js";
+import {findTeacherById} from "../v2models/teachers.js";
+import toTeacherId from "../utils/toTeacherId.js";
+import v2db from "../db/v2db.js";
+import v3db from "../db/v3db.js";
+import {TeacherV3} from "../v3models/teachers.js";
 import camelcaseKeys from "camelcase-keys";
-import {findAllCourseDiaries} from "@/v2models/courseDiaries";
-import {findCoursesByIds} from "@/v2models/courses";
-import toClazzId from "@/utils/toClazzId";
-import toClazzDiaryId from "@/utils/toClazzDiaryId";
-import {ClazzDiaryV3, createClazzDiaries} from "@/v3models/clazzDiaries";
+import {findAllCourseDiaries} from "../v2models/courseDiaries.js";
+import {findCoursesByIds} from "../v2models/courses.js";
+import toClazzId from "../utils/toClazzId.js";
+import toClazzDiaryId from "../utils/toClazzDiaryId.js";
+import {ClazzDiaryV3, createClazzDiaries} from "../v3models/clazzDiaries.js";
 
 export default async (trxs: Trxs) => {
   console.info('轉移班級日誌')
@@ -34,7 +34,7 @@ export default async (trxs: Trxs) => {
     .transacting(trxs.v3db) as TeacherV3
 
   // 轉移班級通知
-  const clazzDiaries = []
+  const clazzDiaries = [] as any;
   for (const courseDiary of courseDiaries) {
     const clazzDiaryId = toClazzDiaryId(courseDiary.hashedId);
 

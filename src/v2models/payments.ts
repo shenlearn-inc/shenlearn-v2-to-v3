@@ -1,6 +1,6 @@
-import v2db from "@/db/v2db"
+import v2db from "../db/v2db.js"
 import camelcaseKeys from "camelcase-keys"
-import {Trxs} from "@/types/Trxs";
+import {Trxs} from "../types/Trxs.js";
 
 export interface PaymentV2 {
   id: number

@@ -1,7 +1,7 @@
 import snakecaseKeys from "snakecase-keys"
-import v3chatdb from "@/db/v3chatdb"
-import {Trxs} from "@/types/Trxs";
-import {chunk} from "lodash"
+import v3chatdb from "../db/v3chatdb.js"
+import {Trxs} from "../types/Trxs.js";
+import _ from "lodash"
 
 export interface RoomUserRefV3 {
   id: string
@@ -20,7 +20,7 @@ export interface RoomUserRefV3 {
 }
 
 export const createRoomUserRefs = async (refs: RoomUserRefV3[], trxs: Trxs): Promise<void> => {
-  for (const c of chunk(refs, 100)) {
+  for (const c of _.chunk(refs, 100)) {
     await v3chatdb()
       .insert(snakecaseKeys(c))
       .from('room_user_refs')

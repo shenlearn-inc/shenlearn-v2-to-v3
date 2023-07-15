@@ -1,29 +1,30 @@
-import {Trxs} from "@/types/Trxs";
-import {findSiteInfo} from "@/v2models/siteInfo";
-import toSchoolId from "@/utils/toSchoolId";
-import {findAllStudents, findStudentsByIds, StudentV2} from "@/v2models/students";
-import v2db from "@/db/v2db";
-import {StudentSignV2} from "@/v2models/studentSigns";
+import {Trxs} from "../types/Trxs.js";
+import {findSiteInfo} from "../v2models/siteInfo.js";
+import toSchoolId from "../utils/toSchoolId.js";
+import {findAllStudents, findStudentsByIds, StudentV2} from "../v2models/students.js";
+import v2db from "../db/v2db.js";
+import {StudentSignV2} from "../v2models/studentSigns.js";
 import _ from "lodash"
 import camelcaseKeys from "camelcase-keys";
-import {CourseV2, findCoursesByIds} from "@/v2models/courses";
+import {CourseV2, findCoursesByIds} from "../v2models/courses.js";
 import {
   findAllNotAttendedStudentAttendances,
   StudentAttendanceV2
-} from "@/v2models/studentAttendances";
+} from "../v2models/studentAttendances.js";
 import moment from "moment";
-import {createStudentSchoolAttendances} from "@/v3models/studentSchoolAttendances";
-import generateUUID from "@/utils/generateUUID";
-import toStudentId from "@/utils/toStudentId";
-import {findTeachersByIds, TeacherV2} from "@/v2models/teachers";
-import toTeacherId from "@/utils/toTeacherId";
-import {createStudentLessonAttendances, StudentLessonAttendanceV3} from "@/v3models/studentLessonAttendances";
-import toClazzId from "@/utils/toClazzId";
-import {findInclassCoursesByIds, InclassCourseV2} from "@/v2models/inclassCourses";
-import v3db from "@/db/v3db";
-import {TeacherV3} from "@/v3models/teachers";
-import toLessonId from "@/utils/toLessonId";
-import {Site} from "@/types/Site";
+import {createStudentSchoolAttendances} from "../v3models/studentSchoolAttendances.js";
+import generateUUID from "../utils/generateUUID.js";
+import toStudentId from "../utils/toStudentId.js";
+import {findTeachersByIds, TeacherV2} from "../v2models/teachers.js";
+import toTeacherId from "../utils/toTeacherId.js";
+import {createStudentLessonAttendances, StudentLessonAttendanceV3} from "../v3models/studentLessonAttendances.js";
+import toClazzId from "../utils/toClazzId.js";
+import {findInclassCoursesByIds, InclassCourseV2} from "../v2models/inclassCourses.js";
+import v3db from "../db/v3db.js";
+import {TeacherV3} from "../v3models/teachers.js";
+import toLessonId from "../utils/toLessonId.js";
+import {Site} from "../types/Site.js";
+import PQueue from "p-queue";
 
 interface HandleStudentAttendanceProps {
   v2Student: StudentV2
@@ -250,7 +251,6 @@ export default async (site: Site, trxs: Trxs) => {
 
   const v2AllStudents = await findAllStudents(Number.MAX_SAFE_INTEGER, 0, trxs)
 
-  const { default: PQueue } = await import("p-queue");
   const queue = new PQueue({concurrency: 10});
 
   v2AllStudents.forEach(v2Student => {

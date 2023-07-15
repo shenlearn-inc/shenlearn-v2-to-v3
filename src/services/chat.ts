@@ -1,18 +1,19 @@
-import {Trxs} from "@/types/Trxs";
-import {findSiteInfo} from "@/v2models/siteInfo";
-import config from "@/config";
-import {findAllStudents, StudentV2} from "@/v2models/students";
-import toTeacherId from "@/utils/toTeacherId";
-import v3db from "@/db/v3db";
-import {TeacherV3} from "@/v3models/teachers";
-import {findRoomByExternalId} from "@/v2chatModels/rooms";
-import toStudentChatRoomId from "@/utils/toStudentChatRoomId";
-import {findMessagesByRoomId} from "@/v2chatModels/messages";
-import {findUsersByIds} from "@/v2chatModels/users";
-import toContactorId from "@/utils/toContactorId";
-import {createMessages, MessageV3} from "@/v3chatModels/messages";
-import {Site} from "@/types/Site";
-import toSchoolId from "@/utils/toSchoolId";
+import {Trxs} from "../types/Trxs.js";
+import {findSiteInfo} from "../v2models/siteInfo.js";
+import config from "../config/index.js";
+import {findAllStudents, StudentV2} from "../v2models/students.js";
+import toTeacherId from "../utils/toTeacherId.js";
+import v3db from "../db/v3db.js";
+import {TeacherV3} from "../v3models/teachers.js";
+import {findRoomByExternalId} from "../v2chatModels/rooms.js";
+import toStudentChatRoomId from "../utils/toStudentChatRoomId.js";
+import {findMessagesByRoomId} from "../v2chatModels/messages.js";
+import {findUsersByIds} from "../v2chatModels/users.js";
+import toContactorId from "../utils/toContactorId.js";
+import {createMessages, MessageV3} from "../v3chatModels/messages.js";
+import {Site} from "../types/Site.js";
+import toSchoolId from "../utils/toSchoolId.js";
+import PQueue from "p-queue";
 
 const convertPayloadV2ToPayloadV3 = (message: any) => {
   const type = message.type;
@@ -123,7 +124,6 @@ export default async (site: Site, trxs: Trxs) => {
 
   const students = await findAllStudents(999999, 0, trxs);
 
-  const { default: PQueue } = await import("p-queue");
   const queue = new PQueue({concurrency: 10});
 
   students.forEach(student => {

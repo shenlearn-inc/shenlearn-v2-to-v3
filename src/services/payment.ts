@@ -1,25 +1,25 @@
-import {Trxs} from "@/types/Trxs";
-import {findSiteInfo} from "@/v2models/siteInfo";
-import config from "@/config";
-import {findAllPayments, getNumberOfPayment} from "@/v2models/payments";
-import {createPayments} from "@/v3models/payments";
-import generateUUID from "@/utils/generateUUID";
-import toSchoolId from "@/utils/toSchoolId";
-import {createPaymentRoots} from "@/v3models/paymentRoots";
-import v2db from "@/db/v2db";
-import {findServiceTeacher, findTeachersByIds, TeacherV2} from "@/v2models/teachers";
-import toTeacherId from "@/utils/toTeacherId";
-import {createPaymentItems} from "@/v3models/paymentItems";
-import toPaymentId from "@/utils/toPaymentId";
-import {PaymentItemV2} from "@/v2models/paymentItems";
-import {findStudentsByIds, StudentV2} from "@/v2models/students";
-import {keyBy} from "lodash"
-import toStudentId from "@/utils/toStudentId";
+import {Trxs} from "../types/Trxs.js";
+import {findSiteInfo} from "../v2models/siteInfo.js";
+import config from "../config/index.js";
+import {findAllPayments, getNumberOfPayment} from "../v2models/payments.js";
+import {createPayments} from "../v3models/payments.js";
+import generateUUID from "../utils/generateUUID.js";
+import toSchoolId from "../utils/toSchoolId.js";
+import {createPaymentRoots} from "../v3models/paymentRoots.js";
+import v2db from "../db/v2db.js";
+import {findServiceTeacher, findTeachersByIds, TeacherV2} from "../v2models/teachers.js";
+import toTeacherId from "../utils/toTeacherId.js";
+import {createPaymentItems} from "../v3models/paymentItems.js";
+import toPaymentId from "../utils/toPaymentId.js";
+import {PaymentItemV2} from "../v2models/paymentItems.js";
+import {findStudentsByIds, StudentV2} from "../v2models/students.js";
+import _ from "lodash"
+import toStudentId from "../utils/toStudentId.js";
 import camelcaseKeys from "camelcase-keys";
-import v3db from "@/db/v3db";
-import {TeacherV3} from "@/v3models/teachers";
-import toDateStr from "@/utils/toDateStr";
-import toValidDateObj from "@/utils/toValidDateObj";
+import v3db from "../db/v3db.js";
+import {TeacherV3} from "../v3models/teachers.js";
+import toDateStr from "../utils/toDateStr.js";
+import toValidDateObj from "../utils/toValidDateObj.js";
 
 export default async (trxs: Trxs) => {
   console.info('轉移繳費')
@@ -86,11 +86,11 @@ export default async (trxs: Trxs) => {
       ) as PaymentItemV2[]
 
       const v2Students = await findStudentsByIds(Array.from(new Set(v2PaymentItems.map(pi => pi.studentId))), trxs) as StudentV2[]
-      const v2StudentMap = keyBy(v2Students, 'id')
+      const v2StudentMap = _.keyBy(v2Students, 'id')
 
       const v2Teachers = await findTeachersByIds(Array.from(new Set(v2PaymentItems.filter(pi => !!pi.teacherId).map(pi => pi.teacherId) as number[])), trxs) as TeacherV2[]
       const serviceTeacher = await findServiceTeacher(trxs);
-      const v2TeacherMap = keyBy(v2Teachers, 'id')
+      const v2TeacherMap = _.keyBy(v2Teachers, 'id')
 
       await createPaymentItems(
         v2PaymentItems.map(pi => {

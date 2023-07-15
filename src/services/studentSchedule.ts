@@ -1,21 +1,21 @@
-import {Trxs} from "@/types/Trxs";
-import {findSiteInfo} from "@/v2models/siteInfo";
-import toSchoolId from "@/utils/toSchoolId";
-import {findTeachersByIds, TeacherV2} from "@/v2models/teachers";
-import config from "@/config";
-import {findAllStudentSchedules, getNumberOfStudentSchedule} from "@/v2models/studentSchedules";
-import {createStudentSchedules} from "@/v3models/studentSchedules";
-import generateUUID from "@/utils/generateUUID";
-import toStudentScheduleHashedId from "@/utils/toStudentScheduleHashedId";
-import {findStudentsByIds, StudentV2} from "@/v2models/students";
-import _, {keyBy} from "lodash";
-import toStudentId from "@/utils/toStudentId";
-import {CourseV2, findCoursesByIds} from "@/v2models/courses";
-import toClazzId from "@/utils/toClazzId";
-import toStudentScheduleType from "@/utils/toStudentScheduleType";
-import toTeacherId from "@/utils/toTeacherId";
-import v3db from "@/db/v3db";
-import {TeacherV3} from "@/v3models/teachers";
+import {Trxs} from "../types/Trxs.js";
+import {findSiteInfo} from "../v2models/siteInfo.js";
+import toSchoolId from "../utils/toSchoolId.js";
+import {findTeachersByIds, TeacherV2} from "../v2models/teachers.js";
+import config from "../config/index.js";
+import {findAllStudentSchedules, getNumberOfStudentSchedule} from "../v2models/studentSchedules.js";
+import {createStudentSchedules} from "../v3models/studentSchedules.js";
+import generateUUID from "../utils/generateUUID.js";
+import toStudentScheduleHashedId from "../utils/toStudentScheduleHashedId.js";
+import {findStudentsByIds, StudentV2} from "../v2models/students.js";
+import _ from "lodash";
+import toStudentId from "../utils/toStudentId.js";
+import {CourseV2, findCoursesByIds} from "../v2models/courses.js";
+import toClazzId from "../utils/toClazzId.js";
+import toStudentScheduleType from "../utils/toStudentScheduleType.js";
+import toTeacherId from "../utils/toTeacherId.js";
+import v3db from "../db/v3db.js";
+import {TeacherV3} from "../v3models/teachers.js";
 
 export default async (trxs: Trxs) => {
   console.info('轉移請假')
@@ -39,7 +39,7 @@ export default async (trxs: Trxs) => {
     const v2StudentSchedules = (await findAllStudentSchedules(config.chunkSize, i * config.chunkSize, trxs)).filter(s => !!s.studentId)
 
     const v2Students = await findStudentsByIds(Array.from(new Set(v2StudentSchedules.map(pi => pi.studentId))), trxs) as StudentV2[]
-    const v2StudentMap = keyBy(v2Students, 'id')
+    const v2StudentMap = _.keyBy(v2Students, 'id')
 
     const v2Courses = await findCoursesByIds(Array.from(new Set(v2StudentSchedules.map(a => a.courseId))), trxs) as CourseV2[]
     const v2CourseMap = _.keyBy(v2Courses, 'id')

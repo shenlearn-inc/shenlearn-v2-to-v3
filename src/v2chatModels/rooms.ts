@@ -1,7 +1,4 @@
-import snakecaseKeys from "snakecase-keys"
-import v3chatdb from "@/db/v3chatdb"
-import {Trxs} from "@/types/Trxs";
-import v2chatdb from "@/db/v2chatdb";
+import v2chatdb from "../db/v2chatdb.js";
 import camelcaseKeys from "camelcase-keys";
 
 export interface RoomV2 {

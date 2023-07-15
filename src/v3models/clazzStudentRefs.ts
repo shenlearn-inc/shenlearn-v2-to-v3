@@ -1,5 +1,5 @@
-import {Trxs} from "@/types/Trxs";
-import v3db from "@/db/v3db";
+import {Trxs} from "../types/Trxs.js";
+import v3db from "../db/v3db.js";;
 import snakecaseKeys from "snakecase-keys";
 
 export interface ClazzStudentRefV3 {

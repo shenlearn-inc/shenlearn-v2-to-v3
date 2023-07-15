@@ -1,21 +1,21 @@
-import generateUUID from "@/utils/generateUUID"
-import config from "@/config"
-import {findAllStudentParents} from "@/v2models/studentParents";
-import {createContactors} from "@/v3models/contactors";
-import {createSubContactors} from "@/v3models/subContactors";
-import {findSiteInfo} from "@/v2models/siteInfo";
-import {findStudentsByIds} from "@/v2models/students";
-import {keyBy} from "lodash";
-import {createRooms} from "@/v3chatModels/rooms";
-import {createRoomUserRefs} from "@/v3chatModels/roomUserRefs";
-import toStudentId from "@/utils/toStudentId";
-import toSubContactorChatRoomId from "@/utils/toSubContactorChatRoomId";
-import toContactorId from "@/utils/toContactorId";
-import toSchoolId from "@/utils/toSchoolId";
-import toStudentChatRoomId from "@/utils/toStudentChatRoomId";
-import {Trxs} from "@/types/Trxs";
-import {createUsers} from "@/v3chatModels/users";
-import {Site} from "@/types/Site";
+import generateUUID from "../utils/generateUUID.js";
+import config from "../config/index.js";
+import {findAllStudentParents} from "../v2models/studentParents.js";
+import {createContactors} from "../v3models/contactors.js";
+import {createSubContactors} from "../v3models/subContactors.js";
+import {findSiteInfo} from "../v2models/siteInfo.js";
+import {findStudentsByIds} from "../v2models/students.js";
+import _ from "lodash";
+import {createRooms} from "../v3chatModels/rooms.js";
+import {createRoomUserRefs} from "../v3chatModels/roomUserRefs.js";
+import toStudentId from "../utils/toStudentId.js";
+import toSubContactorChatRoomId from "../utils/toSubContactorChatRoomId.js";
+import toContactorId from "../utils/toContactorId.js";
+import toSchoolId from "../utils/toSchoolId.js";
+import toStudentChatRoomId from "../utils/toStudentChatRoomId.js";
+import {Trxs} from "../types/Trxs.js";
+import {createUsers} from "../v3chatModels/users.js";
+import {Site} from "../types/Site.js";
 
 export default async (site: Site, trxs: Trxs) => {
   console.info('轉移聯絡人資料')
@@ -30,7 +30,7 @@ export default async (site: Site, trxs: Trxs) => {
   const phoneNumbers = Array.from(new Set(studentParents.map(s => `${s.cellphoneInternationalPrefix}-${s.cellphone}`)))
   // 建立 contactor
   const handlerContactors = async () => {
-    const chunks = [];
+    const chunks = [] as any;
     const chunkSize = 100;
 
     for (let i = 0; i < phoneNumbers.length; i += chunkSize) {
@@ -75,7 +75,7 @@ export default async (site: Site, trxs: Trxs) => {
       };
     });
 
-    const chunks = [];
+    const chunks = [] as any;
     const chunkSize = 100;
 
     for (let i = 0; i < users.length; i += chunkSize) {
@@ -92,7 +92,7 @@ export default async (site: Site, trxs: Trxs) => {
 
   // 找出所屬學生
   const students = await findStudentsByIds(Array.from(new Set(studentParents.map(sp => sp.studentId))).filter(id => !!id) as number[], trxs)
-  const studentMap = keyBy(students, 'id')
+  const studentMap = _.keyBy(students, 'id')
   // 轉移子聯絡人
   for (const sp of studentParents) {
     const studentId = toStudentId(studentMap[sp.studentId!].hashedId)

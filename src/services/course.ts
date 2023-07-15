@@ -1,14 +1,14 @@
-import {findSiteInfo} from "@/v2models/siteInfo"
-import {findAllCourseCategories} from "@/v2models/courseCategories";
-import {createCourses} from "@/v3models/courses";
-import toCourseId from "@/utils/toCourseId";
-import toSchoolId from "@/utils/toSchoolId";
-import toCourseType from "@/utils/toCourseType";
-import generateUUID from "@/utils/generateUUID";
-import {Trxs} from "@/types/Trxs";
-import v3db from "@/db/v3db";
-import v2db from "@/db/v2db";
-import {Site} from "@/types/Site";
+import {findSiteInfo} from "../v2models/siteInfo.js"
+import {findAllCourseCategories} from "../v2models/courseCategories.js";
+import {createCourses} from "../v3models/courses.js";
+import toCourseId from "../utils/toCourseId.js";
+import toSchoolId from "../utils/toSchoolId.js";
+import toCourseType from "../utils/toCourseType.js";
+import generateUUID from "../utils/generateUUID.js";
+import {Trxs} from "../types/Trxs.js";
+import v3db from "../db/v3db.js";
+import v2db from "../db/v2db.js";
+import {Site} from "../types/Site.js";
 
 export default async (site: Site, trxs: Trxs) => {
   console.info('轉移課種資料')

@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "commonjs",
+    "module": "ES2020",
+    "moduleResolution": "node16",
     "preserveConstEnums": true,
-    "strict": true,
     "strictNullChecks": true,
     "noEmitHelpers": true,
     "importHelpers": true,
@@ -13,9 +13,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
+    "paths": {},
     "outDir": "dist"
   }
 }

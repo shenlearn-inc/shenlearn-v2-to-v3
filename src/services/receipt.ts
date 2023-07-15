@@ -1,20 +1,20 @@
-import {Trxs} from "@/types/Trxs";
-import {findSiteInfo} from "@/v2models/siteInfo";
-import {findAllReceipts, getNumberOfReceipt} from "@/v2models/receipts";
-import config from "@/config";
-import {createReceipts} from "@/v3models/receipts";
-import generateUUID from "@/utils/generateUUID";
-import toSchoolId from "@/utils/toSchoolId";
-import {findStudentsByIds} from "@/v2models/students";
-import {findTeachersByIds} from "@/v2models/teachers";
-import toTeacherId from "@/utils/toTeacherId";
-import toStudentId from "@/utils/toStudentId";
-import v2db from "@/db/v2db";
-import {ReceiptPaymentItemRefV2} from "@/v2models/receiptPaymentItemRefs";
-import v3db from "@/db/v3db";
-import {findPaymentItemsByIds} from "@/v2models/paymentItems";
+import {Trxs} from "../types/Trxs.js";
+import {findSiteInfo} from "../v2models/siteInfo.js";
+import {findAllReceipts, getNumberOfReceipt} from "../v2models/receipts.js";
+import config from "../config/index.js";
+import {createReceipts} from "../v3models/receipts.js";
+import generateUUID from "../utils/generateUUID.js";
+import toSchoolId from "../utils/toSchoolId.js";
+import {findStudentsByIds} from "../v2models/students.js";
+import {findTeachersByIds} from "../v2models/teachers.js";
+import toTeacherId from "../utils/toTeacherId.js";
+import toStudentId from "../utils/toStudentId.js";
+import v2db from "../db/v2db.js";
+import {ReceiptPaymentItemRefV2} from "../v2models/receiptPaymentItemRefs.js";
+import v3db from "../db/v3db.js";
+import {findPaymentItemsByIds} from "../v2models/paymentItems.js";
 import camelcaseKeys from "camelcase-keys";
-import {TeacherV3} from "@/v3models/teachers";
+import {TeacherV3} from "../v3models/teachers.js";
 
 export default async (trxs: Trxs) => {
   console.info('轉移收據')

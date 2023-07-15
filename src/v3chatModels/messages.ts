@@ -1,6 +1,6 @@
 import snakecaseKeys from "snakecase-keys"
-import v3chatdb from "@/db/v3chatdb"
-import {Trxs} from "@/types/Trxs";
+import v3chatdb from "../db/v3chatdb.js"
+import {Trxs} from "../types/Trxs.js";
 
 export interface MessageV3 {
   id: string

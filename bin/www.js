@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-const app = require('../dist/app')
+import app from "../dist/app.js"
 
-app.run()
+app()

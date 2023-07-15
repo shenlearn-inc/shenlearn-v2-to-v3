@@ -1,4 +1,4 @@
-import generateUUID from "@/utils/generateUUID"
+import generateUUID from "../utils/generateUUID.js"
 
 export default (v2StudentHashedId: string): string => {
   return generateUUID(`${v2StudentHashedId}_teachers-to-student`)

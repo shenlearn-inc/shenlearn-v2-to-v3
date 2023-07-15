@@ -1,7 +1,7 @@
-import v3db from "@/db/v3db"
+import v3db from "../db/v3db.js";
 import snakecaseKeys from "snakecase-keys"
 import camelcaseKeys from "camelcase-keys";
-import {Trxs} from "@/types/Trxs";
+import {Trxs} from "../types/Trxs.js";
 
 export interface CourseV3 {
   id: string

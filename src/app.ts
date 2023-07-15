@@ -1,30 +1,30 @@
-import v2db from "./db/v2db"
-import v3db from "./db/v3db"
-import v3chatdb from "@/db/v3chatdb"
-import config from "./config"
-import student from "@/services/student"
-import school from "@/services/school"
-import contactor from "@/services/contactor"
-import teacher from "@/services/teacher"
-import course from "@/services/course"
-import {Trxs} from "@/types/Trxs";
-import clazz from "@/services/clazz";
-import clazzRef from "@/services/clazzRef";
-import teacherAndStudentChatRoomRefs from "@/services/teacherAndStudentChatRoomRefs";
-import lesson from "@/services/lesson";
-import payment from "@/services/payment";
-import receipt from "@/services/receipt";
-import attendance from "@/services/attendance";
-import studentSchedule from "@/services/studentSchedule";
-import clear from "@/services/clear";
-import credit from "@/services/credit";
-import chat from "@/services/chat";
-import signDevice from "@/services/signDevice";
-import announcement from "@/services/announcement";
-import clazzDiaries from "@/services/clazzDiaries";
-import exam from "@/services/exam";
-import studentDiary from "@/services/studentDiary";
-import v2chatdb from "@/db/v2chatdb";
+import v2db from "./db/v2db.js"
+import v3db from "./db/v3db.js"
+import v3chatdb from "./db/v3chatdb.js"
+import config from "./config/index.js"
+import student from "./services/student.js"
+import school from "./services/school.js"
+import contactor from "./services/contactor.js"
+import teacher from "./services/teacher.js"
+import course from "./services/course.js"
+import {Trxs} from "./types/Trxs.js";
+import clazz from "./services/clazz.js";
+import clazzRef from "./services/clazzRef.js";
+import teacherAndStudentChatRoomRefs from "./services/teacherAndStudentChatRoomRefs.js";
+import lesson from "./services/lesson.js";
+import payment from "./services/payment.js";
+import receipt from "./services/receipt.js";
+import attendance from "./services/attendance.js";
+import studentSchedule from "./services/studentSchedule.js";
+import clear from "./services/clear.js";
+import credit from "./services/credit.js";
+import chat from "./services/chat.js";
+import signDevice from "./services/signDevice.js";
+import announcement from "./services/announcement.js";
+import clazzDiaries from "./services/clazzDiaries.js";
+import exam from "./services/exam.js";
+import studentDiary from "./services/studentDiary.js";
+import v2chatdb from "./db/v2chatdb.js";
 
 export const run = async (): Promise<void> => {
   for (const site of config.sites) {
@@ -114,3 +114,4 @@ export const run = async (): Promise<void> => {
     console.info(`${site.name} migration done, time elapsed: ${(new Date().getTime() - startTime) / 1000}s`)
   }
 }
+export default run

@@ -1,15 +1,15 @@
-import {Trxs} from "@/types/Trxs";
-import v3db from "@/db/v3db";
-import v2db from "@/db/v2db";
-import {TeacherV2} from "@/v2models/teachers";
-import toTeacherId from "@/utils/toTeacherId";
-import {createRoomUserRefs} from "@/v3chatModels/roomUserRefs";
-import generateUUID from "@/utils/generateUUID";
-import {differenceWith, keyBy} from 'lodash'
-import {StudentV3} from "@/v3models/students";
-import {SubContactorV3} from "@/v3models/subContactors";
-import {findSiteInfo} from "@/v2models/siteInfo";
-import toSchoolId from "@/utils/toSchoolId";
+import {Trxs} from "../types/Trxs.js";
+import v3db from "../db/v3db.js";
+import v2db from "../db/v2db.js";
+import {TeacherV2} from "../v2models/teachers.js";
+import toTeacherId from "../utils/toTeacherId.js";
+import {createRoomUserRefs} from "../v3chatModels/roomUserRefs.js";
+import generateUUID from "../utils/generateUUID.js";
+import _ from 'lodash';
+import {StudentV3} from "../v3models/students.js";
+import {SubContactorV3} from "../v3models/subContactors.js";
+import {findSiteInfo} from "../v2models/siteInfo.js";
+import toSchoolId from "../utils/toSchoolId.js";
 import camelcaseKeys from "camelcase-keys";
 
 export default async (trxs: Trxs) => {
@@ -38,7 +38,7 @@ export default async (trxs: Trxs) => {
       .whereNull('deleted_at')
       .transacting(trxs.v3db)
   )
-  const studentMap = keyBy(students, 'id')
+  const studentMap = _.keyBy(students, 'id')
   const subContactors = students.length
     ? camelcaseKeys(
       await v3db()
@@ -127,7 +127,7 @@ export default async (trxs: Trxs) => {
         .whereIn('id', Array.from(new Set(refs.map(r => r.studentId))))
         .transacting(trxs.v3db))
     ) as StudentV3[]
-    const studentMap = keyBy(students, 'id')
+    const studentMap = _.keyBy(students, 'id')
 
     await createRoomUserRefs(
       refs.map(r => {

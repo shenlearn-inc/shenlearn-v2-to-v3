@@ -1,16 +1,16 @@
-import {findSiteInfo} from "@/v2models/siteInfo"
-import {findAllTeachers} from "@/v2models/teachers";
-import {createTeachers} from "@/v3models/teachers";
-import toTeacherId from "@/utils/toTeacherId";
-import {randomBytes} from "crypto"
-import argon2 from "argon2"
-import config from "@/config"
-import toSchoolId from "@/utils/toSchoolId";
-import toRoleId from "@/utils/toRoleId";
-import {Trxs} from "@/types/Trxs";
-import {createUsers} from "@/v3chatModels/users";
-import generateUUID from "@/utils/generateUUID";
-import {Site} from "@/types/Site";
+import {findSiteInfo} from "../v2models/siteInfo.js";
+import {findAllTeachers} from "../v2models/teachers.js";
+import {createTeachers} from "../v3models/teachers.js";
+import toTeacherId from "../utils/toTeacherId.js";
+import {randomBytes} from "crypto";
+import argon2 from "argon2";
+import config from "../config/index.js";
+import toSchoolId from "../utils/toSchoolId.js";
+import toRoleId from "../utils/toRoleId.js";
+import {Trxs} from "../types/Trxs.js";
+import {createUsers} from "../v3chatModels/users.js";
+import generateUUID from "../utils/generateUUID.js";
+import {Site} from "../types/Site.js";
 
 // 轉移老師資料
 export default async (site: Site, trxs: Trxs) => {

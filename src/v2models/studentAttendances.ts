@@ -1,5 +1,5 @@
-import {Trxs} from "@/types/Trxs";
-import v2db from "@/db/v2db";
+import {Trxs} from "../types/Trxs.js";
+import v2db from "../db/v2db.js";
 import camelcaseKeys from "camelcase-keys";
 
 export interface StudentAttendanceV2 {

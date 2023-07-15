@@ -1,22 +1,21 @@
-import {Trxs} from "@/types/Trxs";
-import {findAllExams} from "@/v2models/exams";
-import generateUUID from "@/utils/generateUUID";
-import {findSiteInfo} from "@/v2models/siteInfo";
-import toSchoolId from "@/utils/toSchoolId";
-import {findCoursesByIds} from "@/v2models/courses";
-import {keyBy} from "lodash"
-import toClazzId from "@/utils/toClazzId";
-import {findTeachersByIds, TeacherV2} from "@/v2models/teachers";
-import toTeacherId from "@/utils/toTeacherId";
-import v2db from "@/db/v2db";
-import {createExams} from "@/v3models/exams";
-import {findStudentsByIds, StudentV2} from "@/v2models/students";
-import {findScoresByExamId} from "@/v2models/scores";
-import toStudentId from "@/utils/toStudentId";
-import {createScores} from "@/v3models/scores";
-import toScoreId from "@/utils/toScoreId";
-import v3db from "@/db/v3db";
-import {TeacherV3} from "@/v3models/teachers";
+import {Trxs} from "../types/Trxs.js";
+import {findAllExams} from "../v2models/exams.js";
+import generateUUID from "../utils/generateUUID.js";
+import {findSiteInfo} from "../v2models/siteInfo.js";
+import toSchoolId from "../utils/toSchoolId.js";
+import {findCoursesByIds} from "../v2models/courses.js";
+import _ from "lodash"
+import toClazzId from "../utils/toClazzId.js";
+import {findTeachersByIds} from "../v2models/teachers.js";
+import toTeacherId from "../utils/toTeacherId.js";
+import {createExams} from "../v3models/exams.js";
+import {findStudentsByIds, StudentV2} from "../v2models/students.js";
+import {findScoresByExamId} from "../v2models/scores.js";
+import toStudentId from "../utils/toStudentId.js";
+import {createScores} from "../v3models/scores.js";
+import toScoreId from "../utils/toScoreId.js";
+import v3db from "../db/v3db.js";
+import {TeacherV3} from "../v3models/teachers.js";
 
 export default async (trxs: Trxs) => {
   console.info('轉移考試資料')
@@ -36,10 +35,10 @@ export default async (trxs: Trxs) => {
   const exams = await findAllExams(Number.MAX_SAFE_INTEGER, 0, trxs)
 
   const v2Courses = await findCoursesByIds(exams.map(c => c.courseId), trxs)
-  const v2CourseMap = keyBy(v2Courses, 'id')
+  const v2CourseMap = _.keyBy(v2Courses, 'id')
 
   const v2Teachers = await findTeachersByIds(exams.map(c => c.teacherId), trxs)
-  const v2TeacherMap = keyBy(v2Teachers, 'id')
+  const v2TeacherMap = _.keyBy(v2Teachers, 'id')
 
   for (const exam of exams) {
     const examId = generateUUID(exam.hashedId)
@@ -63,7 +62,7 @@ export default async (trxs: Trxs) => {
 
     // 找出學生
     const v2Students = await findStudentsByIds(Array.from(new Set(v2Scores.map(s => s.studentId))), trxs) as StudentV2[]
-    const v2StudentMap = keyBy(v2Students, 'id')
+    const v2StudentMap = _.keyBy(v2Students, 'id')
 
     // 建立成績
     await createScores(
