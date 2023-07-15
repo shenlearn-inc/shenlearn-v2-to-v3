@@ -25,6 +25,7 @@ export const findAllNotAttendedStudentAttendances = async (limit: number, offset
     .whereNull('left_at')
     .limit(limit ?? Number.MAX_SAFE_INTEGER)
     .offset(offset ?? 0)
+    .orderBy('created_at')
     .transacting(trxs.v2db)
 
   return camelcaseKeys(await query)
