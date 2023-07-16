@@ -38,7 +38,7 @@ export default async (site: Site, trxs: Trxs) => {
       const c = v2CourseCategories[i];
       let courseCategoryHashedId = c.hashedId;
       do {
-        isExisted = await v3db().first().from("courses").where("id", toCourseId(c.hashedId)).transacting(trxs.v3db);
+        isExisted = await v3db().first().from("courses").where("id", toCourseId(courseCategoryHashedId)).transacting(trxs.v3db);
         if (isExisted) {
           // 產出新 hashedId
           courseCategoryHashedId = c.hashedId + "00000";
