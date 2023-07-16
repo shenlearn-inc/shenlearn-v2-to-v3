@@ -14,6 +14,7 @@ import camelcaseKeys from "camelcase-keys";
 import {findStudentsByIds} from "../v2models/students.js";
 import toStudentId from "../utils/toStudentId.js";
 import {createAnnouncementStudentRefs} from "../v3models/announcementStudentRefs.js";
+import moment from "moment";
 
 const sendModeToMethod = (sendMode: string) => {
   switch (sendMode) {
@@ -122,9 +123,9 @@ export default async (trxs: Trxs) => {
       schoolId: toSchoolId(siteInfoV2.hashedId),
       method: sendModeToMethod(notification.sendMode),
       additionalCharge: notification.smsCount ?? 0,
-      createdAt: notification?.createdAt ?? new Date(),
-      publishedAt: notification?.createdAt ?? new Date(),
-      updatedAt: notification?.updatedAt ?? new Date(),
+      createdAt: !!notification?.createdAt && moment(notification?.createdAt).isValid() ? notification?.createdAt : new Date(),
+      publishedAt: !!notification?.createdAt && moment(notification?.createdAt).isValid() ? notification?.createdAt : new Date(),
+      updatedAt: !!notification?.updatedAt && moment(notification?.updatedAt).isValid() ? notification?.updatedAt : new Date(),
       deletedAt: notification.deletedAt,
     }
     await createAnnouncements([announcement as any], trxs);
