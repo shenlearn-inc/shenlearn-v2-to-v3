@@ -24,22 +24,30 @@ const roles = {
 export default {
   // !必改
   sites: [
-    // {
-    //   name: 'montessori',
-    //   organizationId: "e719c19a-f6c5-40e3-9165-ba72863bc0f8",
-    //   planId: plans.flag,
-    //   roles: roles.flag,
-    //   isDeleteContactor: false,
-    //   isHandleDuplicateHashedId: false,
-    // },
     {
-      name: 'alltruesh',
-      organizationId: "84063c50-e529-4a94-a9a2-cf53bd1440ff",
+      name: 'montessori',
+      organizationId: "e719c19a-f6c5-40e3-9165-ba72863bc0f8",
       planId: plans.flag,
       roles: roles.flag,
       isDeleteContactor: false,
       isHandleDuplicateHashedId: false,
     },
+    {
+      name: 'homewinchampty',
+      organizationId: "20c67d22-ed43-400e-bf53-19c8151f3028",
+      planId: plans.flag,
+      roles: roles.flag,
+      isDeleteContactor: false,
+      isHandleDuplicateHashedId: false,
+    },
+    // {
+    //   name: 'alltruesh',
+    //   organizationId: "84063c50-e529-4a94-a9a2-cf53bd1440ff",
+    //   planId: plans.flag,
+    //   roles: roles.flag,
+    //   isDeleteContactor: false,
+    //   isHandleDuplicateHashedId: false,
+    // },
   ] as Site[],
 
   // !必改
