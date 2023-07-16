@@ -48,7 +48,7 @@ export default async (site: Site, trxs: Trxs) => {
       v2CourseCategories[i].hashedId = courseCategoryHashedId
       await createCourses([
         {
-          id: toCourseId(v2CourseCategories[i].hashedId),
+          id: toCourseId(courseCategoryHashedId),
           schoolId: toSchoolId(siteInfoV2.hashedId),
           name: c.name ?? '',
           remark: c.remark ?? '',
