@@ -41,7 +41,7 @@ export default async (site: Site, trxs: Trxs) => {
         isExisted = await v3db().first().from("courses").where("id", toCourseId(courseCategoryHashedId)).transacting(trxs.v3db);
         if (isExisted) {
           // 產出新 hashedId
-          courseCategoryHashedId = c.hashedId + "00000";
+          courseCategoryHashedId = courseCategoryHashedId + "00000";
         }
       } while (isExisted);
       await v2db().from("course_categories").update({ hashed_id: courseCategoryHashedId }).where({ id: c.id }).transacting(trxs.v2db)
