@@ -38,7 +38,7 @@ export default {
       planId: plans.flag,
       roles: roles.flag,
       isDeleteContactor: false,
-      isHandleDuplicateHashedId: false,
+      isHandleDuplicateHashedId: true,
     },
     // {
     //   name: 'alltruesh',
