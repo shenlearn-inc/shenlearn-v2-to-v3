@@ -16,6 +16,7 @@ import {createScores} from "../v3models/scores.js";
 import toScoreId from "../utils/toScoreId.js";
 import v3db from "../db/v3db.js";
 import {TeacherV3} from "../v3models/teachers.js";
+import toCourseId from "../utils/toCourseId";
 
 export default async (trxs: Trxs) => {
   console.info('轉移考試資料')
@@ -41,7 +42,7 @@ export default async (trxs: Trxs) => {
   const v2TeacherMap = _.keyBy(v2Teachers, 'id')
 
   for (const exam of exams) {
-    const examId = generateUUID(exam.hashedId)
+    const examId = generateUUID(exam.hashedId + "00000")
     await createExams(
       [{
         id: examId,
@@ -67,7 +68,7 @@ export default async (trxs: Trxs) => {
     // 建立成績
     await createScores(
       v2Scores.filter(s => s.studentId in v2StudentMap).map(s => {
-        const id = toScoreId(s.hashedId)
+        const id = toScoreId(s.hashedId + "00000")
         const studentId = toStudentId(v2StudentMap[s.studentId].hashedId)
 
         return {
