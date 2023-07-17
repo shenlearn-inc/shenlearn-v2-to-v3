@@ -16,7 +16,6 @@ import {createScores} from "../v3models/scores.js";
 import toScoreId from "../utils/toScoreId.js";
 import v3db from "../db/v3db.js";
 import {TeacherV3} from "../v3models/teachers.js";
-import toCourseId from "../utils/toCourseId";
 
 export default async (trxs: Trxs) => {
   console.info('轉移考試資料')
