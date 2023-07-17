@@ -53,7 +53,7 @@ export default async (trxs: Trxs) => {
         const clazzId = toClazzId(v2CourseMap[s.courseId].hashedId)
         const type = toStudentScheduleType(s.event)
         return {
-          id: generateUUID(s.hashedId),
+          id: generateUUID(s.hashedId + "00000"),
           schoolId: schoolId,
           hashedId: toStudentScheduleHashedId(studentId, clazzId, type, s.handleAt.toISOString().slice(0, 10)),
           studentId,
