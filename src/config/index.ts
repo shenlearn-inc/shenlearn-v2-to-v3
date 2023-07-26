@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'
 import {Site} from "../types/Site.js";
+import {padStart} from "lodash";
 
 dotenv.config()
 
@@ -24,31 +25,15 @@ const roles = {
 export default {
   // !必改
   sites: [
-    // {
-    //   name: 'montessori',
-    //   organizationId: "e719c19a-f6c5-40e3-9165-ba72863bc0f8",
-    //   planId: plans.flag,
-    //   roles: roles.flag,
-    //   isDeleteContactor: false,
-    //   isHandleDuplicateHashedId: false,
-    // },
-    {
-      name: 'homewinchampty',
-      organizationId: "20c67d22-ed43-400e-bf53-19c8151f3028",
-      planId: plans.flag,
-      roles: roles.flag,
-      isDeleteContactor: false,
-      isHandleDuplicateHashedId: true,
-    },
-    // {
-    //   name: 'alltruesh',
-    //   organizationId: "84063c50-e529-4a94-a9a2-cf53bd1440ff",
-    //   planId: plans.flag,
-    //   roles: roles.flag,
-    //   isDeleteContactor: false,
-    //   isHandleDuplicateHashedId: false,
-    // },
-  ] as Site[],
+    "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15",
+  ].map((num) => ({
+    name: `fanghuads${num}`,
+    organizationId: "24c99882-3cb7-4bfa-b8ff-63f2ae07ae8a",
+    planId: plans.flag,
+    roles: roles.flag,
+    isDeleteContactor: false,
+    isHandleDuplicateHashedId: false,
+  })) as Site[],
 
   // !必改
   // 莘莘集團
