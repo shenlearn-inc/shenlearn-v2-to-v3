@@ -102,7 +102,7 @@ export default async (site: Site, trxs: Trxs) => {
       signDeviceId: studentTerminal.terminalName,
       createdAt: studentTerminal.createdAt.toISOString(),
       updatedAt: studentTerminal.updatedAt.toISOString(),
-      deletedAt: studentTerminal.updatedAt ? studentTerminal.updatedAt.toISOString() : null,
+      deletedAt: studentTerminal.deletedAt ? studentTerminal.deletedAt.toISOString() : null,
     }], trxs);
   }
 }
