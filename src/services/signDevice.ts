@@ -98,6 +98,7 @@ export default async (site: Site, trxs: Trxs) => {
       id: generateUUID(),
       personId: toStudentId(v2student.hashedId),
       personType: "student",
+      schoolId,
       pin: studentTerminal.pin,
       signDeviceId: studentTerminal.terminalName,
       createdAt: studentTerminal.createdAt.toISOString(),
