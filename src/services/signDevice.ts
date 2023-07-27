@@ -49,7 +49,7 @@ export default async (site: Site, trxs: Trxs) => {
       .where("site_id", schoolId)
       .whereNull("deleted_at")
   );
-  const terminalMap = _.keyBy(terminals, "terminal_name");
+  const terminalMap = _.keyBy(terminals, "terminalName");
 
   const devices = Object.values(terminalMap).map((terminal) => snakecaseKeys({
     id: terminal.terminalName,
