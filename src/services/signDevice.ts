@@ -102,7 +102,7 @@ export default async (site: Site, trxs: Trxs) => {
       pin: studentTerminal.pin,
       signDeviceId: studentTerminal.terminalName,
       createdAt: studentTerminal.createdAt ? (studentTerminal.createdAt as any) === "0000-00-00 00:00:00" ? new Date().toISOString() : studentTerminal.createdAt.toISOString() : new Date().toISOString(),
-      updatedAt: studentTerminal.updatedAt.toISOString(),
+      updatedAt: studentTerminal.updatedAt ? (studentTerminal.updatedAt as any) === "0000-00-00 00:00:00" ? new Date().toISOString() : studentTerminal.updatedAt.toISOString() : new Date().toISOString(),
       deletedAt: studentTerminal.deletedAt ? (studentTerminal.deletedAt as any) === "0000-00-00 00:00:00" ? null : studentTerminal.deletedAt.toISOString() : null,
     }], trxs);
   }
