@@ -7,6 +7,7 @@ interface PersonSignPinV3 {
   id: string;
   personId: string;
   personType: "student" | "teacher";
+  schoolId: string;
   pin: string | null;
   signDeviceId: string;
   createdAt: string;
