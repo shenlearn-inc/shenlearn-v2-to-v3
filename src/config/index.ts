@@ -25,15 +25,79 @@ const roles = {
 export default {
   // !必改
   sites: [
-    "15", "14", "13", "12", "11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01",
-  ].map((num) => ({
-    name: `fanghuads${num}`,
-    organizationId: "24c99882-3cb7-4bfa-b8ff-63f2ae07ae8a",
-    planId: plans.flag,
-    roles: roles.flag,
-    isDeleteContactor: false,
-    isHandleDuplicateHashedId: false,
-  })) as Site[],
+    {
+      name: `dsm22216277`,
+      organizationId: "a7f30f6e-b7d3-4ae3-add9-03535b443023",
+      planId: plans.flag,
+      roles: roles.flag,
+      isDeleteContactor: false,
+      isHandleDuplicateHashedId: false,
+    },
+    {
+      name: `dsm22216677`,
+      organizationId: "a7f30f6e-b7d3-4ae3-add9-03535b443023",
+      planId: plans.flag,
+      roles: roles.flag,
+      isDeleteContactor: false,
+      isHandleDuplicateHashedId: false,
+    },
+    {
+      name: `dsm22260260`,
+      organizationId: "a7f30f6e-b7d3-4ae3-add9-03535b443023",
+      planId: plans.flag,
+      roles: roles.flag,
+      isDeleteContactor: false,
+      isHandleDuplicateHashedId: false,
+    },
+    {
+      name: `dsm22975666`,
+      organizationId: "a7f30f6e-b7d3-4ae3-add9-03535b443023",
+      planId: plans.flag,
+      roles: roles.flag,
+      isDeleteContactor: false,
+      isHandleDuplicateHashedId: false,
+    },
+    {
+      name: `dsm23179210`,
+      organizationId: "a7f30f6e-b7d3-4ae3-add9-03535b443023",
+      planId: plans.flag,
+      roles: roles.flag,
+      isDeleteContactor: false,
+      isHandleDuplicateHashedId: false,
+    },
+    {
+      name: `dsm25131077`,
+      organizationId: "a7f30f6e-b7d3-4ae3-add9-03535b443023",
+      planId: plans.flag,
+      roles: roles.flag,
+      isDeleteContactor: false,
+      isHandleDuplicateHashedId: false,
+    },
+    {
+      name: `dsm7275699`,
+      organizationId: "a7f30f6e-b7d3-4ae3-add9-03535b443023",
+      planId: plans.flag,
+      roles: roles.flag,
+      isDeleteContactor: false,
+      isHandleDuplicateHashedId: false,
+    },
+    {
+      name: `dsm8326767`,
+      organizationId: "a7f30f6e-b7d3-4ae3-add9-03535b443023",
+      planId: plans.flag,
+      roles: roles.flag,
+      isDeleteContactor: false,
+      isHandleDuplicateHashedId: false,
+    },
+    {
+      name: `alltrueshaoyang`,
+      organizationId: "84063c50-e529-4a94-a9a2-cf53bd1440ff",
+      planId: plans.flag,
+      roles: roles.flag,
+      isDeleteContactor: false,
+      isHandleDuplicateHashedId: false,
+    }
+  ] as Site[],
 
   // !必改
   // 莘莘集團
