@@ -15,6 +15,7 @@ import generateUUID from "../utils/generateUUID.js";
 import v2chatdb from "../db/v2chatdb.js";
 import v3db from "../db/v3db.js";
 import {Site} from "../types/Site.js";
+import toDateStr from "../utils/toDateStr";
 
 export default async (site: Site, trxs: Trxs) => {
   console.info('轉移學生資料')
@@ -80,7 +81,7 @@ export default async (site: Site, trxs: Trxs) => {
         avatarUrl: s.imageUrl,
         status: s.status ? 'active' : 'inactive',
         cardNo: s.cardId,
-        dateOfBirth: s.birthday?.toISOString().slice(0, 10) ?? null,
+        dateOfBirth: toDateStr(s.birthday),
         cellphonePrefix: s.cellphoneInternationalPrefix,
         cellphone: s.cellphone,
         telephonePrefix: s.telephoneInternationalPrefix,
