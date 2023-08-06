@@ -45,6 +45,9 @@ export default async (site: Site, trxs: Trxs) => {
     if (site?.isHandleDuplicateHashedId) {
       for (let i = 0; i < inclassCourses.length; i++) {
         const c = inclassCourses[i];
+        if (!(c.courseId in v2CourseMap)) {
+          continue;
+        }
         const isExisted = await v3db().first().from("lessons").where("id", generateUUID(c.hashedId)).transacting(trxs.v3db)
         if (isExisted) {
           // 產出新 hashedId
@@ -73,7 +76,7 @@ export default async (site: Site, trxs: Trxs) => {
     } else {
       // 轉移課堂
       await createLessons(
-        inclassCourses.map(c => {
+        inclassCourses.filter((c) => c.courseId in v2CourseMap).map(c => {
           return {
             id: generateUUID(c.hashedId),
             schoolId: toSchoolId(siteInfoV2.hashedId),
