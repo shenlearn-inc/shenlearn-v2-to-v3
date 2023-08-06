@@ -18,6 +18,7 @@ import toLessonId from "../utils/toLessonId.js";
 import toCreditId from "../utils/toCreditId.js";
 import v3db from "../db/v3db.js";
 import {TeacherV3} from "../v3models/teachers.js";
+import toValidDateObj from "../utils/toValidDateObj.js";
 
 export default async (trxs: Trxs) => {
   console.info('轉移堂次')
@@ -80,9 +81,9 @@ export default async (trxs: Trxs) => {
           reason: c.reason ?? '',
           count: c.count ?? 0,
           remark: c.remark ?? '',
-          createdAt: c.createdAt ?? new Date(),
-          updatedAt: c.updatedAt ?? new Date(),
-          deletedAt: c.deletedAt,
+          createdAt: toValidDateObj(c.createdAt) ?? new Date(),
+          updatedAt: toValidDateObj(c.updatedAt) ?? new Date(),
+          deletedAt: toValidDateObj(c.deletedAt),
         }
       }),
       trxs,
