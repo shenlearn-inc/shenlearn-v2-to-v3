@@ -7,7 +7,7 @@ import generateUUID from "../utils/generateUUID.js";
 import toSchoolId from "../utils/toSchoolId.js";
 import {createPaymentRoots} from "../v3models/paymentRoots.js";
 import v2db from "../db/v2db.js";
-import {findServiceTeacher, findTeachersByIds, TeacherV2} from "../v2models/teachers.js";
+import {findTeachersByIds, TeacherV2} from "../v2models/teachers.js";
 import toTeacherId from "../utils/toTeacherId.js";
 import {createPaymentItems} from "../v3models/paymentItems.js";
 import toPaymentId from "../utils/toPaymentId.js";
@@ -89,18 +89,17 @@ export default async (trxs: Trxs) => {
       const v2StudentMap = _.keyBy(v2Students, 'id')
 
       const v2Teachers = await findTeachersByIds(Array.from(new Set(v2PaymentItems.filter(pi => !!pi.teacherId).map(pi => pi.teacherId) as number[])), trxs) as TeacherV2[]
-      const serviceTeacher = await findServiceTeacher(trxs);
       const v2TeacherMap = _.keyBy(v2Teachers, 'id')
 
       await createPaymentItems(
         v2PaymentItems.map(pi => {
-
+          const teacherId = pi.teacherId! in v2TeacherMap ? toTeacherId(v2TeacherMap[pi.teacherId!].hashedId) : serviceDirector.id
           return {
             id: toPaymentId(pi.hashedId),
             schoolId: schoolId,
             paymentId: paymentId,
             studentId: toStudentId(v2StudentMap[pi.studentId].hashedId),
-            teacherId: toTeacherId(pi.teacherId! in v2TeacherMap ? v2TeacherMap[pi.teacherId!].hashedId : serviceTeacher.hashedId),
+            teacherId: teacherId,
             name: v2Payment.name ?? '',
             price: pi.price ?? 0,
             remark: pi.remark ?? '',
