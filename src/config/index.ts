@@ -25,7 +25,7 @@ const roles = {
 export default {
   // !必改
   sites: [
-    // 'rulinty',
+    'rulinty',
     'gailenglishnew',
     'chiaoyangdayeh',
     'chiaoyangdayou',
@@ -114,7 +114,7 @@ export default {
     planId: plans.pro,
     roles: roles.pro,
     isDeleteContactor: false,
-    isHandleDuplicateHashedId: false,
+    isHandleDuplicateHashedId: true,
   })) as Site[],
 
   // !必改
