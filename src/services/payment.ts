@@ -54,9 +54,9 @@ const handlePayment = async ({ schoolId, v2Payment, serviceDirector, trxs }) => 
     endedDate: toValidDateObj(v2Payment.endedAt)?.toISOString().slice(0, 10) ?? null,
     courseId: null,
     creditCount: null,
-    createdAt: v2Payment.createdAt ?? new Date(),
-    updatedAt: v2Payment.updatedAt ?? new Date(),
-    deletedAt: v2Payment.deletedAt,
+    createdAt: toValidDateObj(v2Payment.createdAt) ?? new Date(),
+    updatedAt: toValidDateObj(v2Payment.updatedAt) ?? new Date(),
+    deletedAt: toValidDateObj(v2Payment.deletedAt),
   }], trxs)
 
   // Payment item
@@ -86,9 +86,9 @@ const handlePayment = async ({ schoolId, v2Payment, serviceDirector, trxs }) => 
         price: pi.price ?? 0,
         remark: pi.remark ?? '',
         isPublic: !!pi.isPublic,
-        deadlineDate: toDateStr(pi.deadlineAt),
-        startedDate: toDateStr(pi.startedAt),
-        endedDate: toDateStr(pi.endedAt),
+        deadlineDate: toValidDateObj(pi.deadlineAt)?.toISOString().slice(0, 10) ?? null,
+        startedDate: toValidDateObj(pi.startedAt)?.toISOString().slice(0, 10) ?? null,
+        endedDate: toValidDateObj(pi.endedAt)?.toISOString().slice(0, 10) ?? null,
         receiptId: null,
         courseId: null,
         creditCount: null,
