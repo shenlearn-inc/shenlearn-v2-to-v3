@@ -188,7 +188,7 @@ const handleStudentAttendance = async ({
           j = -1;
         }
       } else if (i === studentSignIns.length - 1) {
-        attendances = v2StudentAttendances.map(a => ({
+        attendances = v2StudentAttendances.filter(a => a.courseId in v2CourseMap).map(a => ({
           id: generateUUID(a.hashedId),
           schoolId: schoolId,
           clazzId: toClazzId(v2CourseMap[a.courseId].hashedId),

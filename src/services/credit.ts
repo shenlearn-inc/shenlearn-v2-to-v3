@@ -67,7 +67,7 @@ export default async (trxs: Trxs) => {
     // 檢查 courseCategoryId 是否為 null
     v2Credits.forEach(c => {
       const category = getV2CourseCategoryByV2CourseId(c.courseId);
-      if (!category) throw new Error(`轉移堂次 id: ${c.id} 發生錯誤，課堂班級找不到相對應課種`)
+      if (!category) throw new Error(`轉移堂次 id: ${c.id}, ${c.courseId} 發生錯誤，課堂班級找不到相對應課種`)
     })
 
     await createCredits(
