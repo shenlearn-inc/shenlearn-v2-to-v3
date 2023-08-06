@@ -46,10 +46,10 @@ export default {
     // 'chengguang',
     // 'newtoeic',
 
-    'chushin02',
-    'tachih',
-    'pochuan',
-    'huangs88',
+    // 'chushin02',
+    // 'tachih',
+    // 'pochuan',
+    // 'huangs88',
     'guantengnew',
     'sowaclass',
     'shinhenew',
@@ -72,11 +72,13 @@ export default {
     'giraffefive',
     'taiattd3255050',
     'jingwennew',
+
     // 'zhengyinew',
     // 'muchaartnew',
     // 'tplsnew',
     // 'muchaart1new',
     // 'kidcastle01',
+
     // 'wangshihnew',
     // 'dsedunew',
     // 'knockknock',

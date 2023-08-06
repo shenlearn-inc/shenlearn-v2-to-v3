@@ -4,7 +4,7 @@ import {findAllCourses} from "../v2models/courses.js";
 import toClazzId from "../utils/toClazzId.js";
 import {createClazzes} from "../v3models/clazzes.js";
 import {findCourseCategoriesByIds} from "../v2models/courseCategories.js";
-import _ from "lodash"
+import _, {countBy} from "lodash"
 import toCourseId from "../utils/toCourseId.js";
 import toAttendMode from "../utils/toAttendMode.js";
 import {findInitCourse} from "../v3models/courses.js";
@@ -88,6 +88,9 @@ export default async (site: Site, trxs: Trxs) => {
   if (site?.isHandleDuplicateHashedId) {
     for (let i = 0; i < v2CourseTimes.length; i++) {
       const ct = v2CourseTimes[i];
+      if (!(ct.courseId in v2CourseMap)) {
+        continue;
+      }
       const date = weekdayToDate(ct.weekday)
       const isExisted = await v3db().first().from("clazz_times").where("id", generateUUID(ct.hashedId)).transacting(trxs.v3db)
       if (isExisted) {
