@@ -20,6 +20,8 @@ import toValidDateObj from "../utils/toValidDateObj.js";
 import PQueue from "p-queue";
 
 const handleExam = async ({ exam, siteInfoV2, v2CourseMap, v2TeacherMap, serviceDirector, trxs }) => {
+  const startTime = new Date().getTime();
+
   const examId = generateUUID(exam.hashedId + "00000")
   if (!(exam.courseId in v2CourseMap)) {
     return;
@@ -65,6 +67,8 @@ const handleExam = async ({ exam, siteInfoV2, v2CourseMap, v2TeacherMap, service
     }),
     trxs,
   )
+
+  console.info(`已處理考試 ${exam.hashedId}, time elapsed: ${(new Date().getTime() - startTime) / 1000}s`)
 }
 
 export default async (trxs: Trxs) => {
