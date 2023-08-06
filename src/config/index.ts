@@ -25,7 +25,7 @@ const roles = {
 export default {
   // !必改
   sites: [
-    'rulinty',
+    // 'rulinty',
     'gailenglishnew',
     'chiaoyangdayeh',
     'chiaoyangdayou',
