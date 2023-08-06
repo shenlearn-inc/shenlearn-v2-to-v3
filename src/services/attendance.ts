@@ -25,7 +25,7 @@ import {TeacherV3} from "../v3models/teachers.js";
 import toLessonId from "../utils/toLessonId.js";
 import {Site} from "../types/Site.js";
 import PQueue from "p-queue";
-import config from "../config/index.js";
+import toValidDateObj from "../utils/toValidDateObj.js";
 
 interface HandleStudentAttendanceProps {
   v2Student: StudentV2
@@ -133,8 +133,8 @@ const handleStudentAttendance = async ({
         endedAt: i === 0 ? null : studentSignOuts[i - 1]?.createdAt ?? new Date(),
         enderId: v2TeacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[v2TeacherId].hashedId) : null,
         enderType: null,
-        createdAt: studentSignIns[i].createdAt ?? new Date(),
-        updatedAt: studentSignIns[i].updatedAt ?? new Date(),
+        createdAt: toValidDateObj(studentSignIns[i].createdAt) ?? new Date(),
+        updatedAt: toValidDateObj(studentSignIns[i].updatedAt) ?? new Date(),
         deletedAt: null,
       }], trxs)
     } else {
@@ -148,8 +148,8 @@ const handleStudentAttendance = async ({
         endedAt: studentSignOuts[i]?.createdAt ?? null,
         enderId: v2TeacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[v2TeacherId].hashedId) : null,
         enderType: null,
-        createdAt: studentSignIns[i].createdAt ?? new Date(),
-        updatedAt: studentSignIns[i].updatedAt ?? new Date(),
+        createdAt: toValidDateObj(studentSignIns[i].createdAt) ?? new Date(),
+        updatedAt: toValidDateObj(studentSignIns[i].updatedAt) ?? new Date(),
         deletedAt: null,
       }], trxs)
     }
@@ -179,9 +179,9 @@ const handleStudentAttendance = async ({
               leaveAt: a.leftAt,
               remark: a.remark ?? '',
               teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : serviceDirector.id,
-              createdAt: a.createdAt ?? new Date(),
-              updatedAt: a.updatedAt ?? new Date(),
-              deletedAt: a.deletedAt,
+              createdAt: toValidDateObj(a.createdAt) ?? new Date(),
+              updatedAt: toValidDateObj(a.updatedAt) ?? new Date(),
+              deletedAt: toValidDateObj(a.deletedAt),
             });
           }
           v2StudentAttendances.splice(j, 1);
@@ -199,9 +199,9 @@ const handleStudentAttendance = async ({
           leaveAt: a.leftAt,
           remark: a.remark ?? '',
           teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : serviceDirector.id,
-          createdAt: a.createdAt ?? new Date(),
-          updatedAt: a.updatedAt ?? new Date(),
-          deletedAt: a.deletedAt,
+          createdAt: toValidDateObj(a.createdAt) ?? new Date(),
+          updatedAt: toValidDateObj(a.updatedAt) ?? new Date(),
+          deletedAt: toValidDateObj(a.deletedAt),
         }));
         break;
       } else {
@@ -219,9 +219,9 @@ const handleStudentAttendance = async ({
               leaveAt: a.leftAt,
               remark: a.remark ?? '',
               teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : serviceDirector.id,
-              createdAt: a.createdAt ?? new Date(),
-              updatedAt: a.updatedAt ?? new Date(),
-              deletedAt: a.deletedAt,
+              createdAt: toValidDateObj(a.createdAt) ?? new Date(),
+              updatedAt: toValidDateObj(a.updatedAt) ?? new Date(),
+              deletedAt: toValidDateObj(a.deletedAt),
             });
           }
           v2StudentAttendances.splice(j, 1);
@@ -314,9 +314,9 @@ export default async (site: Site, trxs: Trxs) => {
               leaveAt: a.leftAt,
               remark: a.remark ?? '',
               teacherId: a.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[a.teacherId].hashedId) : serviceDirector.id,
-              createdAt: a.createdAt ?? new Date(),
-              updatedAt: a.updatedAt ?? new Date(),
-              deletedAt: a.deletedAt,
+              createdAt: toValidDateObj(a.createdAt) ?? new Date(),
+              updatedAt: toValidDateObj(a.updatedAt) ?? new Date(),
+              deletedAt: toValidDateObj(a.deletedAt),
             }
           }),
         trxs,

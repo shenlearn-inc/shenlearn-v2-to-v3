@@ -12,6 +12,7 @@ import toStudentId from "../utils/toStudentId.js";
 import {findTeachersByIds} from "../v2models/teachers.js";
 import {findAllCourseTeacherRefs} from "../v2models/courseTeacherRefs.js";
 import {createClazzTeacherRefs} from "../v3models/clazzTeacherRefs.js";
+import toValidDateObj from "../utils/toValidDateObj.js";
 
 export default async (trxs: Trxs) => {
   console.info('轉移班級關係')
@@ -35,9 +36,9 @@ export default async (trxs: Trxs) => {
           id: generateUUID(),
           clazzId: toClazzId(v2CourseMap[r.courseId].hashedId),
           studentId: toStudentId(v2StudentMap[r.studentId].hashedId),
-          createdAt: r.createdAt ?? new Date(),
-          updatedAt: r.updatedAt ?? new Date(),
-          deletedAt: r.deletedAt,
+          createdAt: toValidDateObj(r.createdAt) ?? new Date(),
+          updatedAt: toValidDateObj(r.updatedAt) ?? new Date(),
+          deletedAt: toValidDateObj(r.deletedAt),
         }
       }), trxs)
   }
@@ -71,9 +72,9 @@ export default async (trxs: Trxs) => {
         id: generateUUID(),
         clazzId: toClazzId(v2CourseMap[r.courseId].hashedId),
         teacherId: toTeacherId(v2TeacherMap[r.teacherId].hashedId),
-        createdAt: r.createdAt ?? new Date(),
-        updatedAt: r.updatedAt ?? new Date(),
-        deletedAt: r.deletedAt,
+        createdAt: toValidDateObj(r.createdAt) ?? new Date(),
+        updatedAt: toValidDateObj(r.updatedAt) ?? new Date(),
+        deletedAt: toValidDateObj(r.deletedAt),
       }
     }), trxs)
 }
