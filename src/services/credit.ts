@@ -39,7 +39,7 @@ export default async (trxs: Trxs) => {
   for (let i = 0; i < Math.ceil(numberOfCredit / config.chunkSize); i++) {
 
     // 找出堂次
-    const v2Credits = await findAllCredits(config.chunkSize, i * config.chunkSize, trxs)
+    const v2Credits = (await findAllCredits(config.chunkSize, i * config.chunkSize, trxs)).filter((c) => !!c.courseId)
 
     const v2Students = await findStudentsByIds(Array.from(new Set(v2Credits.map(pi => pi.studentId))), trxs) as StudentV2[]
     const v2StudentMap = _.keyBy(v2Students, 'id')
