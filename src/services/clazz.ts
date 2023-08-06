@@ -16,6 +16,7 @@ import weekdayToDate from "../utils/weekdayToDate.js";
 import v3db from "../db/v3db.js";
 import v2db from "../db/v2db.js";
 import {Site} from "../types/Site.js";
+import toValidDateObj from "../utils/toValidDateObj.js";
 
 export default async (site: Site, trxs: Trxs) => {
   console.info('轉移班級資料')
@@ -55,9 +56,9 @@ export default async (site: Site, trxs: Trxs) => {
           remark: c.remark ?? '',
           isActive: !!c.status,
           isStarted: !!c.inclass,
-          createdAt: c.createdAt ?? new Date(),
-          updatedAt: c.updatedAt ?? new Date(),
-          deletedAt: c.deletedAt,
+          createdAt: toValidDateObj(c.createdAt) ?? new Date(),
+          updatedAt: toValidDateObj(c.updatedAt) ?? new Date(),
+          deletedAt: toValidDateObj(c.deletedAt),
         }
       ], trxs)
     }
@@ -72,9 +73,9 @@ export default async (site: Site, trxs: Trxs) => {
         remark: c.remark ?? '',
         isActive: !!c.status,
         isStarted: !!c.inclass,
-        createdAt: c.createdAt ?? new Date(),
-        updatedAt: c.updatedAt ?? new Date(),
-        deletedAt: c.deletedAt,
+        createdAt: toValidDateObj(c.createdAt) ?? new Date(),
+        updatedAt: toValidDateObj(c.updatedAt) ?? new Date(),
+        deletedAt: toValidDateObj(c.deletedAt),
       }
     }), trxs)
   }
@@ -109,9 +110,9 @@ export default async (site: Site, trxs: Trxs) => {
           untilTime: null,
           repeat: "everyweek",
           counter: 0,
-          createdAt: ct.createdAt ?? new Date(),
-          updatedAt: ct.updatedAt ?? new Date(),
-          deletedAt: ct.deletedAt,
+          createdAt: toValidDateObj(ct.createdAt) ?? new Date(),
+          updatedAt: toValidDateObj(ct.updatedAt) ?? new Date(),
+          deletedAt: toValidDateObj(ct.deletedAt),
         }
       ], trxs)
     }
@@ -131,9 +132,9 @@ export default async (site: Site, trxs: Trxs) => {
         untilTime: null,
         repeat: "everyweek",
         counter: 0,
-        createdAt: ct.createdAt ?? new Date(),
-        updatedAt: ct.updatedAt ?? new Date(),
-        deletedAt: ct.deletedAt,
+        createdAt: toValidDateObj(ct.createdAt) ?? new Date(),
+        updatedAt: toValidDateObj(ct.updatedAt) ?? new Date(),
+        deletedAt: toValidDateObj(ct.deletedAt),
       }
     }), trxs)
   }
