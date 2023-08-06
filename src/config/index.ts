@@ -79,7 +79,7 @@ export default {
     // 'muchaart1new',
     // 'kidcastle01',
 
-    // 'wangshihnew',
+    'wangshihnew',
     'dsedunew',
     'knockknock',
     'jcsfnew',
