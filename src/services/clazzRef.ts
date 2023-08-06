@@ -54,7 +54,7 @@ export default async (trxs: Trxs) => {
   // 轉換老師關係
   await createClazzTeacherRefs(v2CourseTeacherRefs
     .filter(r => {
-      const condition = !!r.courseId && !!r.teacherId && r.teacherId in v2TeacherMap;
+      const condition = !!r.courseId && !!r.teacherId && r.teacherId in v2TeacherMap && r.courseId in v2CourseMap;
       if (!condition) {
         console.log({
           id: r.id,
