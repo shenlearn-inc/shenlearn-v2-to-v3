@@ -52,7 +52,7 @@ export default {
     // 'guantengnew',
     // 'sowaclass',
 
-    'shinhenew',
+    // 'shinhenew',
     'gm168new',
     'oxonian',
     'sunshinetaichung',
