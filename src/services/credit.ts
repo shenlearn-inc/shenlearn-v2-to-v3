@@ -44,7 +44,9 @@ export default async (trxs: Trxs) => {
     const v2Students = await findStudentsByIds(Array.from(new Set(v2Credits.map(pi => pi.studentId))), trxs) as StudentV2[]
     const v2StudentMap = _.keyBy(v2Students, 'id')
 
-    const v2Courses = await findCoursesByIds(Array.from(new Set(v2Credits.filter(a => !!a.courseId).map(a => a.courseId) as number[])), trxs) as CourseV2[]
+    // 如果堂次沒有課種，找出堂次的班級去找課種
+    const v2NoCourseCategoryCourseIds = v2Credits.filter(c => !c.courseCategoryId).map(c => c.courseId)
+    const v2Courses = await findCoursesByIds(Array.from(new Set(v2Credits.filter(a => !!a.courseId).map(a => a.courseId).concat(v2NoCourseCategoryCourseIds) as number[])), trxs) as CourseV2[]
     const v2CourseMap = _.keyBy(v2Courses, 'id')
 
     const v2CourseCategories = await findCourseCategoriesByIds(Array.from(new Set(v2Credits.filter(a => !!a.courseCategoryId).map(a => a.courseCategoryId) as number[])), trxs) as CourseCategoryV2[]
@@ -56,15 +58,23 @@ export default async (trxs: Trxs) => {
     const v2InclassCourses = await findInclassCoursesByIds(Array.from(new Set(v2Credits.filter(a => !!a.inclassCourseId).map(a => a.inclassCourseId) as number[])), trxs) as InclassCourseV2[]
     const v2InclassCourseMap = _.keyBy(v2InclassCourses, 'id')
 
+    const getV2CourseCategoryByV2CourseId = (v2CourseId) => {
+      const course = v2CourseMap[v2CourseId]
+      const courseCategoryId = course.courseCategoryId
+      return courseCategoryId in v2CourseCategoryMap ? v2CourseCategoryMap[courseCategoryId] : null
+    }
+
     // 檢查 courseCategoryId 是否為 null
     v2Credits.forEach(c => {
-      if (!c.courseCategoryId) throw new Error(`轉移堂次 id: ${c.id} 發生錯誤，課種id 為 null`)
+      const category = getV2CourseCategoryByV2CourseId(c.courseId);
+      if (!category) throw new Error(`轉移堂次 id: ${c.id} 發生錯誤，課堂班級找不到相對應課種`)
     })
 
     await createCredits(
       v2Credits.map(c => {
         const id = toCreditId(c.hashedId)
-        const courseId = toCourseId(v2CourseCategoryMap[c.courseCategoryId as number].hashedId)
+        // @ts-ignore
+        const courseId = !c.courseCategoryId ? toCourseId(getV2CourseCategoryByV2CourseId(c.courseId).hashedId) : toCourseId(v2CourseCategoryMap[c.courseCategoryId as number].hashedId)
         const studentId = toStudentId(v2StudentMap[c.studentId].hashedId)
         const teacherId = c.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : serviceDirector.id
         const clazzId = c.courseId && c.courseId in v2CourseMap ? toClazzId(v2CourseMap[c.courseId].hashedId) : null
