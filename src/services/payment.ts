@@ -34,9 +34,9 @@ const handlePayment = async ({ schoolId, v2Payment, serviceDirector, trxs }) => 
     cycleDay: 0,
     isOnline: true,
     remark: '',
-    createdAt: v2Payment.createdAt ?? new Date(),
-    updatedAt: v2Payment.updatedAt ?? new Date(),
-    deletedAt: v2Payment.deletedAt,
+    createdAt: toValidDateObj(v2Payment.createdAt) ?? new Date(),
+    updatedAt: toValidDateObj(v2Payment.updatedAt) ?? new Date(),
+    deletedAt: toValidDateObj(v2Payment.deletedAt),
   }], trxs)
 
   // Payment
