@@ -17,9 +17,59 @@ import toScoreId from "../utils/toScoreId.js";
 import v3db from "../db/v3db.js";
 import {TeacherV3} from "../v3models/teachers.js";
 import toValidDateObj from "../utils/toValidDateObj.js";
+import PQueue from "p-queue";
+
+const handleExam = async ({ exam, siteInfoV2, v2CourseMap, v2TeacherMap, serviceDirector, trxs }) => {
+  const examId = generateUUID(exam.hashedId + "00000")
+  if (!(exam.courseId in v2CourseMap)) {
+    return;
+  }
+  await createExams(
+    [{
+      id: examId,
+      name: exam.name,
+      schoolId: toSchoolId(siteInfoV2.hashedId),
+      clazzId: toClazzId(v2CourseMap[exam.courseId].hashedId),
+      teacherId: exam.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[exam.teacherId].hashedId) : serviceDirector.id,
+      remark: exam.remark ?? "",
+      createdAt: toValidDateObj(exam.createdAt) ?? new Date(),
+      updatedAt: toValidDateObj(exam.updatedAt) ?? new Date(),
+      deletedAt: toValidDateObj(exam.deletedAt),
+    }],
+    trxs,
+  )
+
+  // 找出成績
+  const v2Scores = await findScoresByExamId(exam.id, trxs);
+
+  // 找出學生
+  const v2Students = await findStudentsByIds(Array.from(new Set(v2Scores.map(s => s.studentId))), trxs) as StudentV2[]
+  const v2StudentMap = _.keyBy(v2Students, 'id')
+
+  // 建立成績
+  await createScores(
+    v2Scores.filter(s => s.studentId in v2StudentMap).map(s => {
+      const id = toScoreId(s.hashedId + "00000")
+      const studentId = toStudentId(v2StudentMap[s.studentId].hashedId)
+
+      return {
+        id,
+        examId,
+        studentId,
+        score: s.score,
+        remark: "",
+        createdAt: toValidDateObj(s.createdAt) ?? new Date(),
+        updatedAt: toValidDateObj(s.updatedAt) ?? new Date(),
+        deletedAt: toValidDateObj(s.deletedAt),
+      }
+    }),
+    trxs,
+  )
+}
 
 export default async (trxs: Trxs) => {
   console.info('轉移考試資料')
+  const startTime = new Date().getTime();
 
   // 取得站台資料
   const siteInfoV2 = await findSiteInfo(trxs)
@@ -41,51 +91,25 @@ export default async (trxs: Trxs) => {
   const v2Teachers = await findTeachersByIds(exams.map(c => c.teacherId), trxs)
   const v2TeacherMap = _.keyBy(v2Teachers, 'id')
 
-  for (const exam of exams) {
-    const examId = generateUUID(exam.hashedId + "00000")
-    if (!(exam.courseId in v2CourseMap)) {
-      continue;
-    }
-    await createExams(
-      [{
-        id: examId,
-        name: exam.name,
-        schoolId: toSchoolId(siteInfoV2.hashedId),
-        clazzId: toClazzId(v2CourseMap[exam.courseId].hashedId),
-        teacherId: exam.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[exam.teacherId].hashedId) : serviceDirector.id,
-        remark: exam.remark ?? "",
-        createdAt: toValidDateObj(exam.createdAt) ?? new Date(),
-        updatedAt: toValidDateObj(exam.updatedAt) ?? new Date(),
-        deletedAt: toValidDateObj(exam.deletedAt),
-      }],
+  const queue = new PQueue({concurrency: 10});
+
+  exams.forEach((exam) => {
+    queue.add(() => handleExam({
+      v2CourseMap,
+      v2TeacherMap,
+      serviceDirector,
+      siteInfoV2,
+      exam,
       trxs,
-    )
+    })).catch((error: any) => {
+      console.log('處理考試出錯: ', {
+        exam,
+        error
+      });
+    });
+  })
 
-    // 找出成績
-    const v2Scores = await findScoresByExamId(exam.id, trxs);
+  await queue.onIdle();
 
-    // 找出學生
-    const v2Students = await findStudentsByIds(Array.from(new Set(v2Scores.map(s => s.studentId))), trxs) as StudentV2[]
-    const v2StudentMap = _.keyBy(v2Students, 'id')
-
-    // 建立成績
-    await createScores(
-      v2Scores.filter(s => s.studentId in v2StudentMap).map(s => {
-        const id = toScoreId(s.hashedId + "00000")
-        const studentId = toStudentId(v2StudentMap[s.studentId].hashedId)
-
-        return {
-          id,
-          examId,
-          studentId,
-          score: s.score,
-          remark: "",
-          createdAt: toValidDateObj(s.createdAt) ?? new Date(),
-          updatedAt: toValidDateObj(s.updatedAt) ?? new Date(),
-          deletedAt: toValidDateObj(s.deletedAt),
-        }
-      }),
-      trxs,
-    )
-  }
+  console.log(`所有考試處理完成, time elapsed: ${(new Date().getTime() - startTime) / 1000}s`);
 }
