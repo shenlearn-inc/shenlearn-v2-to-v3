@@ -20,6 +20,89 @@ import v3db from "../db/v3db.js";
 import {TeacherV3} from "../v3models/teachers.js";
 import toDateStr from "../utils/toDateStr.js";
 import toValidDateObj from "../utils/toValidDateObj.js";
+import PQueue from "p-queue";
+
+const handlePayment = async ({ schoolId, v2Payment, serviceDirector, trxs }) => {
+  const startTime = new Date().getTime();
+
+  // Payment root
+  const paymentRootId = generateUUID()
+  await createPaymentRoots([{
+    id: paymentRootId,
+    schoolId: schoolId,
+    name: v2Payment.name ?? '',
+    cycleDay: 0,
+    isOnline: true,
+    remark: '',
+    createdAt: v2Payment.createdAt ?? new Date(),
+    updatedAt: v2Payment.updatedAt ?? new Date(),
+    deletedAt: v2Payment.deletedAt,
+  }], trxs)
+
+  // Payment
+  const paymentId = generateUUID(v2Payment.hashedId)
+  await createPayments([{
+    id: paymentId,
+    schoolId: schoolId,
+    teacherId: serviceDirector.id,
+    paymentRootId: paymentRootId,
+    price: v2Payment.price ?? 0,
+    remark: v2Payment.remark ?? '',
+    isPublic: v2Payment.isPublic ?? false,
+    deadlineDate: toValidDateObj(v2Payment.deadlineAt)?.toISOString().slice(0, 10) ?? null,
+    startedDate: toValidDateObj(v2Payment.startedAt)?.toISOString().slice(0, 10) ?? null,
+    endedDate: toValidDateObj(v2Payment.endedAt)?.toISOString().slice(0, 10) ?? null,
+    courseId: null,
+    creditCount: null,
+    createdAt: v2Payment.createdAt ?? new Date(),
+    updatedAt: v2Payment.updatedAt ?? new Date(),
+    deletedAt: v2Payment.deletedAt,
+  }], trxs)
+
+  // Payment item
+  const v2PaymentItems = camelcaseKeys(
+    await v2db()
+      .select()
+      .from('payment_items')
+      .where('payment_id', v2Payment.id)
+  ) as PaymentItemV2[]
+
+  const v2Students = await findStudentsByIds(Array.from(new Set(v2PaymentItems.map(pi => pi.studentId))), trxs) as StudentV2[]
+  const v2StudentMap = _.keyBy(v2Students, 'id')
+
+  const v2Teachers = await findTeachersByIds(Array.from(new Set(v2PaymentItems.filter(pi => !!pi.teacherId).map(pi => pi.teacherId) as number[])), trxs) as TeacherV2[]
+  const v2TeacherMap = _.keyBy(v2Teachers, 'id')
+
+  await createPaymentItems(
+    v2PaymentItems.map(pi => {
+      const teacherId = pi.teacherId! in v2TeacherMap ? toTeacherId(v2TeacherMap[pi.teacherId!].hashedId) : serviceDirector.id
+      return {
+        id: toPaymentId(pi.hashedId),
+        schoolId: schoolId,
+        paymentId: paymentId,
+        studentId: toStudentId(v2StudentMap[pi.studentId].hashedId),
+        teacherId: teacherId,
+        name: v2Payment.name ?? '',
+        price: pi.price ?? 0,
+        remark: pi.remark ?? '',
+        isPublic: !!pi.isPublic,
+        deadlineDate: toDateStr(pi.deadlineAt),
+        startedDate: toDateStr(pi.startedAt),
+        endedDate: toDateStr(pi.endedAt),
+        receiptId: null,
+        courseId: null,
+        creditCount: null,
+        order: null,
+        createdAt: toValidDateObj(pi.createdAt) ?? new Date(),
+        updatedAt: toValidDateObj(pi.updatedAt) ?? new Date(),
+        deletedAt: toValidDateObj(pi.deletedAt),
+      }
+    }),
+    trxs,
+  )
+
+  console.info(`已處理繳費 ${v2Payment.hashedId}, time elapsed: ${(new Date().getTime() - startTime) / 1000}s`)
+}
 
 export default async (trxs: Trxs) => {
   console.info('轉移繳費')
@@ -38,86 +121,28 @@ export default async (trxs: Trxs) => {
 
   const numberOfPayment = await getNumberOfPayment(trxs)
   for (let i = 0; i < Math.ceil(numberOfPayment / config.chunkSize); i++) {
+    const startTime = new Date().getTime();
 
     // 找出繳費
     const v2Payments = await findAllPayments(config.chunkSize, i * config.chunkSize, trxs)
 
-    for (const v2Payment of v2Payments) {
-      // Payment root
-      const paymentRootId = generateUUID()
-      await createPaymentRoots([{
-        id: paymentRootId,
-        schoolId: schoolId,
-        name: v2Payment.name ?? '',
-        cycleDay: 0,
-        isOnline: true,
-        remark: '',
-        createdAt: v2Payment.createdAt ?? new Date(),
-        updatedAt: v2Payment.updatedAt ?? new Date(),
-        deletedAt: v2Payment.deletedAt,
-      }], trxs)
+    const queue = new PQueue({concurrency: 10});
 
-      // Payment
-      const paymentId = generateUUID(v2Payment.hashedId)
-      await createPayments([{
-        id: paymentId,
-        schoolId: schoolId,
-        teacherId: serviceDirector.id,
-        paymentRootId: paymentRootId,
-        price: v2Payment.price ?? 0,
-        remark: v2Payment.remark ?? '',
-        isPublic: v2Payment.isPublic ?? false,
-        deadlineDate: toValidDateObj(v2Payment.deadlineAt)?.toISOString().slice(0, 10) ?? null,
-        startedDate: toValidDateObj(v2Payment.startedAt)?.toISOString().slice(0, 10) ?? null,
-        endedDate: toValidDateObj(v2Payment.endedAt)?.toISOString().slice(0, 10) ?? null,
-        courseId: null,
-        creditCount: null,
-        createdAt: v2Payment.createdAt ?? new Date(),
-        updatedAt: v2Payment.updatedAt ?? new Date(),
-        deletedAt: v2Payment.deletedAt,
-      }], trxs)
+    v2Payments.forEach(v2Payment => {
+      queue.add(() => handlePayment({
+        v2Payment,
+        serviceDirector,
+        schoolId,
+        trxs
+      })).catch((error: any) => {
+        console.log('處理繳費出錯: ', {
+          v2Payment,
+          error
+        });
+      });
+    });
 
-      // Payment item
-      const v2PaymentItems = camelcaseKeys(
-        await v2db()
-        .select()
-        .from('payment_items')
-        .where('payment_id', v2Payment.id)
-      ) as PaymentItemV2[]
-
-      const v2Students = await findStudentsByIds(Array.from(new Set(v2PaymentItems.map(pi => pi.studentId))), trxs) as StudentV2[]
-      const v2StudentMap = _.keyBy(v2Students, 'id')
-
-      const v2Teachers = await findTeachersByIds(Array.from(new Set(v2PaymentItems.filter(pi => !!pi.teacherId).map(pi => pi.teacherId) as number[])), trxs) as TeacherV2[]
-      const v2TeacherMap = _.keyBy(v2Teachers, 'id')
-
-      await createPaymentItems(
-        v2PaymentItems.map(pi => {
-          const teacherId = pi.teacherId! in v2TeacherMap ? toTeacherId(v2TeacherMap[pi.teacherId!].hashedId) : serviceDirector.id
-          return {
-            id: toPaymentId(pi.hashedId),
-            schoolId: schoolId,
-            paymentId: paymentId,
-            studentId: toStudentId(v2StudentMap[pi.studentId].hashedId),
-            teacherId: teacherId,
-            name: v2Payment.name ?? '',
-            price: pi.price ?? 0,
-            remark: pi.remark ?? '',
-            isPublic: !!pi.isPublic,
-            deadlineDate: toDateStr(pi.deadlineAt),
-            startedDate: toDateStr(pi.startedAt),
-            endedDate: toDateStr(pi.endedAt),
-            receiptId: null,
-            courseId: null,
-            creditCount: null,
-            order: null,
-            createdAt: pi.createdAt ?? new Date(),
-            updatedAt: pi.updatedAt ?? new Date(),
-            deletedAt: pi.deletedAt,
-          }
-        }),
-        trxs,
-      )
-    }
+    await queue.onIdle();
+    console.log(`所有繳費處理完成, time elapsed: ${(new Date().getTime() - startTime) / 1000}s`);
   }
 }

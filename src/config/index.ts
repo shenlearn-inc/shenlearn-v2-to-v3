@@ -61,7 +61,7 @@ export default {
     // 'shinhenew',
     // 'oxonian',
 
-    'sunshinetaichung',
+    // 'sunshinetaichung',
     'dc47',
     'knowhownew',
     'chihyi',
