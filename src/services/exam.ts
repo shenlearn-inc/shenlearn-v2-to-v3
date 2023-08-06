@@ -43,6 +43,9 @@ export default async (trxs: Trxs) => {
 
   for (const exam of exams) {
     const examId = generateUUID(exam.hashedId + "00000")
+    if (!(exam.courseId in v2CourseMap)) {
+      continue;
+    }
     await createExams(
       [{
         id: examId,
