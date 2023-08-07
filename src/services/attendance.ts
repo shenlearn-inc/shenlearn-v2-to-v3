@@ -278,7 +278,7 @@ export default async (site: Site, trxs: Trxs) => {
   const allAttendanceStartTime = new Date().getTime();
   const queue2 = new PQueue({concurrency: 10});
   const numberOfNotAttendedStudentAttendance = await getNumberOfNotAttendedStudentAttendance(trxs)
-  const chunkSize = 2000;
+  const chunkSize = 5000;
   const numberOfChunks = Math.ceil(numberOfNotAttendedStudentAttendance / chunkSize);
   let counter = 0;
   console.log(`轉移全部班級出勤, 轉換為 ${numberOfChunks} 個批次處理`);
