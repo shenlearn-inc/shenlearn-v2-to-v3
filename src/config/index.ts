@@ -63,6 +63,7 @@ export default {
 
     // 'sunshinetaichung',
     'dc47',
+    'lovetolearn',
     'knowhownew',
     'chihyi',
     'jinlin',
@@ -73,7 +74,6 @@ export default {
     'wentengnew',
     'liwei',
     'mininnew',
-    'lovetolearn',
     'taipeirulinnew',
     'giraffefive',
     'taiattd3255050',

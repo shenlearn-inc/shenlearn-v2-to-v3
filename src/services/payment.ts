@@ -48,7 +48,7 @@ const handlePayment = async ({ schoolId, v2Payment, serviceDirector, trxs }) => 
     paymentRootId: paymentRootId,
     price: v2Payment.price ?? 0,
     remark: v2Payment.remark ?? '',
-    isPublic: v2Payment.isPublic ?? false,
+    isPublic: !!v2Payment.isPublic ?? false,
     deadlineDate: toValidDateObj(v2Payment.deadlineAt)?.toISOString().slice(0, 10) ?? null,
     startedDate: toValidDateObj(v2Payment.startedAt)?.toISOString().slice(0, 10) ?? null,
     endedDate: toValidDateObj(v2Payment.endedAt)?.toISOString().slice(0, 10) ?? null,
