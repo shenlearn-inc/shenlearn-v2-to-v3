@@ -169,7 +169,7 @@ const handleStudentAttendance = async ({
       if (i === 0) {
         if (moment(v2StudentAttendances[j].attendedAt).isSameOrAfter(studentSignIns[i].createdAt)) {
           const a = v2StudentAttendances[j]
-          if (a.courseId in v2CourseMap) {
+          if (a.courseId in v2CourseMap && a.inclassCourseId! in v2InclassCourseMap) {
             attendances.push({
               id: generateUUID(a.hashedId),
               schoolId: schoolId,
