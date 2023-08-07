@@ -116,18 +116,18 @@ export default {
     // 'chushin', 2
     // 'knockknock', 2
     // 'jasonleader', 2
-    'giraffe1026new',
-    'chingshanshu',
-    'wentengnew',
-    'giraffefive',
-    'gardennew',
-    'rubyzx',
-    'liwei',
-    'aliothnew',
-    'aceyilannew',
-    'vincen2003new',
-    'drpromathnew',
-    'taipeirulinnew',
+    // 'giraffe1026new',
+    // 'chingshanshu',
+    // 'wentengnew',
+    // 'giraffefive',
+    // 'gardennew',
+    // 'rubyzx',
+    // 'liwei',
+    // 'aliothnew',
+    // 'aceyilannew',
+    // 'vincen2003new',
+    // 'drpromathnew',
+    // 'taipeirulinnew',
 
     // 'city8831new', 2
     // 'newtonnew', 2
