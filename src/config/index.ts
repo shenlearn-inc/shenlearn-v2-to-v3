@@ -87,7 +87,7 @@ export default {
     // 'wskd', 1
     // 'jingyeclass', 1
     // 'youjia01', 1
-    'academiceducation',
+    // 'academiceducation', 1
     'sunyang',
     'yixiuenglishclass',
     'hdprofessional',
@@ -103,6 +103,9 @@ export default {
     'lingyunnew',
     'longshengnew',
     'auroranew',
+    'giraffesg870new',
+    'taiattd3255050',
+    'great5576new',
 
     // 'mrt', 1
     // 'p033893334', 1
@@ -110,7 +113,7 @@ export default {
     // 'giraffe29960680', 1
     // 'milesnew', 1
     // 'hjunphysicsmnew', 1
-    // 'dashannew',
+    // 'dashannew', 1
     // 'chushin',
     // 'knockknock',
     // 'jasonleader',
@@ -123,6 +126,9 @@ export default {
     // 'liwei',
     // 'aliothnew',
     // 'aceyilannew',
+    // 'vincen2003new',
+    // 'drpromathnew',
+    // 'taipeirulinnew',
 
     // 'city8831new',
     // 'newtonnew',
@@ -138,12 +144,6 @@ export default {
     // 'wangshihnew',
     // 'smilenew',
     // 'bear123new',
-    // 'taipeirulinnew',
-    // 'great5576new',
-    // 'drpromathnew',
-    // 'taiattd3255050',
-    // 'vincen2003new',
-    // 'giraffesg870new',
   ].map((name) => ({
     name,
     organizationId: "546694a2-6e6b-4f1d-8bfd-7559fda0ffbf",
