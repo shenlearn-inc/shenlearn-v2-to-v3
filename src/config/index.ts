@@ -99,10 +99,9 @@ export default {
     // 'longshengnew', 2
     // 'auroranew', 2
     // 'great5576new', 2
-    'giraffesg870new',
-    // 'taiattd3255050',
-
-    // 'shinhenew',
+    // 'shinhenew', 2
+    // 'giraffesg870new',
+    'taiattd3255050',
 
     // 'mrt', 1
     // 'p033893334', 1
@@ -150,7 +149,7 @@ export default {
     planId: plans.pro,
     roles: roles.pro,
     isDeleteContactor: false,
-    isHandleDuplicateHashedId: true,
+    isHandleDuplicateHashedId: false,
   })) as Site[],
 
   // !必改
