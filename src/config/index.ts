@@ -142,7 +142,7 @@ export default {
     // 'bear123new', 2
     // 'oxonian', 2
     'jinlin',
-    // 'gm168new',
+    'gm168new',
   ].map((name) => ({
     name,
     organizationId: "546694a2-6e6b-4f1d-8bfd-7559fda0ffbf",
