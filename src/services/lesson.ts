@@ -15,6 +15,7 @@ import toValidDateObj from "../utils/toValidDateObj.js";
 import v3db from "../db/v3db.js";
 import {Site} from "../types/Site.js";
 import {TeacherV3} from "../v3models/teachers.js";
+import PQueue from "p-queue";
 
 export default async (site: Site, trxs: Trxs) => {
   console.info('轉移課堂資料')
@@ -31,34 +32,60 @@ export default async (site: Site, trxs: Trxs) => {
     .transacting(trxs.v3db) as TeacherV3
 
   const numberOfInclassCourse = await getNumberOfInclassCourse(trxs)
-  for (let i = 0; i < Math.ceil(numberOfInclassCourse / config.chunkSize); i++) {
+  const numberOfChunks = Math.ceil(numberOfInclassCourse / config.chunkSize);
 
-    // 找出課堂
-    const inclassCourses = await findAllInclassCourses(config.chunkSize, i * config.chunkSize, trxs)
+  const queue = new PQueue({concurrency: 10});
+  let counter = 0;
+  console.log(`轉移全部課堂, 轉換為 ${numberOfChunks} 個批次處理`);
+  for (let i = 0; i < numberOfChunks; i++) {
+    queue.add(async () => {
+      const startTime = new Date().getTime();
+      // 找出課堂
+      const inclassCourses = await findAllInclassCourses(config.chunkSize, i * config.chunkSize, trxs)
 
-    const v2Courses = await findCoursesByIds(inclassCourses.map(c => c.courseId), trxs)
-    const v2CourseMap = _.keyBy(v2Courses, 'id')
+      const v2Courses = await findCoursesByIds(inclassCourses.map(c => c.courseId), trxs)
+      const v2CourseMap = _.keyBy(v2Courses, 'id')
 
-    const v2Teachers = await findTeachersByIds(inclassCourses.map(c => c.teacherId), trxs)
-    const v2TeacherMap = _.keyBy(v2Teachers, 'id')
+      const v2Teachers = await findTeachersByIds(inclassCourses.map(c => c.teacherId), trxs)
+      const v2TeacherMap = _.keyBy(v2Teachers, 'id')
 
-    if (site?.isHandleDuplicateHashedId) {
-      for (let i = 0; i < inclassCourses.length; i++) {
-        const c = inclassCourses[i];
-        if (!(c.courseId in v2CourseMap)) {
-          continue;
+      if (site?.isHandleDuplicateHashedId) {
+        for (let i = 0; i < inclassCourses.length; i++) {
+          const c = inclassCourses[i];
+          if (!(c.courseId in v2CourseMap)) {
+            continue;
+          }
+          const isExisted = await v3db().first().from("lessons").where("id", generateUUID(c.hashedId)).transacting(trxs.v3db)
+          if (isExisted) {
+            // 產出新 hashedId
+            const newHashedId = c.hashedId + "00000";
+            await v2db().from("inclass_courses").update({hashed_id: newHashedId}).where({id: c.id}).transacting(trxs.v2db)
+            inclassCourses[i].hashedId = newHashedId
+          }
+          await createLessons(
+            [
+              {
+                id: generateUUID(inclassCourses[i].hashedId),
+                schoolId: toSchoolId(siteInfoV2.hashedId),
+                clazzId: toClazzId(v2CourseMap[c.courseId].hashedId),
+                name: '',
+                startAt: toValidDateObj(c.inclassAt) ?? null,
+                endAt: toValidDateObj(c.outclassAt) ?? null,
+                teacherId: c.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : serviceDirector.id,
+                createdAt: toValidDateObj(c.createdAt) ?? new Date(),
+                updatedAt: toValidDateObj(c.updatedAt) ?? new Date(),
+                deletedAt: toValidDateObj(c.deletedAt),
+              }
+            ],
+            trxs,
+          )
         }
-        const isExisted = await v3db().first().from("lessons").where("id", generateUUID(c.hashedId)).transacting(trxs.v3db)
-        if (isExisted) {
-          // 產出新 hashedId
-          const newHashedId = c.hashedId + "00000";
-          await v2db().from("inclass_courses").update({hashed_id: newHashedId}).where({id: c.id}).transacting(trxs.v2db)
-          inclassCourses[i].hashedId = newHashedId
-        }
+      } else {
+        // 轉移課堂
         await createLessons(
-          [
-            {
-              id: generateUUID(inclassCourses[i].hashedId),
+          inclassCourses.filter((c) => c.courseId in v2CourseMap).map(c => {
+            return {
+              id: generateUUID(c.hashedId),
               schoolId: toSchoolId(siteInfoV2.hashedId),
               clazzId: toClazzId(v2CourseMap[c.courseId].hashedId),
               name: '',
@@ -69,29 +96,13 @@ export default async (site: Site, trxs: Trxs) => {
               updatedAt: toValidDateObj(c.updatedAt) ?? new Date(),
               deletedAt: toValidDateObj(c.deletedAt),
             }
-          ],
+          }),
           trxs,
         )
       }
-    } else {
-      // 轉移課堂
-      await createLessons(
-        inclassCourses.filter((c) => c.courseId in v2CourseMap).map(c => {
-          return {
-            id: generateUUID(c.hashedId),
-            schoolId: toSchoolId(siteInfoV2.hashedId),
-            clazzId: toClazzId(v2CourseMap[c.courseId].hashedId),
-            name: '',
-            startAt: toValidDateObj(c.inclassAt) ?? null,
-            endAt: toValidDateObj(c.outclassAt) ?? null,
-            teacherId: c.teacherId in v2TeacherMap ? toTeacherId(v2TeacherMap[c.teacherId].hashedId) : serviceDirector.id,
-            createdAt: toValidDateObj(c.createdAt) ?? new Date(),
-            updatedAt: toValidDateObj(c.updatedAt) ?? new Date(),
-            deletedAt: toValidDateObj(c.deletedAt),
-          }
-        }),
-        trxs,
-      )
-    }
+      counter++;
+      console.log(`已處理批次 ${counter}/${numberOfChunks}, time elapsed: ${(new Date().getTime() - startTime) / 1000}s`)
+    })
   }
+  await queue.onIdle();
 }

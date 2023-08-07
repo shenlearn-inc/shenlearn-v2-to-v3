@@ -81,7 +81,7 @@ export default {
     // 'jjkd', 1
     // 'fskd', 1
     // 'tdkd', 1
-    // 'fudan02',
+    // 'fudan02', 1
     // 'sinsiangnew',
     // 'lykd',
     // 'wskd',
