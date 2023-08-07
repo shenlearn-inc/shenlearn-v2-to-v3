@@ -98,9 +98,10 @@ export default {
     // 'lingyunnew', 2
     // 'longshengnew', 2
     // 'auroranew', 2
+    // 'great5576new', 2
     // 'giraffesg870new',
     // 'taiattd3255050',
-    'great5576new',
+
     'shinhenew',
 
     // 'mrt', 1
@@ -149,7 +150,7 @@ export default {
     planId: plans.pro,
     roles: roles.pro,
     isDeleteContactor: false,
-    isHandleDuplicateHashedId: false,
+    isHandleDuplicateHashedId: true,
   })) as Site[],
 
   // !必改
