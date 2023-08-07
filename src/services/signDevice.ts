@@ -41,12 +41,21 @@ export default async (site: Site, trxs: Trxs) => {
   const siteInfoV2 = await findSiteInfo(trxs)
   const schoolId = toSchoolId(siteInfoV2.hashedId)
 
+  // 找簽到 site
+  const terminalSite = await v2signdb()
+    .first()
+    .from("sites")
+    .where("server_url", "like", `%https://${siteInfoV2.databaseName}.%`)
+    .whereNull("deleted_at") as any
+  if (!terminalSite?.id) {
+    return;
+  }
   // 轉移簽到機
   const terminals: TerminalV2[] = camelcaseKeys(
     await v2signdb()
       .select("*")
       .from("terminals")
-      .where("site_id", schoolId)
+      .where("site_id", terminalSite.id)
       .whereNull("deleted_at")
   );
   const terminalMap = _.keyBy(terminals, "terminalName");
@@ -55,7 +64,7 @@ export default async (site: Site, trxs: Trxs) => {
     id: terminal.terminalName,
     macAddress: terminal.macAddress,
     organizationId: site.organizationId,
-    schoolId: terminal.siteId,
+    schoolId: schoolId,
     clazzId: null,
     zone: "Asia/Taipei",
     remark: "",
