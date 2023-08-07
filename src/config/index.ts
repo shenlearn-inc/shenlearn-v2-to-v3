@@ -85,8 +85,8 @@ export default {
     // 'sinsiangnew', 1
     // 'lykd', 1
     // 'wskd', 1
-    'jingyeclass',
-    'youjia01',
+    // 'jingyeclass', 1
+    // 'youjia01', 1
     'academiceducation',
     'sunyang',
     'yixiuenglishclass',

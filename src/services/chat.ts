@@ -60,7 +60,8 @@ interface HandleStudentChatProps {
   site: Site
   trxs: Trxs
 }
-const handleStudentChat = async ({ student, serviceDirector, site, trxs }: HandleStudentChatProps) => {
+
+const handleStudentChat = async ({student, serviceDirector, site, trxs}: HandleStudentChatProps) => {
   if (!student.hashedId) {
     return;
   }
@@ -92,7 +93,7 @@ const handleStudentChat = async ({ student, serviceDirector, site, trxs }: Handl
   }
 
   const v3ChatRoomId = toStudentChatRoomId(student.hashedId);
-  const v3Messages = v2Messages.map((v2message) => {
+  const v3Messages = v2Messages.filter(v2message => v2message.userId in userIdMap).map((v2message) => {
     return {
       id: v2message.id,
       roomId: v3ChatRoomId,
