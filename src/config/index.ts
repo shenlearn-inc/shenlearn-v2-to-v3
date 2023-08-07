@@ -67,14 +67,13 @@ export default {
     // 'maggieenew',
     // 'josephihonew',
     // 'mininnew',
+    // 'vincen2003new',
 
     // 'shinhenew',
     // 'oxonian',
     // 'jinlin',
     // 'gm168new',
 
-
-    'vincen2003new',
     'giraffefive',
     'taipeirulinnew',
     'bear123new',
@@ -95,7 +94,6 @@ export default {
     'kmsupernew',
     'hjunphysicsmnew',
     'smilenew',
-    'josephihonew',
     'chingshanshu',
     'aceyilannew',
     'milesnew',
