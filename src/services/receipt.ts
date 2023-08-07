@@ -15,6 +15,7 @@ import v3db from "../db/v3db.js";
 import {findPaymentItemsByIds} from "../v2models/paymentItems.js";
 import camelcaseKeys from "camelcase-keys";
 import {TeacherV3} from "../v3models/teachers.js";
+import {strictEqual} from "assert";
 
 export default async (trxs: Trxs) => {
   console.info('轉移收據')
@@ -61,6 +62,12 @@ export default async (trxs: Trxs) => {
         deletedAt: v2Receipt.deletedAt,
         url: v2Receipt.url ?? '',
         paymentConfigId: null,
+        schoolName: siteInfoV2.name,
+        schoolImageUrl: siteInfoV2.imageUrl,
+        schoolCertificateNumber: siteInfoV2.certificateNumber,
+        schoolTelephonePrefix: "886",
+        schoolTelephone: siteInfoV2.phone,
+        schoolAddress: siteInfoV2.address,
       }], trxs)
 
       // 將已繳費的 payment item 填入 receiptId

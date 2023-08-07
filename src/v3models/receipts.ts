@@ -17,6 +17,12 @@ export interface ReceiptV3 {
   deletedAt: Date | null
   url: string
   paymentConfigId: string | null
+  schoolName: string | null
+  schoolImageUrl: string | null
+  schoolCertificateNumber: string | null
+  schoolTelephonePrefix: string | null
+  schoolTelephone: string | null
+  schoolAddress: string | null
 }
 
 export const createReceipts = async (receipts: ReceiptV3[], trxs: Trxs): Promise<void> => {

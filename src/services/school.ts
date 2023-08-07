@@ -5,6 +5,8 @@ import moment from "moment";
 import toSchoolId from "../utils/toSchoolId.js";
 import {Trxs} from "../types/Trxs.js";
 import {Site} from "../types/Site.js";
+import v3db from "../db/v3db.js";
+import snakecaseKeys from "snakecase-keys";
 
 export default async (site: Site, trxs: Trxs) => {
   console.info('轉移站台資料')
@@ -32,4 +34,13 @@ export default async (site: Site, trxs: Trxs) => {
     updatedAt: siteInfoV2.updatedAt ?? new Date(),
     deletedAt: siteInfoV2.deletedAt,
   }, trxs)
+
+  await v3db()
+    .insert(snakecaseKeys({
+      schoolId: toSchoolId(siteInfoV2.hashedId),
+      noticeRemark: siteInfoV2?.noticeNote ?? "",
+      receiptRemark: siteInfoV2?.receiptNote ?? "",
+    }))
+    .from('payment_configs')
+    .transacting(trxs.v3db)
 }
