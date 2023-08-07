@@ -149,7 +149,7 @@ export default {
     planId: plans.pro,
     roles: roles.pro,
     isDeleteContactor: false,
-    isHandleDuplicateHashedId: false,
+    isHandleDuplicateHashedId: true,
   })) as Site[],
 
   // !必改
