@@ -15,7 +15,7 @@ import v3db from "../db/v3db.js";
 import {findPaymentItemsByIds} from "../v2models/paymentItems.js";
 import camelcaseKeys from "camelcase-keys";
 import {TeacherV3} from "../v3models/teachers.js";
-import {strictEqual} from "assert";
+import toValidDateObj from "../utils/toValidDateObj.js";
 
 export default async (trxs: Trxs) => {
   console.info('轉移收據')
@@ -57,9 +57,9 @@ export default async (trxs: Trxs) => {
         totalPrice: v2Receipt.price ?? 0,
         remark: v2Receipt.remark ?? '',
         paidAt: v2Receipt.paidAt,
-        createdAt: v2Receipt.createdAt ?? new Date(),
-        updatedAt: v2Receipt.updatedAt ?? new Date(),
-        deletedAt: v2Receipt.deletedAt,
+        createdAt: toValidDateObj(v2Receipt.createdAt) ?? new Date(),
+        updatedAt: toValidDateObj(v2Receipt.updatedAt) ?? new Date(),
+        deletedAt: toValidDateObj(v2Receipt.deletedAt),
         url: v2Receipt.url ?? '',
         paymentConfigId: null,
         schoolName: siteInfoV2.name,

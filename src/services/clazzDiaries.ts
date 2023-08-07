@@ -12,6 +12,7 @@ import {findCoursesByIds} from "../v2models/courses.js";
 import toClazzId from "../utils/toClazzId.js";
 import toClazzDiaryId from "../utils/toClazzDiaryId.js";
 import {ClazzDiaryV3, createClazzDiaries} from "../v3models/clazzDiaries.js";
+import toValidDateObj from "../utils/toValidDateObj.js";
 
 export default async (trxs: Trxs) => {
   console.info('轉移班級日誌')
@@ -79,9 +80,9 @@ export default async (trxs: Trxs) => {
         }
       },
       isPublished: !!courseDiary.isPublic,
-      createdAt: courseDiary.createdAt,
-      updatedAt: courseDiary.updatedAt,
-      deletedAt: courseDiary.deletedAt,
+      createdAt: toValidDateObj(courseDiary.createdAt) ?? new Date(),
+      updatedAt: toValidDateObj(courseDiary.updatedAt) ?? new Date(),
+      deletedAt: toValidDateObj(courseDiary.deletedAt),
     } as ClazzDiaryV3)
   }
   await createClazzDiaries(clazzDiaries, trxs);
