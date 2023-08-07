@@ -111,15 +111,17 @@ const handleStudentAttendance = async ({
   for (let i = 0; i < studentSignIns.length; i++) {
     let attendances: StudentLessonAttendanceV3[] = []
 
-    if (site?.isHandleDuplicateHashedId) {
-      const isExisted = await v3db().first().from("student_school_attendances").where("id", generateUUID(studentSignIns[i].hashedId))
-      if (isExisted) {
-        // 產出新 hashedId
-        const newHashedId = studentSignIns[i].hashedId + "00000";
-        await v2db().from("student_signs").update({hashed_id: newHashedId}).where({id: studentSignIns[i].id}).transacting(trxs.v2db)
-        studentSignIns[i].hashedId = newHashedId
-      }
-    }
+    // if (site?.isHandleDuplicateHashedId) {
+    //   const isExisted = await v3db().first().from("student_school_attendances").where("id", generateUUID(studentSignIns[i].hashedId))
+    //   if (isExisted) {
+    //     // 產出新 hashedId
+    //     const newHashedId = studentSignIns[i].hashedId + "00000";
+    //     await v2db().from("student_signs").update({hashed_id: newHashedId}).where({id: studentSignIns[i].id}).transacting(trxs.v2db)
+    //     studentSignIns[i].hashedId = newHashedId
+    //   }
+    // }
+    const newHashedId = studentSignIns[i].hashedId + "00000";
+    studentSignIns[i].hashedId = newHashedId;
     const schoolAttendanceId = generateUUID(studentSignIns[i].hashedId);
     const v2TeacherId = studentSignIns[i].teacherId!
 
