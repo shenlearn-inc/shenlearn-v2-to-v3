@@ -16,6 +16,7 @@ import v2chatdb from "../db/v2chatdb.js";
 import v3db from "../db/v3db.js";
 import {Site} from "../types/Site.js";
 import toDateStr from "../utils/toDateStr.js";
+import toValidDateObj from "../utils/toValidDateObj";
 
 export default async (site: Site, trxs: Trxs) => {
   console.info('轉移學生資料')
@@ -91,7 +92,7 @@ export default async (site: Site, trxs: Trxs) => {
         alias: s.englishName ?? '',
         schoolName: s.schoolName ?? '',
         gradeNo: toGradeNumber(s.grade),
-        dateOfEnroll: s.enrollAt?.toISOString().slice(0, 10) ?? null,
+        dateOfEnroll: toValidDateObj(s.enrollAt)?.toISOString().slice(0, 10) ?? null,
         enrollmentMethod: '',
         highestDegreeEarned: s.level ?? '',
         remark: s.remark ?? '',

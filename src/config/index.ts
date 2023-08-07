@@ -62,7 +62,7 @@ export default {
     // 'oxonian',
 
     // 'sunshinetaichung',
-    'dc47',
+    // 'dc47',
     'lovetolearn',
     'knowhownew',
     'chihyi',
