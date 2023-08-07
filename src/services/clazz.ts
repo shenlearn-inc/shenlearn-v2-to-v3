@@ -120,7 +120,7 @@ export default async (site: Site, trxs: Trxs) => {
       ], trxs)
     }
   } else {
-    await createClazzTimes(v2CourseTimes.map(ct => {
+    await createClazzTimes(v2CourseTimes.filter(ct => ct.courseId in v2CourseMap).map(ct => {
       const date = weekdayToDate(ct.weekday)
       return {
         id: generateUUID(site?.isHandleDuplicateHashedId ? `${ct.hashedId}00000` : ct.hashedId),
