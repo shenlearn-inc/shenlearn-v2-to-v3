@@ -31,7 +31,7 @@ export default async (site: Site, trxs: Trxs) => {
   const v2CourseCategories = await findAllCourseCategories(99999, 0, trxs)
   if (!v2CourseCategories.length) return
 
-  if (site?.isHandleDuplicateHashedId) {
+  if (true) {
     for (let i = 0; i < v2CourseCategories.length; i++) {
 
       let isExisted = false;
@@ -62,7 +62,7 @@ export default async (site: Site, trxs: Trxs) => {
   } else {
     await createCourses(v2CourseCategories.map(c => {
       return {
-        id: toCourseId(c.hashedId + "00000"),
+        id: toCourseId(c.hashedId),
         schoolId: toSchoolId(siteInfoV2.hashedId),
         name: c.name ?? '',
         remark: c.remark ?? '',
