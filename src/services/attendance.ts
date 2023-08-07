@@ -190,7 +190,7 @@ const handleStudentAttendance = async ({
           j = -1;
         }
       } else if (i === studentSignIns.length - 1) {
-        attendances = v2StudentAttendances.filter(a => a.courseId in v2CourseMap).map(a => ({
+        attendances = v2StudentAttendances.filter(a => a.courseId in v2CourseMap && a.inclassCourseId! in v2InclassCourseMap).map(a => ({
           id: generateUUID(a.hashedId),
           schoolId: schoolId,
           clazzId: toClazzId(v2CourseMap[a.courseId].hashedId),
@@ -209,7 +209,7 @@ const handleStudentAttendance = async ({
       } else {
         if (moment(v2StudentAttendances[j].attendedAt).isBetween(studentSignIns[i].createdAt, studentSignIns[i - 1].createdAt, null, '[)')) {
           const a = v2StudentAttendances[j]
-          if (a.courseId in v2CourseMap) {
+          if (a.courseId in v2CourseMap && a.inclassCourseId! in v2InclassCourseMap) {
             attendances.push({
               id: generateUUID(a.hashedId),
               schoolId: schoolId,

@@ -83,29 +83,28 @@ export default {
     // 'jingyeclass', 1
     // 'youjia01', 1
     // 'academiceducation', 1
-    // 'sunyang',
-    // 'yixiuenglishclass',
-
-    'hdprofessional',
-    'chiahua2new',
-    '27040new',
-    'chiahuanew',
-    'haydn',
-    'bear123new',
-    'gm062005588new',
-    '4333007new',
-    'taidanew',
-    'texunew',
-    'lingyunnew',
-    'longshengnew',
-    'auroranew',
-    'giraffesg870new',
-    'taiattd3255050',
-    'great5576new',
-    'shinhenew',
-    'oxonian',
-    'jinlin',
-    'gm168new',
+    // 'sunyang', 2
+    // 'yixiuenglishclass', 2
+    // 'hdprofessional',
+    // 'chiahua2new',
+    // '27040new',
+    // 'chiahuanew',
+    // 'haydn',
+    // 'bear123new',
+    // 'gm062005588new',
+    // '4333007new',
+    // 'taidanew',
+    // 'texunew',
+    // 'lingyunnew',
+    // 'longshengnew',
+    // 'auroranew',
+    // 'giraffesg870new',
+    // 'taiattd3255050',
+    // 'great5576new',
+    // 'shinhenew',
+    // 'oxonian',
+    // 'jinlin',
+    // 'gm168new',
 
     // 'mrt', 1
     // 'p033893334', 1
@@ -114,22 +113,21 @@ export default {
     // 'milesnew', 1
     // 'hjunphysicsmnew', 1
     // 'dashannew', 1
-    // 'chushin',
-    // 'knockknock',
-    // 'jasonleader',
-
-    // 'giraffe1026new',
-    // 'chingshanshu',
-    // 'wentengnew',
-    // 'giraffefive',
-    // 'gardennew',
-    // 'rubyzx',
-    // 'liwei',
-    // 'aliothnew',
-    // 'aceyilannew',
-    // 'vincen2003new',
-    // 'drpromathnew',
-    // 'taipeirulinnew',
+    // 'chushin', 2
+    // 'knockknock', 2
+    // 'jasonleader', 2
+    'giraffe1026new',
+    'chingshanshu',
+    'wentengnew',
+    'giraffefive',
+    'gardennew',
+    'rubyzx',
+    'liwei',
+    'aliothnew',
+    'aceyilannew',
+    'vincen2003new',
+    'drpromathnew',
+    'taipeirulinnew',
 
     // 'city8831new',
     // 'newtonnew',
