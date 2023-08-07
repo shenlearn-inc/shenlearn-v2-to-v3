@@ -60,14 +60,17 @@ export default {
 
     // 'shinhenew',
     // 'oxonian',
+    // 'jinlin',
+
 
     // 'sunshinetaichung',
     // 'dc47',
     // 'lovetolearn',
     // 'knowhownew',
     // 'chihyi',
+
     'bihua',
-    'jinlin',
+
     'justwinnew',
     'playdreamnew',
     'wentengnew',
