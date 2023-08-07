@@ -48,7 +48,7 @@ export default async (trxs: Trxs) => {
     const v2TeacherMap = _.keyBy(v2Teachers, 'id')
 
     await createStudentSchedules(
-      v2StudentSchedules.map(s => {
+      v2StudentSchedules.filter((s) => !!s.handleAt).map(s => {
         const studentId  = toStudentId(v2StudentMap[s.studentId].hashedId)
         const clazzId = toClazzId(v2CourseMap[s.courseId].hashedId)
         const type = toStudentScheduleType(s.event)
