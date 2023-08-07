@@ -40,7 +40,7 @@ const handlePayment = async ({ schoolId, v2Payment, serviceDirector, trxs }) => 
   }], trxs)
 
   // Payment
-  const paymentId = generateUUID(v2Payment.hashedId)
+  const paymentId = generateUUID(v2Payment.hashedId + "00000")
   await createPayments([{
     id: paymentId,
     schoolId: schoolId,
