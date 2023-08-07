@@ -73,12 +73,12 @@ export default {
     // 'oxonian',
     // 'jinlin',
     // 'gm168new',
-    // 'vincen2003new',
 
     'taipeirulinnew',
     'giraffefive',
     'bear123new',
     'chiahua2new',
+    'vincen2003new',
     'playdreamnew',
     'wentengnew',
     'drpromathnew',
