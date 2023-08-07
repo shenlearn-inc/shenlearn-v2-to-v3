@@ -89,22 +89,19 @@ export default {
     // 'chiahua2new', 2
     // '27040new', 2
     // 'chiahuanew', 2
-    // 'haydn',
-    // 'bear123new',
-    // 'gm062005588new',
-    // '4333007new',
-    // 'taidanew',
-    // 'texunew',
-    // 'lingyunnew',
-    // 'longshengnew',
-    // 'auroranew',
-    // 'giraffesg870new',
-    // 'taiattd3255050',
-    // 'great5576new',
-    // 'shinhenew',
-    // 'oxonian',
-    // 'jinlin',
-    // 'gm168new',
+    // 'haydn', 2
+    // 'bear123new', 2
+    // 'gm062005588new', 2
+    // '4333007new', 2
+    // 'taidanew', 2
+    'texunew',
+    'lingyunnew',
+    'longshengnew',
+    'auroranew',
+    'giraffesg870new',
+    'taiattd3255050',
+    'great5576new',
+    'shinhenew',
 
     // 'mrt', 1
     // 'p033893334', 1
@@ -116,18 +113,18 @@ export default {
     // 'chushin', 2
     // 'knockknock', 2
     // 'jasonleader', 2
-    // 'giraffe1026new',
-    // 'chingshanshu',
-    // 'wentengnew',
-    // 'giraffefive',
-    // 'gardennew',
-    // 'rubyzx',
-    // 'liwei',
-    // 'aliothnew',
-    // 'aceyilannew',
-    // 'vincen2003new',
-    // 'drpromathnew',
-    // 'taipeirulinnew',
+    // 'giraffe1026new', 2
+    // 'chingshanshu', 2
+    // 'wentengnew', 2
+    // 'giraffefive', 2
+    // 'gardennew', 2
+    // 'rubyzx', 2
+    // 'liwei', 2
+    // 'aliothnew', 2
+    // 'aceyilannew', 2
+    // 'vincen2003new', 2
+    // 'drpromathnew', 2
+    // 'taipeirulinnew', 2
 
     // 'city8831new', 2
     // 'newtonnew', 2
@@ -136,13 +133,16 @@ export default {
     // 'jingwennew', 2
     // 'playdreamnew', 2
     // 'maggieenew', 2
-    'alecnew',
-    'dsedunew',
-    'jcsfnew',
-    'chiahua2new',
-    'wangshihnew',
-    'smilenew',
-    'bear123new',
+    // 'alecnew', 2
+    // 'dsedunew', 2
+    // 'jcsfnew', 2
+    // 'chiahua2new', 2
+    // 'wangshihnew',
+    // 'smilenew',
+    // 'bear123new',
+    // 'oxonian',
+    // 'jinlin',
+    // 'gm168new',
   ].map((name) => ({
     name,
     organizationId: "546694a2-6e6b-4f1d-8bfd-7559fda0ffbf",
