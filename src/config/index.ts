@@ -94,14 +94,14 @@ export default {
     // 'gm062005588new', 2
     // '4333007new', 2
     // 'taidanew', 2
-    'texunew',
-    'lingyunnew',
-    'longshengnew',
-    'auroranew',
-    'giraffesg870new',
-    'taiattd3255050',
-    'great5576new',
-    'shinhenew',
+    // 'texunew',
+    // 'lingyunnew',
+    // 'longshengnew',
+    // 'auroranew',
+    // 'giraffesg870new',
+    // 'taiattd3255050',
+    // 'great5576new',
+    // 'shinhenew',
 
     // 'mrt', 1
     // 'p033893334', 1
@@ -140,9 +140,9 @@ export default {
     // 'wangshihnew', 2
     // 'smilenew',
     // 'bear123new',
-    // 'oxonian',
-    // 'jinlin',
-    // 'gm168new',
+    'oxonian',
+    'jinlin',
+    'gm168new',
   ].map((name) => ({
     name,
     organizationId: "546694a2-6e6b-4f1d-8bfd-7559fda0ffbf",
