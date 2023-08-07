@@ -62,7 +62,7 @@ export default async (site: Site, trxs: Trxs) => {
   } else {
     await createCourses(v2CourseCategories.map(c => {
       return {
-        id: toCourseId(c.hashedId),
+        id: toCourseId(c.hashedId + "00000"),
         schoolId: toSchoolId(siteInfoV2.hashedId),
         name: c.name ?? '',
         remark: c.remark ?? '',
