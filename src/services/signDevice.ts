@@ -12,6 +12,8 @@ import v2db from "../db/v2db.js";
 import {createPersonSignPins} from "../v3models/personSignPin.js";
 import generateUUID from "../utils/generateUUID.js";
 import {Site} from "../types/Site.js";
+import PQueue from "p-queue";
+import toValidDateObj from "../utils/toValidDateObj.js";
 
 interface TerminalV2 {
   id: string
@@ -42,14 +44,22 @@ export default async (site: Site, trxs: Trxs) => {
   const schoolId = toSchoolId(siteInfoV2.hashedId)
 
   // 找簽到 site
-  const terminalSite = await v2signdb()
+  let terminalSite = await v2signdb()
     .first()
     .from("sites")
-    .where("server_url", "like", `%https://${siteInfoV2.databaseName}.%`)
+    .where("external_id", siteInfoV2.hashedId)
     .whereNull("deleted_at") as any
   if (!terminalSite?.id) {
-    return;
+    terminalSite = await v2signdb()
+      .first()
+      .from("sites")
+      .where("server_url", "like", `%https://${siteInfoV2.databaseName}.%`)
+      .whereNull("deleted_at") as any
+    if (!terminalSite?.id) {
+      return;
+    }
   }
+
   // 轉移簽到機
   const terminals: TerminalV2[] = camelcaseKeys(
     await v2signdb()
@@ -59,6 +69,7 @@ export default async (site: Site, trxs: Trxs) => {
       .whereNull("deleted_at")
   );
   const terminalMap = _.keyBy(terminals, "terminalName");
+  console.info(`找到 ${terminals.length}個 簽到機`)
 
   const devices = Object.values(terminalMap).map((terminal) => snakecaseKeys({
     id: terminal.terminalName,
@@ -96,23 +107,32 @@ export default async (site: Site, trxs: Trxs) => {
     return;
   }
 
+  const queue = new PQueue({concurrency: 10});
   const v2StudentMap = _.keyBy(v2Students, "id");
   for (const studentTerminal of studentTerminals) {
-    // 學生不存在 或是 簽到機沒有建立 都不轉移
-    if (!(studentTerminal.studentId in v2StudentMap) || !(studentTerminal.terminalName in deviceMap)) {
-      continue;
-    }
-    const v2student = v2StudentMap[studentTerminal.studentId];
-    await createPersonSignPins([{
-      id: generateUUID(),
-      personId: toStudentId(v2student.hashedId),
-      personType: "student",
-      schoolId,
-      pin: studentTerminal.pin,
-      signDeviceId: studentTerminal.terminalName,
-      createdAt: studentTerminal.createdAt ? (studentTerminal.createdAt as any) === "0000-00-00 00:00:00" ? new Date().toISOString() : studentTerminal.createdAt.toISOString() : new Date().toISOString(),
-      updatedAt: studentTerminal.updatedAt ? (studentTerminal.updatedAt as any) === "0000-00-00 00:00:00" ? new Date().toISOString() : studentTerminal.updatedAt.toISOString() : new Date().toISOString(),
-      deletedAt: studentTerminal.deletedAt ? (studentTerminal.deletedAt as any) === "0000-00-00 00:00:00" ? null : studentTerminal.deletedAt.toISOString() : null,
-    }], trxs);
+    queue.add(async () => {
+      const startTime = new Date().getTime()
+      // 學生不存在 或是 簽到機沒有建立 都不轉移
+      if (!(studentTerminal.studentId in v2StudentMap) || !(studentTerminal.terminalName in deviceMap)) {
+        return;
+      }
+      const v2student = v2StudentMap[studentTerminal.studentId];
+      await createPersonSignPins([{
+        id: generateUUID(),
+        personId: toStudentId(v2student.hashedId),
+        personType: "student",
+        schoolId,
+        pin: studentTerminal.pin,
+        signDeviceId: studentTerminal.terminalName,
+        // @ts-ignore
+        createdAt: toValidDateObj(studentTerminal.createdAt) ?? new Date().toISOString(),
+        // @ts-ignore
+        updatedAt: toValidDateObj(studentTerminal.updatedAt) ?? new Date().toISOString(),
+        // @ts-ignore
+        deletedAt: toValidDateObj(studentTerminal.deletedAt),
+      }], trxs);
+      console.info(`已處理學生指紋 ${v2student.hashedId}, time elapsed: ${(new Date().getTime() - startTime) / 1000}s`)
+    })
   }
+  await queue.onIdle();
 }
