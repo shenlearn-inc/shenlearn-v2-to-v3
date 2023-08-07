@@ -99,9 +99,9 @@ export default async (site: Site, trxs: Trxs) => {
         advisorId: s.teacherId ? (s.teacherId in teacherMap ? toTeacherId(teacherMap[s.teacherId].hashedId) : null) : null,
         isInSchool: !!s.inclass,
         chatRoomId: chatRoomId,
-        createdAt: s.createdAt ?? new Date(),
-        updatedAt: s.updatedAt ?? new Date(),
-        deletedAt: s.deletedAt,
+        createdAt: toValidDateObj(s.createdAt) ?? new Date(),
+        updatedAt: toValidDateObj(s.updatedAt) ?? new Date(),
+        deletedAt: toValidDateObj(s.deletedAt),
       }], trxs)
 
       // 新建老師與學生的聊天室
