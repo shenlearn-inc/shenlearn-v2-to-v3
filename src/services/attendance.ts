@@ -106,7 +106,6 @@ const handleStudentAttendance = async ({
   const v2InclassCourseMap = _.keyBy(v2InclassCourses, 'id')
 
   const time1 = new Date().getTime()
-  console.log(`準備時間花費 ${(time1 - startTime) / 1000}s`)
 
   const isOffset: boolean = false;
   for (let i = 0; i < studentSignIns.length; i++) {
@@ -234,8 +233,6 @@ const handleStudentAttendance = async ({
     }
 
     const time2 = new Date().getTime()
-    console.log(`計算時間花費 ${(time2 - time1) / 1000}s`)
-
     await createStudentLessonAttendances(attendances, trxs)
   }
 
