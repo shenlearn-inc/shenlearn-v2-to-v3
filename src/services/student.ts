@@ -16,7 +16,7 @@ import v2chatdb from "../db/v2chatdb.js";
 import v3db from "../db/v3db.js";
 import {Site} from "../types/Site.js";
 import toDateStr from "../utils/toDateStr.js";
-import toValidDateObj from "../utils/toValidDateObj";
+import toValidDateObj from "../utils/toValidDateObj.js";
 
 export default async (site: Site, trxs: Trxs) => {
   console.info('轉移學生資料')
