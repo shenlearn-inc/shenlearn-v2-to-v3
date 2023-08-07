@@ -94,8 +94,8 @@ export default {
     // 'gm062005588new', 2
     // '4333007new', 2
     // 'taidanew', 2
-    // 'texunew', 2
-    // 'lingyunnew', 2
+    'texunew',
+    'lingyunnew',
     'longshengnew',
     'auroranew',
     'giraffesg870new',
