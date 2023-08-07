@@ -85,7 +85,7 @@ export default async (site: Site, trxs: Trxs) => {
   if (!v2CourseTimes.length) return
 
   const v2CourseMap = _.keyBy(v2Courses, 'id')
-  if (site?.isHandleDuplicateHashedId) {
+  if (true) {
     for (let i = 0; i < v2CourseTimes.length; i++) {
       const ct = v2CourseTimes[i];
       if (!(ct.courseId in v2CourseMap)) {
