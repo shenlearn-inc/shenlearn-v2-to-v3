@@ -67,6 +67,7 @@ export default {
     // 'maggieenew',
     // 'josephihonew',
     // 'mininnew',
+    // 'wfc',
 
 
     // 'shinhenew',
@@ -74,15 +75,15 @@ export default {
     // 'jinlin',
     // 'gm168new',
 
-    // 'taipeirulinnew',
-    // 'giraffefive',
-    // 'bear123new',
-    // 'chiahua2new',
-    // 'vincen2003new',
-    // 'playdreamnew',
-    // 'wentengnew',
-    // 'drpromathnew',
-    // 'wentengnew',
+    'taipeirulinnew',
+    'giraffefive',
+    'bear123new',
+    'chiahua2new',
+    'vincen2003new',
+    'playdreamnew',
+    'wentengnew',
+    'drpromathnew',
+    'wentengnew',
     // 'liwei',
     // 'taiattd3255050',
     // 'jingwennew',
@@ -112,7 +113,6 @@ export default {
     // 'chushin',
     // 'jasonleader',
     // 'mrt',
-    'wfc',
     // 'p033893334',
     // 'giraffe29960680'
   ].map((name) => ({
