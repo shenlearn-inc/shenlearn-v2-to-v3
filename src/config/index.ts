@@ -68,10 +68,12 @@ export default {
     // 'lovetolearn',
     // 'knowhownew',
     // 'chihyi',
+    // 'bihua',
+    // 'justwinnew',
 
-    'bihua',
-
-    'justwinnew',
+    'fudannew',
+    'maggieenew',
+    'josephihonew',
     'playdreamnew',
     'wentengnew',
     'drpromathnew',
