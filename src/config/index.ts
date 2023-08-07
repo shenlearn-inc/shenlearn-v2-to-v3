@@ -76,7 +76,6 @@ export default {
     // 'gm168new',
 
     'taipeirulinnew',
-    'giraffefive',
     'bear123new',
     'chiahua2new',
     'vincen2003new',
@@ -84,7 +83,9 @@ export default {
     'wentengnew',
     'drpromathnew',
     'wentengnew',
-    // 'liwei',
+    'liwei',
+
+    // 'giraffefive',
     // 'taiattd3255050',
     // 'jingwennew',
     // 'wangshihnew',
@@ -95,6 +96,8 @@ export default {
     // 'kmsupernew',
     // 'hjunphysicsmnew',
     // 'smilenew',
+
+    // 'bear123new',
     // 'chingshanshu',
     // 'aceyilannew',
     // 'milesnew',
