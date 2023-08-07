@@ -65,6 +65,8 @@ export default {
     // 'justwinnew',
     // 'fudannew',
     // 'maggieenew',
+    // 'josephihonew',
+    // 'mininnew',
 
     // 'shinhenew',
     // 'oxonian',
@@ -72,10 +74,9 @@ export default {
     // 'gm168new',
 
 
-    // 'josephihonew',
-    'mininnew',
     'vincen2003new',
     'giraffefive',
+    'taipeirulinnew',
     'bear123new',
     'chiahua2new',
     'playdreamnew',
@@ -83,7 +84,6 @@ export default {
     'drpromathnew',
     'wentengnew',
     'liwei',
-    'taipeirulinnew',
 
     'taiattd3255050',
     'jingwennew',
@@ -156,7 +156,7 @@ export default {
 
   initTeacherPassword: 'test123',
   zone: 'Asia/Taipei',
-  chunkSize: 100,
+  chunkSize: 1000,
   studentRoleId: 'd9a7dc11-074d-403a-bd88-c35d30fe8b90',
   contactorRoleId: '26eaa76b-9090-43ec-b0c8-237bca571a33',
   unknownChatUser: '7e60d5e5-23ce-499c-839a-b7e8f233e932',
