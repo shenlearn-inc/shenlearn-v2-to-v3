@@ -34,15 +34,15 @@ export const run = async (): Promise<void> => {
     v3db(config.v3db.database)
     v3chatdb(config.v3chatdb.database)
 
-    await v2db().transaction(async v2dbTRX => {
-      await v2chatdb().transaction(async v2chatdbTRX => {
-        await v3db().transaction(async v3dbTRX => {
-          await v3chatdb().transaction(async v3chatdbTRX => {
+    // await v2db().transaction(async v2dbTRX => {
+    //   await v2chatdb().transaction(async v2chatdbTRX => {
+    //     await v3db().transaction(async v3dbTRX => {
+    //       await v3chatdb().transaction(async v3chatdbTRX => {
             const trxs = {
-              v2db: v2dbTRX,
-              v2chatdb: v2chatdbTRX,
-              v3db: v3dbTRX,
-              v3chatdb: v3chatdbTRX,
+              v2db: "123" as any,
+              v2chatdb: "123" as any,
+              v3db: "123" as any,
+              v3chatdb: "123" as any,
             } as Trxs
 
             // 清空學校資料
@@ -107,10 +107,10 @@ export const run = async (): Promise<void> => {
 
             // 轉移校園公告
             await announcement(trxs)
-          })
-        })
-      })
-    })
+          // })
+        // })
+      // })
+    // })
     console.info(`${site.name} migration done, time elapsed: ${(new Date().getTime() - startTime) / 1000}s`)
   }
 }
