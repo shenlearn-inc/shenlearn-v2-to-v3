@@ -99,10 +99,10 @@ export default {
     // 'longshengnew', 2
     // 'auroranew', 2
     // 'great5576new', 2
-    // 'giraffesg870new',
+    'giraffesg870new',
     // 'taiattd3255050',
 
-    'shinhenew',
+    // 'shinhenew',
 
     // 'mrt', 1
     // 'p033893334', 1
