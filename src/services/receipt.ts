@@ -67,7 +67,7 @@ export default async (trxs: Trxs) => {
         schoolCertificateNumber: siteInfoV2.certificateNumber,
         schoolTelephonePrefix: "886",
         schoolTelephone: siteInfoV2.phone,
-        schoolAddress: siteInfoV2.address,
+        schoolAddress: siteInfoV2?.address ?? "",
       }], trxs)
 
       // 將已繳費的 payment item 填入 receiptId
