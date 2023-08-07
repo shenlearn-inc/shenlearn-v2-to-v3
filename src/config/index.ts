@@ -67,15 +67,16 @@ export default {
     // 'maggieenew',
     // 'josephihonew',
     // 'mininnew',
-    // 'vincen2003new',
+
 
     // 'shinhenew',
     // 'oxonian',
     // 'jinlin',
     // 'gm168new',
+    // 'vincen2003new',
 
-    'giraffefive',
     'taipeirulinnew',
+    'giraffefive',
     'bear123new',
     'chiahua2new',
     'playdreamnew',
@@ -83,7 +84,6 @@ export default {
     'drpromathnew',
     'wentengnew',
     'liwei',
-
     'taiattd3255050',
     'jingwennew',
     'wangshihnew',
