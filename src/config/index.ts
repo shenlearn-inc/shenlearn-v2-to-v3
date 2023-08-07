@@ -99,7 +99,7 @@ export default {
     // 'longshengnew', 2
     // 'auroranew', 2
     // 'great5576new', 2
-    'giraffesg870new',
+    // 'giraffesg870new',
     // 'taiattd3255050',
 
     // 'shinhenew',
@@ -142,8 +142,8 @@ export default {
     // 'smilenew', 2
     // 'bear123new', 2
     // 'oxonian', 2
-    // 'jinlin',
-    // 'gm168new',
+    'jinlin',
+    'gm168new',
   ].map((name) => ({
     name,
     organizationId: "546694a2-6e6b-4f1d-8bfd-7559fda0ffbf",

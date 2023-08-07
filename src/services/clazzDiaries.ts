@@ -37,7 +37,9 @@ export default async (trxs: Trxs) => {
   // 轉移班級通知
   const clazzDiaries = [] as any;
   for (const courseDiary of courseDiaries) {
-    const clazzDiaryId = toClazzDiaryId(courseDiary.hashedId);
+    const hashedId = courseDiary.hashedId + "00000";
+    const clazzDiaryId = toClazzDiaryId(hashedId);
+    await v2db().from("course_diaries").update({ hashed_id: clazzDiaryId }).where({ id: courseDiary.id }).transacting(trxs.v2db)
 
     // 班級
     const [course] = await findCoursesByIds([courseDiary.courseId], trxs);

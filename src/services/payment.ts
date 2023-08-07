@@ -40,7 +40,9 @@ const handlePayment = async ({ schoolId, v2Payment, serviceDirector, trxs }) => 
   }], trxs)
 
   // Payment
-  const paymentId = generateUUID(v2Payment.hashedId + "00000")
+  const hashedId = v2Payment.hashedId + "00000";
+  const paymentId = generateUUID(hashedId)
+  await v2db().from("payments").update({ hashed_id: hashedId }).where({ id: v2Payment.id }).transacting(trxs.v2db)
   await createPayments([{
     id: paymentId,
     schoolId: schoolId,
