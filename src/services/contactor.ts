@@ -95,6 +95,9 @@ export default async (site: Site, trxs: Trxs) => {
   const studentMap = _.keyBy(students, 'id')
   // 轉移子聯絡人
   for (const sp of studentParents) {
+    if (!(sp.studentId! in studentMap)) {
+      continue
+    }
     const studentId = toStudentId(studentMap[sp.studentId!].hashedId)
     const student = studentMap[sp.studentId!]
     const chatRoomId = toSubContactorChatRoomId(sp.hashedId)
