@@ -83,8 +83,8 @@ export default {
     // 'tdkd', 1
     // 'fudan02', 1
     // 'sinsiangnew', 1
-    'lykd',
-    'wskd',
+    // 'lykd', 1
+    // 'wskd', 1
     'jingyeclass',
     'youjia01',
     'academiceducation',
