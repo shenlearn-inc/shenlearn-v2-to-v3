@@ -101,7 +101,7 @@ export default {
     // 'great5576new', 2
     // 'shinhenew', 2
     // 'giraffesg870new',
-    'taiattd3255050',
+    // 'taiattd3255050',
 
     // 'mrt', 1
     // 'p033893334', 1
@@ -141,7 +141,7 @@ export default {
     // 'smilenew', 2
     // 'bear123new', 2
     // 'oxonian', 2
-    // 'jinlin',
+    'jinlin',
     // 'gm168new',
   ].map((name) => ({
     name,
