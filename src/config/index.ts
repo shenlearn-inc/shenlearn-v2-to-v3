@@ -25,124 +25,117 @@ const roles = {
 export default {
   // !必改
   sites: [
-    // 'rulinty',
-    // 'gailenglishnew',
-    // 'chiaoyangdayeh',
-    // 'chiaoyangdayou',
-    // 'bishengnew',
-    // 'cls',
-    // 'yspro',
-    // 'pigdogletternew',
-    // 'taiat3176767',
-    // 'reggioscience',
-    // 'tah',
-    // 'giraffesp10new',
-    // 'sunlight',
-    // 'hanway',
-    // 'sensei',
-    // 'panpole627',
-    // 'sinsing',
-    // 'hungguang',
-    // 'chengguang',
-    // 'newtoeic',
+    'rulinty',
+    'gailenglishnew',
+    'chiaoyangdayeh',
+    'chiaoyangdayou',
+    'bishengnew',
+    'cls',
+    'yspro',
+    'pigdogletternew',
+    'taiat3176767',
+    'reggioscience',
+    'tah',
+    'giraffesp10new',
+    'sunlight',
+    'hanway',
+    'sensei',
+    'panpole627',
+    'sinsing',
+    'hungguang',
+    'chengguang',
+    'newtoeic',
     // 'chushin02',
-    // 'tachih',
-    // 'pochuan',
-    // 'huangs88',
-    // 'guantengnew',
-    // 'sowaclass',
-    // 'zhengyinew',
-    // 'muchaartnew',
-    // 'tplsnew',
-    // 'muchaart1new',
-    // 'kidcastle01',
-    // 'sunshinetaichung',
-    // 'dc47',
-    // 'lovetolearn',
-    // 'knowhownew',
-    // 'chihyi',
-    // 'bihua',
-    // 'justwinnew',
-    // 'fudannew',
-    // 'maggieenew',
-    // 'josephihonew',
-    // 'mininnew',
-    // 'wfc',
-
-
-    // 'rootwondernew', 1
-    // 'nlkd', 1
-    // 'pan', 1
-    // 'jjkd', 1
-    // 'fskd', 1
-    // 'tdkd', 1
-    // 'fudan02', 1
-    // 'sinsiangnew', 1
-    // 'lykd', 1
-    // 'wskd', 1
-    // 'jingyeclass', 1
-    // 'youjia01', 1
-    // 'academiceducation', 1
-    // 'sunyang', 2
-    // 'yixiuenglishclass', 2
-    // 'hdprofessional', 2
-    // 'chiahua2new', 2
-    // '27040new', 2
-    // 'chiahuanew', 2
-    // 'haydn', 2
-    // 'bear123new', 2
-    // 'gm062005588new', 2
-    // '4333007new', 2
-    // 'taidanew', 2
-    // 'texunew', 2
-    // 'lingyunnew', 2
-    // 'longshengnew', 2
-    // 'auroranew', 2
-    // 'great5576new', 2
-    // 'shinhenew', 2
-    // 'giraffesg870new',
+    'tachih',
+    'pochuan',
+    'huangs88',
+    'guantengnew',
+    'sowaclass',
+    'zhengyinew',
+    'muchaartnew',
+    'tplsnew',
+    'muchaart1new',
+    'kidcastle01',
+    'sunshinetaichung',
+    'dc47',
+    'lovetolearn',
+    'knowhownew',
+    'chihyi',
+    'bihua',
+    'justwinnew',
+    'fudannew',
+    'maggieenew',
+    'josephihonew',
+    'mininnew',
+    'wfc',
+    'rootwondernew',
+    'nlkd',
+    'pan',
+    'jjkd',
+    'fskd',
+    'tdkd',
+    'fudan02',
+    'sinsiangnew',
+    'lykd',
+    'wskd',
+    'jingyeclass',
+    'youjia01',
+    'academiceducation',
+    'sunyang',
+    'yixiuenglishclass',
+    'hdprofessional',
+    'chiahua2new',
+    '27040new',
+    'chiahuanew',
+    'haydn',
+    'bear123new',
+    'gm062005588new',
+    '4333007new',
+    'taidanew',
+    'texunew',
+    'lingyunnew',
+    'longshengnew',
+    'auroranew',
+    'great5576new',
+    'shinhenew',
+    'giraffesg870new',
     'taiattd3255050',
-
-    // 'mrt', 1
-    // 'p033893334', 1
-    // 'arknew', 1
-    // 'giraffe29960680', 1
-    // 'milesnew', 1
-    // 'hjunphysicsmnew', 1
-    // 'dashannew', 1
-    // 'chushin', 2
-    // 'knockknock', 2
-    // 'jasonleader', 2
-    // 'giraffe1026new', 2
-    // 'chingshanshu', 2
-    // 'wentengnew', 2
-    // 'giraffefive', 2
-    // 'gardennew', 2
-    // 'rubyzx', 2
-    // 'liwei', 2
-    // 'aliothnew', 2
-    // 'aceyilannew', 2
-    // 'vincen2003new', 2
-    // 'drpromathnew', 2
-    // 'taipeirulinnew', 2
-
-    // 'city8831new', 2
-    // 'newtonnew', 2
-    // 'kmsupernew', 2
-    // 'liupingtungnew', 2
-    // 'jingwennew', 2
-    // 'playdreamnew', 2
-    // 'maggieenew', 2
-    // 'alecnew', 2
-    // 'dsedunew', 2
-    // 'jcsfnew', 2
-    // 'chiahua2new', 2
-    // 'wangshihnew', 2
-    // 'smilenew', 2
-    // 'bear123new', 2
-    // 'oxonian', 2
-    // 'jinlin', 2
-    // 'gm168new',
+    'mrt',
+    'p033893334',
+    'arknew',
+    'giraffe29960680',
+    'milesnew',
+    'hjunphysicsmnew',
+    'dashannew',
+    'chushin',
+    'knockknock',
+    'jasonleader',
+    'giraffe1026new',
+    'chingshanshu',
+    'wentengnew',
+    'giraffefive',
+    'gardennew',
+    'rubyzx',
+    'liwei',
+    'aliothnew',
+    'aceyilannew',
+    'vincen2003new',
+    'drpromathnew',
+    'taipeirulinnew',
+    'city8831new',
+    'newtonnew',
+    'kmsupernew',
+    'liupingtungnew',
+    'jingwennew',
+    'playdreamnew',
+    'alecnew',
+    'dsedunew',
+    'jcsfnew',
+    'wangshihnew',
+    'smilenew',
+    'oxonian',
+    'jinlin',
+    'gm168new',
   ].map((name) => ({
     name,
     organizationId: "546694a2-6e6b-4f1d-8bfd-7559fda0ffbf",
