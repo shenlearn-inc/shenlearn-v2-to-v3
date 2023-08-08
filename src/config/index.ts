@@ -118,7 +118,7 @@ export default {
     'rubyzx',
     'liwei',
     'aliothnew',
-    // 'aceyilannew',
+    'aceyilannew',
     'vincen2003new',
     'drpromathnew',
     'taipeirulinnew',

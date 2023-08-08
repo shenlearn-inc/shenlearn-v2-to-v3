@@ -27,6 +27,7 @@ import studentDiary from "./services/studentDiary.js";
 import v2chatdb from "./db/v2chatdb.js";
 import video from "./services/video.js";
 import paymentItemReceiptFix from "./services/paymentItemReceiptFix.js";
+import paymentConfigFix from "./services/paymentConfigFix.js";
 
 export const run = async (): Promise<void> => {
   for (const site of config.sites) {
@@ -119,9 +120,12 @@ export const run = async (): Promise<void> => {
             //
             // // 轉移影片
             // await video(trxs)
-
-            // 修復繳費項目沒有收據 id 問題
-            await paymentItemReceiptFix(trxs)
+            //
+            // // 修復繳費項目沒有收據 id 問題
+            // await paymentItemReceiptFix(trxs)
+            //
+            // // 修復繳費備註
+            // await paymentConfigFix(trxs)
 
     //       })
     //     })
