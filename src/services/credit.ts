@@ -39,7 +39,7 @@ export default async (trxs: Trxs) => {
   for (let i = 0; i < Math.ceil(numberOfCredit / config.chunkSize); i++) {
 
     // 找出堂次
-    const v2Credits = (await findAllCredits(config.chunkSize, i * config.chunkSize, trxs)).filter((c) => !!c.courseId)
+    const v2Credits = (await findAllCredits(config.chunkSize, i * config.chunkSize, trxs))
 
     const v2Students = await findStudentsByIds(Array.from(new Set(v2Credits.map(pi => pi.studentId))), trxs) as StudentV2[]
     const v2StudentMap = _.keyBy(v2Students, 'id')
@@ -59,7 +59,7 @@ export default async (trxs: Trxs) => {
 
     // 檢查 courseCategoryId 是否為 null
     await createCredits(
-      v2Credits.filter(c => !!c.courseCategoryId).map(c => {
+      v2Credits.filter(c => c.courseCategoryId as number in v2CourseCategoryMap && c.studentId in v2StudentMap).map(c => {
         const id = toCreditId(c.hashedId)
         // @ts-ignore
         const courseId = toCourseId(v2CourseCategoryMap[c.courseCategoryId as number].hashedId)
