@@ -13,7 +13,6 @@ import {createPersonSignPins} from "../v3models/personSignPin.js";
 import generateUUID from "../utils/generateUUID.js";
 import {Site} from "../types/Site.js";
 import PQueue from "p-queue";
-import toValidDateObj from "../utils/toValidDateObj.js";
 
 interface TerminalV2 {
   id: string
@@ -84,7 +83,7 @@ export default async (site: Site, trxs: Trxs) => {
     deletedAt: terminal.deletedAt ? terminal.deletedAt.toISOString() : null,
   }))
   const deviceMap = _.keyBy(devices, "id")
-  await v3db().insert(devices).from("sign_devices").transacting(trxs.v3db)
+  // await v3db().insert(devices).from("sign_devices").transacting(trxs.v3db)
 
   // 轉移學生工號
   const studentTerminals: StudentTerminalV2[] = camelcaseKeys(
@@ -124,12 +123,9 @@ export default async (site: Site, trxs: Trxs) => {
         schoolId,
         pin: studentTerminal.pin,
         signDeviceId: studentTerminal.terminalName,
-        // @ts-ignore
-        createdAt: toValidDateObj(studentTerminal.createdAt) ?? new Date().toISOString(),
-        // @ts-ignore
-        updatedAt: toValidDateObj(studentTerminal.updatedAt) ?? new Date().toISOString(),
-        // @ts-ignore
-        deletedAt: toValidDateObj(studentTerminal.deletedAt),
+        createdAt: studentTerminal.createdAt ? (studentTerminal.createdAt as any) === "0000-00-00 00:00:00" ? new Date().toISOString() : studentTerminal.createdAt.toISOString() : new Date().toISOString(),
+        updatedAt: studentTerminal.updatedAt ? (studentTerminal.updatedAt as any) === "0000-00-00 00:00:00" ? new Date().toISOString() : studentTerminal.updatedAt.toISOString() : new Date().toISOString(),
+        deletedAt: studentTerminal.deletedAt ? (studentTerminal.deletedAt as any) === "0000-00-00 00:00:00" ? null : studentTerminal.deletedAt.toISOString() : null,
       }], trxs);
       console.info(`已處理學生指紋 ${v2student.hashedId}, time elapsed: ${(new Date().getTime() - startTime) / 1000}s`)
     })
