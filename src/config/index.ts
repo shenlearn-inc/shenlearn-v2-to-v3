@@ -140,7 +140,8 @@ export default {
     // 'wordsmusic',
     // 'rwtkd',
     // 'jdkd',
-    'happyenglishnew',
+    // 'happyenglishnew',
+    'wenxinnew',
   ].map((name) => ({
     name,
     organizationId: "546694a2-6e6b-4f1d-8bfd-7559fda0ffbf",
