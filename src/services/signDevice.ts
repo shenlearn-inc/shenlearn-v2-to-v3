@@ -83,7 +83,7 @@ export default async (site: Site, trxs: Trxs) => {
     deletedAt: terminal.deletedAt ? terminal.deletedAt.toISOString() : null,
   }))
   const deviceMap = _.keyBy(devices, "id")
-  // await v3db().insert(devices).from("sign_devices").transacting(trxs.v3db)
+  await v3db().insert(devices).from("sign_devices").transacting(trxs.v3db)
 
   // 轉移學生工號
   const studentTerminals: StudentTerminalV2[] = camelcaseKeys(
