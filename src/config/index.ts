@@ -141,7 +141,9 @@ export default {
     // 'rwtkd',
     // 'jdkd',
     // 'happyenglishnew',
-    'wenxinnew',
+    // 'wenxinnew',
+    // 'fanghuads14',
+    'al365'
   ].map((name) => ({
     name,
     organizationId: "546694a2-6e6b-4f1d-8bfd-7559fda0ffbf",
