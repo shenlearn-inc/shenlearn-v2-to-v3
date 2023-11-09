@@ -143,7 +143,8 @@ export default {
     // 'happyenglishnew',
     // 'wenxinnew',
     // 'fanghuads14',
-    'al365'
+    // 'al365'
+    'mydearlotung'
   ].map((name) => ({
     name,
     organizationId: "546694a2-6e6b-4f1d-8bfd-7559fda0ffbf",
