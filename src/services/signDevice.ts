@@ -70,24 +70,30 @@ export default async (site: Site, trxs: Trxs) => {
   const terminalMap = _.keyBy(terminals, "terminalName");
   console.info(`找到 ${terminals.length}個 簽到機`)
 
-  const devices = Object.values(terminalMap).map((terminal) => snakecaseKeys({
-    id: terminal.terminalName,
-    macAddress: terminal.macAddress,
-    organizationId: site.organizationId,
-    schoolId: schoolId,
-    clazzId: null,
-    zone: "Asia/Taipei",
-    remark: "",
-    createdAt: terminal.createdAt.toISOString(),
-    updatedAt: terminal.updatedAt.toISOString(),
-    deletedAt: terminal.deletedAt ? terminal.deletedAt.toISOString() : null,
-  }))
-  const deviceMap = _.keyBy(devices, "id")
-  try {
-    await v3db().insert(devices).from("sign_devices").transacting(trxs.v3db)
-  } catch (e) {
-    console.log(`${devices.map((d) => d.id).join(", ")} 簽到機已存在`)
+  const devices: any = []
+  for (const terminal of Object.values(terminalMap)) {
+    const existedDevice = await v3db().first().from("sign_devices").where("id", terminal.terminalName).transacting(trxs.v3db)
+    if (!!existedDevice) {
+      devices.push(existedDevice)
+      continue
+    }
+    const device = snakecaseKeys({
+      id: terminal.terminalName,
+      macAddress: terminal.macAddress,
+      organizationId: site.organizationId,
+      schoolId: schoolId,
+      clazzId: null,
+      zone: "Asia/Taipei",
+      remark: "",
+      createdAt: terminal.createdAt.toISOString(),
+      updatedAt: terminal.updatedAt.toISOString(),
+      deletedAt: terminal.deletedAt ? terminal.deletedAt.toISOString() : null,
+    })
+    await v3db().insert(device).from("sign_devices").transacting(trxs.v3db)
+    devices.push(device)
   }
+
+  const deviceMap = _.keyBy(devices, "id")
 
   // 轉移學生工號
   const studentTerminals: StudentTerminalV2[] = camelcaseKeys(
