@@ -308,7 +308,7 @@ export default async (site: Site, trxs: Trxs) => {
 
       await createStudentLessonAttendances(
         v2StudentAttendances
-          .filter(a => a.inclassCourseId && a.inclassCourseId in v2InclassCourseMap && a.studentId in v2StudentMap)
+          .filter(a => a.inclassCourseId && a.inclassCourseId in v2InclassCourseMap && a.studentId in v2StudentMap && a.courseId in v2CourseMap)
           .map(a => {
             return {
               id: generateUUID(site?.isHandleDuplicateHashedId ? `${a.hashedId}00000` : a.hashedId),
