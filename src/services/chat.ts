@@ -73,7 +73,7 @@ const handleStudentChat = async ({student, serviceDirector, site, trxs}: HandleS
   // 正常
   // const v2Messages = await findMessagesByRoomId(v2Room.id);
   // 回補某時間之後的訊息
-  const v2Messages = await findMessagesAfterTimeByRoomId(v2Room.id, '2023-11-24T00:00:00.000Z');
+  const v2Messages = await findMessagesAfterTimeByRoomId(v2Room.id, '2023-11-26T00:00:00.000Z');
 
   if (!v2Messages.length) {
     return;
@@ -117,8 +117,9 @@ const handleStudentChat = async ({student, serviceDirector, site, trxs}: HandleS
   // 回補某時間之後的訊息使用
   for (const v3Message of v3Messages) {
     try {
+      console.log(`轉移訊息 ${v3Message.createdAt}`)
       await createMessages([v3Message], trxs);
-      console.error(`轉移訊息成功 ${v3Message.id}`)
+      console.log(`轉移訊息成功 ${v3Message.id}`)
     } catch (e) {
       console.error(`轉移訊息錯誤 ${v3Message.id}`)
     }
