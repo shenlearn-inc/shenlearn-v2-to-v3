@@ -25,8 +25,9 @@ const roles = {
 export default {
   // !必改
   sites: [
-    'goldmedalsh2',
+    'goldmedalsh',
     // 'gm5892500new',
+    // 'gm5892501new',
     // 'gm5892501new',
     // 'al365',
   ].map((name) => ({

@@ -23,3 +23,16 @@ export const findMessagesByRoomId = async (roomId: string): Promise<MessageV2[]>
 
   return camelcaseKeys(await query);
 }
+
+export const findMessagesAfterTimeByRoomId = async (roomId: string, time: string): Promise<MessageV2[]> => {
+  const query = v2chatdb()
+    .select()
+    .from('messages')
+    .where({
+      room_id: roomId
+    })
+    .where('created_at', '>=', time)
+    .whereNull("deleted_at")
+
+  return camelcaseKeys(await query);
+}

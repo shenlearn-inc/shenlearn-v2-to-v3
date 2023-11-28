@@ -7,7 +7,7 @@ import v3db from "../db/v3db.js";
 import {TeacherV3} from "../v3models/teachers.js";
 import {findRoomByExternalId} from "../v2chatModels/rooms.js";
 import toStudentChatRoomId from "../utils/toStudentChatRoomId.js";
-import {findMessagesByRoomId} from "../v2chatModels/messages.js";
+import {findMessagesAfterTimeByRoomId, findMessagesByRoomId} from "../v2chatModels/messages.js";
 import {findUsersByIds} from "../v2chatModels/users.js";
 import toContactorId from "../utils/toContactorId.js";
 import {createMessages, MessageV3} from "../v3chatModels/messages.js";
@@ -69,7 +69,12 @@ const handleStudentChat = async ({student, serviceDirector, site, trxs}: HandleS
   if (!v2Room) {
     return;
   }
-  const v2Messages = await findMessagesByRoomId(v2Room.id);
+
+  // 正常
+  // const v2Messages = await findMessagesByRoomId(v2Room.id);
+  // 回補某時間之後的訊息
+  const v2Messages = await findMessagesAfterTimeByRoomId(v2Room.id, '2023-11-24T00:00:00.000Z');
+
   if (!v2Messages.length) {
     return;
   }
@@ -106,7 +111,18 @@ const handleStudentChat = async ({student, serviceDirector, site, trxs}: HandleS
       deletedAt: v2message.deletedAt,
     } as MessageV3
   });
-  await createMessages(v3Messages, trxs);
+
+  // 正常
+  // await createMessages(v3Messages, trxs);
+  // 回補某時間之後的訊息使用
+  for (const v3Message of v3Messages) {
+    try {
+      await createMessages([v3Message], trxs);
+      console.error(`轉移訊息成功 ${v3Message.id}`)
+    } catch (e) {
+      console.error(`轉移訊息錯誤 ${v3Message.id}`)
+    }
+  }
 }
 
 export default async (site: Site, trxs: Trxs) => {
