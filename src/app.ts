@@ -133,7 +133,7 @@ export const run = async (): Promise<void> => {
             await noEndTimeAttendanceFix(trxs)
 
             // 修復堂次
-            await creditFix(trxs)
+            // await creditFix(trxs)
 
           })
         })
