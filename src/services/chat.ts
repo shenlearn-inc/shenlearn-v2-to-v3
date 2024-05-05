@@ -7,7 +7,7 @@ import v3db from "../db/v3db.js";
 import {TeacherV3} from "../v3models/teachers.js";
 import {findRoomByExternalId} from "../v2chatModels/rooms.js";
 import toStudentChatRoomId from "../utils/toStudentChatRoomId.js";
-import {findMessagesAfterTimeByRoomId, findMessagesByRoomId} from "../v2chatModels/messages.js";
+import {findMessagesByRoomId} from "../v2chatModels/messages.js";
 import {findUsersByIds} from "../v2chatModels/users.js";
 import toContactorId from "../utils/toContactorId.js";
 import {createMessages, MessageV3} from "../v3chatModels/messages.js";

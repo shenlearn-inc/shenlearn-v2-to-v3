@@ -25,16 +25,12 @@ const roles = {
 export default {
   // !必改
   sites: [
-    'goldmedalsh',
-    'gm5892500new',
-    // 'gm5892501new',
-    'gm5712624new',
-    'al365',
+    'dmcfcnew'
   ].map((name) => ({
     name,
-    organizationId: "a6845149-88bd-4616-ad6b-93c9451e1f66",
-    planId: plans.pro,
-    roles: roles.pro,
+    organizationId: "7ce7cb18-2052-4ade-bd0a-188532e3bd9b",
+    planId: plans.flag,
+    roles: roles.flag,
     isDeleteContactor: false,
     isHandleDuplicateHashedId: true,
   })) as Site[],
